@@ -49,6 +49,8 @@ class ServerTests(unittest.TestCase):
     def test_synchronised_voice_assets_and_path_confinement(self):
         for path, mime in [
             ('/speech-sync.mjs', 'text/javascript'),
+            ('/sounds.mjs', 'text/javascript'),
+            ('/sound-catalog.mjs', 'text/javascript'),
             ('/sw.js', 'text/javascript'),
             ('/manifest.webmanifest', 'application/manifest+json'),
             ('/icons/icon-192.png', 'image/png'),
@@ -58,6 +60,11 @@ class ServerTests(unittest.TestCase):
             ('/assets/voice/wasm/espeak-ng.wasm', 'application/wasm'),
             ('/assets/voice/espeak-ng-data/fr_dict.gz', 'application/gzip'),
             ('/assets/voice/espeak-ng-data/en_dict.gz', 'application/gzip'),
+            ('/assets/voice/keys/manifest.json', 'application/json'),
+            ('/assets/voice/keys/siwis-keys.wav', 'audio/'),
+            ('/voice-review.html', 'text/html'),
+            ('/voice-review-before.json', 'application/json'),
+            ('/voice-review-before.wav', 'audio/wav'),
         ]:
             with urlopen(self.url + path) as response:
                 self.assertIn(mime, response.headers['Content-Type'])

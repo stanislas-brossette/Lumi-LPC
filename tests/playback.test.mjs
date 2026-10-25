@@ -39,9 +39,9 @@ test('default learning playback is substantially slower than ordinary synthesis'
   assert.ok(didacticAudio(natural.result, natural, encodeWav).duration / 0.5 > normal.duration * 3);
 });
 
-test('consonant-vowel keys start at their consonant and never join separate words', () => {
+test('consonant-vowel keys start at their consonant, including across connected words', () => {
   const { keys, times, result } = packet('Papa mange une pomme.');
-  assert.deepEqual(keys.map(k => k.ipa), ['pa', 'pa', 'mɑ̃', 'ʒ', 'y', 'n', 'pɔ', 'm']);
+  assert.deepEqual(keys.map(k => k.ipa), ['pa', 'pa', 'mɑ̃', 'ʒy', 'n', 'pɔ', 'm']);
   const phonemes = result.events.filter(e => e.type === 'phoneme' && e.phoneme);
   assert.equal(times[0], phonemes[0].sample / result.sampleRate);
   assert.equal(times[1], phonemes[2].sample / result.sampleRate);
@@ -49,7 +49,7 @@ test('consonant-vowel keys start at their consonant and never join separate word
 });
 
 function app(stored = null, reducedMotion = true) {
-  const nodes = new Map(), frames = new Map(), timers = new Map(); let id = 0;
+  const nodes = new Map(), frames = new Map(), timers = new Map(); let id = 0, saved = stored;
   function element() { return { value: '', dataset: {}, style: {}, children: [], handlers: {}, attrs: {}, classList: { toggle() {} },
     addEventListener(name, fn) { this.handlers[name] = fn; }, setAttribute(name, value) { this.attrs[name] = value; },
     removeAttribute(name) { delete this.attrs[name]; }, querySelectorAll() { return []; }, replaceChildren() { this.children = []; },
@@ -67,7 +67,7 @@ function app(stored = null, reducedMotion = true) {
   }
   const context = {
     document: { getElementById: get, querySelectorAll: selector => queried(selector), createElement: element, addEventListener() {}, body },
-    localStorage: { getItem: () => stored && JSON.stringify(stored), setItem() {} }, location: { protocol: 'file:' }, performance: {now:()=>0},
+    localStorage: { getItem: () => stored && JSON.stringify(stored), setItem(key,value) { saved=JSON.parse(value); } }, location: { protocol: 'file:' }, performance: {now:()=>0},
     matchMedia: () => ({ matches: reducedMotion }), addEventListener() {}, Audio: FakeAudio, Blob,
     URL: { createObjectURL: () => 'blob:test', revokeObjectURL: url => revoked.push(url) },
     setTimeout(fn) { timers.set(++id, fn); return id; }, clearTimeout(id) { timers.delete(id); },
@@ -78,7 +78,7 @@ function app(stored = null, reducedMotion = true) {
   context.location.protocol = 'http:';
   const a = context.LumiTest; const natural = packet(get('phrase').value); a.state.voiceData = didacticAudio(natural.result, natural, encodeWav);
   a.state.keys = a.state.voiceData.keys; a.state.speechModule = { keyAtTime };
-  return { ...a, get, frames, timers, audios, revoked, context, body, nav, drawing,
+  return { ...a, get, frames, timers, audios, revoked, context, body, nav, drawing, saved:()=>saved,
     frame() { const [id, fn] = frames.entries().next().value; frames.delete(id); fn(); } };
 }
 
@@ -87,6 +87,49 @@ test('speed defaults to 1 and preserves saved playback preferences', () => {
   assert.equal(app({ speed: 1 }).state.speed, 1);
   assert.equal(app({ speed: 0.5, speedProfile: 2 }).state.speed, 0.5);
   assert.equal(app({ speed: 0.25, speedProfile: 2 }).state.speed, 0.25);
+});
+
+test('each reading mode starts at its own speed and remembers changes separately',async()=>{
+ const a=app({speed:1,speedProfile:2,playbackMode:'natural'});
+ a.get('phrase').value=''; // Test the mode transition without resynthesizing a phrase.
+ assert.equal(a.state.speed,1);
+ a.get('playback-mode').value='natural';await a.get('playback-mode').handlers.change();
+ assert.equal(a.state.speed,.75);assert.equal(a.get('speed').value,'0.75');
+ a.get('speed').value='0.5';a.get('speed').handlers.change();
+ a.get('playback-mode').value='didactic';await a.get('playback-mode').handlers.change();
+ assert.equal(a.state.speed,1);assert.equal(a.get('speed').value,'1');
+ const reloaded=app({...a.saved(),text:'Papa mange une pomme.'});reloaded.get('phrase').value='';
+ reloaded.get('playback-mode').value='natural';await reloaded.get('playback-mode').handlers.change();
+ assert.equal(reloaded.state.speed,.5);assert.equal(reloaded.get('speed').value,'0.5');
+});
+
+test('invalid saved mode speeds fall back independently to their defaults',()=>{
+ const a=app({speedProfile:3,speeds:{didactic:100,natural:'0.5'}});
+ assert.equal(a.state.speeds.didactic,1);assert.equal(a.state.speeds.natural,.75);
+});
+
+test('natural playback follows variable key times through pause, speed changes and isolated replay',async()=>{
+ const a=app(),source=packet('Bien. Papa mange une pomme.');
+ const d={...source,mode:'natural',soundOffset:0,clips:source.keys.map(()=>new Uint8Array()),clipTimes:source.times.map((t,i)=>i?t:0)};
+ a.state.voiceData=d;a.state.keys=d.keys;a.state.playbackMode='natural';
+ a.togglePlay();await Promise.resolve();const audio=a.audios[0];
+ audio.currentTime=d.times[2];a.frame();assert.equal(a.state.index,2);
+ a.togglePlay();assert.equal(audio.paused,true);
+ a.get('speed').value='0.5';a.get('speed').handlers.change();assert.equal(audio.currentTime,d.times[2]);
+ a.togglePlay();await Promise.resolve();audio.currentTime=d.times[3];a.frame();assert.equal(a.state.index,3);
+ a.selectKey(0);await Promise.resolve();assert.equal(a.state.singleKey,true);assert.equal(a.state.index,0);
+ a.audios.at(-1).onended();assert.equal(a.state.index,0);assert.equal(a.state.playing,false);
+});
+
+test('changing reading mode cancels obsolete preparation and sends the selected mode for manual IPA',async()=>{
+ const a=app();a.state.manual=true;a.get('ipa').value='pa';a.get('playback-mode').value='natural';
+ let finish,options;
+ a.state.speechModule.synthesizePronunciation=(_ipa,_lpc,_schwa,opts)=>{options=opts;return new Promise(resolve=>finish=resolve);};
+ const pending=a.get('playback-mode').handlers.change();
+ assert.equal(a.state.playbackMode,'natural');assert.equal(options.mode,'natural');assert.equal(a.state.busy,true);
+ a.get('ipa').value='fu';a.get('ipa').handlers.input();
+ finish(synthesizeKeysWithEngine(encoder.LPC.encode('pa'),engine,encodeWav));await pending;
+ assert.equal(a.state.voiceData,null);assert.equal(a.state.keys.length,0);assert.equal(a.state.busy,false);
 });
 
 test('visual follows the audio clock at every speed; pause/resume cannot drift', async () => {
@@ -314,7 +357,7 @@ test('the mouth follows the audio clock, then shows the key vowel when stepping'
   audio.currentTime = d.times[0] + d.soundOffset + 0.2; a.frame(); assert.equal(visual.attrs.d, inner('a'), 'open for a');
   audio.currentTime = d.times[2] + d.soundOffset + 0.2; a.frame(); assert.equal(a.state.index, 2); assert.equal(visual.attrs.d, inner('ɑ̃'));
   a.togglePlay(); assert.equal(visual.attrs.d, inner('ɑ̃'), 'pause freezes the mouth');
-  a.moveTo(6); assert.equal(visual.attrs.d, inner('ɔ'), 'stepping shows the key vowel');
+  a.moveTo(5); assert.equal(visual.attrs.d, inner('ɔ'), 'stepping shows the key vowel');
 });
 
 test('voice timeline links every key to the word of the text it comes from', () => {
@@ -334,7 +377,7 @@ test('voice timeline links every key to the word of the text it comes from', () 
 test('without voice, words match IPA words only when their counts agree', () => {
   const a = app(), encode = ipa => encoder.LPC.encode(ipa);
   const ok = a.sentenceFor('Papa mange une pomme.', encode('papa mɑ̃ʒ yn pɔm|'), null);
-  assert.deepEqual(Array.from(ok.keyWord), [0, 0, 1, 1, 2, 2, 3, 3]);
+  assert.deepEqual(Array.from(ok.keyWord), [0, 0, 1, 1, 2, 3, 3]);
   const off = a.sentenceFor('Tu veux de l’eau', encode('ty vø də l o'), null);
   assert.equal(off.keyWord, null, 'l’eau is one written word but two IPA words: no guess');
   assert.equal(off.words.length, 4, 'the sentence is still shown');
@@ -359,4 +402,26 @@ test('clicking anywhere on the page does not stop playback; only nav buttons swi
   assert.equal(a.state.playing, true);
   a.nav.handlers.click(); assert.equal(a.state.playing, false, 'changing view stops playback');
   assert.equal(a.get('view-help').hidden, false); assert.equal(a.get('view-simulator').hidden, true);
+});
+
+test('connected speech groups existing liaison and enchainement consonants with following vowels',()=>{
+ const text='il a réussi son examen',p=packet(text);
+ assert.equal(p.ipa,'ila ʁeysi sɔ̃nɛgzamɛ̃|');
+ assert.deepEqual(p.keys.map(k=>k.ipa),['i','la','ʁe','y','si','sɔ̃','nɛ','g','za','mɛ̃']);
+ const la=p.keys.find(k=>k.ipa==='la'),ne=p.keys.find(k=>k.ipa==='nɛ');
+ assert.deepEqual([la.word,la.wordEnd],[0,1]);assert.deepEqual([ne.word,ne.wordEnd],[3,4]);
+ const onsets=p.result.events.filter(e=>e.type==='phoneme'&&e.phoneme).map(e=>e.sample/p.result.sampleRate);
+ for(const t of p.times)assert.ok(onsets.includes(t));
+ const a=app();const tracker=a.sentenceFor(text,p.keys,{...p,text});
+ assert.equal(tracker.keyWord[1],0);assert.equal(tracker.keyWordEnd[1],1);
+ const enc=ipa=>Array.from(encoder.LPC.encode(ipa),k=>k.ipa);
+ assert.deepEqual(enc('il a ʁeysi sɔ̃n ɛgzamɛ̃'),p.keys.map(k=>k.ipa));
+ assert.deepEqual(enc('il | a'),['i','l','a']);
+ assert.deepEqual(enc('il a'),['i','la']);
+ for(const phrase of ['Il. A.','Un haricot et un héros.','Et un ami.']){
+  const q=packet(phrase);
+  const original=q.result.events.filter(e=>e.type==='phoneme'&&e.phoneme).flatMap(e=>Array.from(encoder.LPC.tokenize(e.phoneme).tokens).filter(s=>s!=='¦'&&s!=='|')).join('');
+  assert.equal(q.keys.map(k=>k.ipa).join(''),original,'no consonant may be added for '+phrase);
+ }
+ assert.ok(!packet('Il. A.').keys.some(k=>k.ipa==='la'));
 });

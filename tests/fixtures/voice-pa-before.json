@@ -1,0 +1,12 @@
+{
+  "sampleRate": 22050,
+  "entry": {
+    "start": 155889,
+    "length": 6220,
+    "vowel": 0.13596371882086167,
+    "end": 0.28208616780045354,
+    "source": "isolated"
+  },
+  "sourceBankSha256": "ae9d29bae16edd4bb7b843a34b014e482801c854576e7e323bf7541e436a200d",
+  "unmodifiedPcmSha256": "98e70cc414f816f34a85751b36603b4bc38de6335fcd91eff0b9d0ca802b4825"
+}
