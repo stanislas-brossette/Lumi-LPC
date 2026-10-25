@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+.netlify/
+netlify/functions/*.zip
+netlify/functions/manifest.json

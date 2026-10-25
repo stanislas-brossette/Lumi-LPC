@@ -1,0 +1,16 @@
+{
+  "name": "lumi-lpc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node tests/netlify.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "ephone": "1.0.2"
+  }
+}
