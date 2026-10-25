@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "sampleRate": 22050,
+  "audio": "voice-extraordinaire-before.wav",
+  "keys": {
+    "tɛ": {
+      "start": 0,
+      "length": 5776,
+      "vowel": 0.13569160997732427,
+      "end": 0.2619501133786848,
+      "source": "isolated"
+    },
+    "ɔ": {
+      "start": 5776,
+      "length": 7103,
+      "vowel": null,
+      "end": 0.32213151927437644,
+      "source": "isolated"
+    },
+    "ʁ": {
+      "start": 12879,
+      "length": 2048,
+      "vowel": null,
+      "end": 0.09287981859410431,
+      "source": "isolated"
+    }
+  },
+  "sourceBankSha256": "05175f70d710f296b35b851989628695e40ad0b2b47fea66adc732240a08a93f",
+  "audioSha256": "7b99dee1be5cefb0001d76220343b736c5e9a8c7f9d6f93b525026422733c086",
+  "unmodifiedPcmSha256": "467879330215844c1628f3091eed03eebcb329c17f5785f0f3336a7a2d12e960"
+}

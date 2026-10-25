@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "humanValidated": false,
+  "baseAudioSha256": "05175f70d710f296b35b851989628695e40ad0b2b47fea66adc732240a08a93f",
+  "fixtureAudioSha256": "6e1c1d9b3d1fea0fe2c9b4a7ecbb702a37219d4401081dc8f182fd4dda18d5c3",
+  "unmodifiedPcmSha256": "467879330215844c1628f3091eed03eebcb329c17f5785f0f3336a7a2d12e960",
+  "units": [
+    {
+      "ipa": "tɛ",
+      "status": "replaced",
+      "metadata": {
+        "start": 0,
+        "length": 9482,
+        "end": 0.43002267573696146,
+        "vowel": 0.13,
+        "source": "carrier",
+        "phonemes": "ʒə dˈi tˈɛt .",
+        "sourceStart": 16978,
+        "sourceEnd": 26460,
+        "lengthScale": 2.0,
+        "cropMethod": "contextual cut checked against acoustic energy and independent phoneme timings"
+      },
+      "recognition": {
+        "before": "s e",
+        "after": "d eː",
+        "context": "ʒ y d i t ɛ t"
+      }
+    },
+    {
+      "ipa": "ɔ",
+      "status": "replaced",
+      "metadata": {
+        "start": 0,
+        "length": 5072,
+        "end": 0.23002267573696145,
+        "vowel": null,
+        "source": "carrier",
+        "phonemes": "ʒə dˈi pˈɔʁt .",
+        "sourceStart": 17860,
+        "sourceEnd": 22932,
+        "lengthScale": 2.0,
+        "cropMethod": "contextual cut checked against acoustic energy and independent phoneme timings"
+      },
+      "recognition": {
+        "before": "ø",
+        "after": "",
+        "context": "ʒ d i p ɔ ʁ t"
+      }
+    },
+    {
+      "ipa": "ʁ",
+      "status": "replaced",
+      "metadata": {
+        "start": 0,
+        "length": 1213,
+        "end": 0.055011337868480725,
+        "vowel": null,
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi aʁˈø .",
+        "sourceStart": 25357,
+        "sourceEnd": 26570,
+        "lengthScale": 2.0,
+        "cropMethod": "contextual cut checked against acoustic energy and independent phoneme timings",
+        "supportVowelOnset": 26680
+      },
+      "recognition": {
+        "before": "",
+        "after": null,
+        "context": "ʒ ə d i a ʁ y"
+      }
+    }
+  ]
+}

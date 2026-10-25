@@ -212,3 +212,9 @@ La version 0.4.6 règle les vitesses initiales à **×1 en clé par clé** et
 pour chaque mode, y compris après rechargement. L’ancien réglage commun ×1
 est remplacé par ces valeurs ; les autres vitesses personnalisées sont conservées
 pour leur mode précédent.
+
+La version 0.4.7 propose de nouvelles coupes /tɛ/, /ɔ/ et /ʁ/ pour les défauts
+signalés dans « c’est extraordinaire ». Les 326 autres unités restent identiques,
+y compris le /y/ validé. Comparaison avant/après et contexte sur les trois
+premières cartes de `/voice-review.html` ; [méthode et limites](voices/README.md).
+La validation perceptive de ces nouveaux extraits reste à faire.

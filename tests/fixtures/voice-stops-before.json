@@ -3,7 +3,7 @@
   "sampleRate": 22050,
   "name": "Première banque Siwis",
   "audio": "voice-stops-before.wav",
-  "audioSha256": "2caf97612e2884e414263eff9fd658e5f06ddd39e30bda48845c631c211b9dcb",
+  "audioSha256": "6e1c1d9b3d1fea0fe2c9b4a7ecbb702a37219d4401081dc8f182fd4dda18d5c3",
   "sourceBankSha256": "bca646818e6d4fea8f739dc567aee28b07ad7dddf7fccb3ce72961e968173d67",
   "keys": {
     "b": {
@@ -151,16 +151,16 @@
       "vowel": null
     },
     "pass-before-ʁ": {
-      "start": 130416,
+      "start": 578434,
       "length": 2048,
-      "end": 0.09287981859410431,
-      "vowel": null
+      "vowel": null,
+      "end": 0.09287981859410431
     },
     "pass-after-ʁ": {
-      "start": 132464,
-      "length": 2048,
-      "end": 0.09287981859410431,
-      "vowel": null
+      "start": 580482,
+      "length": 1213,
+      "vowel": null,
+      "end": 0.055011337868480725
     },
     "pass-before-b": {
       "start": 134512,
@@ -395,6 +395,48 @@
       "length": 29696,
       "vowel": null,
       "end": 1.3467573696145125
+    },
+    "pass-before-tɛ": {
+      "start": 469337,
+      "length": 5776,
+      "vowel": null,
+      "end": 0.2619501133786848
+    },
+    "pass-after-tɛ": {
+      "start": 475113,
+      "length": 9482,
+      "vowel": null,
+      "end": 0.43002267573696146
+    },
+    "pass-context-tɛ": {
+      "start": 484595,
+      "length": 41472,
+      "vowel": null,
+      "end": 1.8808163265306121
+    },
+    "pass-before-ɔ": {
+      "start": 526067,
+      "length": 7103,
+      "vowel": null,
+      "end": 0.32213151927437644
+    },
+    "pass-after-ɔ": {
+      "start": 533170,
+      "length": 5072,
+      "vowel": null,
+      "end": 0.23002267573696145
+    },
+    "pass-context-ɔ": {
+      "start": 538242,
+      "length": 40192,
+      "vowel": null,
+      "end": 1.822766439909297
+    },
+    "pass-context-ʁ": {
+      "start": 581695,
+      "length": 41472,
+      "vowel": null,
+      "end": 1.8808163265306121
     }
   }
 }

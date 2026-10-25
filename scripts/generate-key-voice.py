@@ -18,9 +18,10 @@ from piper import PiperVoice, SynthesisConfig
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def apply_reviewed_consonants(output):
-    """Reapply the checked-in, individually reviewed cuts without new synthesis."""
-    review = json.loads((ROOT / 'voices/consonant-audit.json').read_text())
+def apply_reviewed_consonants(output, extraordinaire=False):
+    """Reapply the checked-in targeted cuts without new synthesis."""
+    review_path = ROOT / ('voices/extraordinaire-audit.json' if extraordinaire else 'voices/consonant-audit.json')
+    review = json.loads(review_path.read_text())
     fixture_path = ROOT / 'tests/fixtures/voice-stops-before.wav'
     fixture_meta = json.loads(fixture_path.with_suffix('.json').read_text())
     if hashlib.sha256(fixture_path.read_bytes()).hexdigest() != review['fixtureAudioSha256']:
@@ -50,11 +51,12 @@ def apply_reviewed_consonants(output):
     with wave.open(str(path), 'wb') as wav:
         wav.setparams((1, 2, rate, 0, 'NONE', 'not compressed'))
         wav.writeframes(np.concatenate(pieces).astype('<i2').tobytes())
-    manifest.update(audioSha256=hashlib.sha256(path.read_bytes()).hexdigest(),
-                    consonantRepairBaseSha256=previous_hash,
-                    consonantReviewSha256=hashlib.sha256((ROOT / 'voices/consonant-audit.json').read_bytes()).hexdigest())
+    manifest['audioSha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+    prefix = 'extraordinaire' if extraordinaire else 'consonant'
+    manifest[prefix + 'RepairBaseSha256'] = previous_hash
+    manifest[prefix + 'ReviewSha256'] = hashlib.sha256(review_path.read_bytes()).hexdigest()
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
-    print(f'{len(patches)} reviewed consonants applied; every other PCM preserved')
+    print(f'{len(patches)} archived cuts applied; every other PCM preserved')
 
 
 def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=None):
@@ -200,9 +202,12 @@ if __name__ == '__main__':
     parser.add_argument('--repair-existing', action='store_true', help='Preserve every other clip byte for byte')
     parser.add_argument('--repair-key', action='append', help='Regenerate only this key in an existing bank (repeatable)')
     parser.add_argument('--apply-reviewed-consonants', action='store_true', help='Reapply the archived consonant cuts exactly, without synthesis')
+    parser.add_argument('--apply-archived-extraordinaire', action='store_true', help='Reapply archived /tɛ/, /ɔ/ and /ʁ/ cuts without new synthesis')
     args = parser.parse_args()
-    if args.apply_reviewed_consonants:
-        apply_reviewed_consonants(args.output)
+    if args.apply_reviewed_consonants and args.apply_archived_extraordinaire:
+        parser.error('Apply one archive at a time')
+    if args.apply_reviewed_consonants or args.apply_archived_extraordinaire:
+        apply_reviewed_consonants(args.output, args.apply_archived_extraordinaire)
     else:
         if args.model is None:
             parser.error('--model is required for synthesis')

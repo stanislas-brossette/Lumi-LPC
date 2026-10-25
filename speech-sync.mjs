@@ -226,7 +226,7 @@ export async function synthesizePronunciation(ipa, LPC, schwa, options = {}) {
 // A small, pre-generated neural voice bank. eSpeak still determines the text's
 // phonemes; automatic and manually corrected keys use these same audio units.
 // No neural model, remote TTS API or AudioContext is needed during playback.
-const VOICE_BANK_VERSION = '0.4.6';
+const VOICE_BANK_VERSION = '0.4.7';
 let bankReady;
 export function readVoiceBank(manifest, buffer) {
   const view = new DataView(buffer);
