@@ -67,7 +67,8 @@ export async function synthesize(text, LPC, schwa, options = {}) {
   const result = espeak.synthesize(text, { rate: 175, phonemes: false, ssml: false });
   const timeline = timelineFromEvents(result, LPC, schwa);
   if (options.mode === 'natural') {
-    return { ...naturalAudio(result, timeline, encodeWav), text };
+    const packet = await continuousVoice(timeline.keys, encodeWav, () => naturalAudio(result, timeline, encodeWav));
+    return { ...packet, ipa: timeline.ipa, text, words: timeline.words };
   }
   const packet=await synthesizeKeys(timeline.keys,espeak,encodeWav);
   packet.ipa=timeline.ipa;packet.text=text;packet.words=timeline.words;
@@ -205,7 +206,7 @@ export async function synthesizePronunciation(ipa, LPC, schwa, options = {}) {
   const keys=LPC.encode(ipa,schwa);
   const { espeak,encodeWav }=await engine();
   if (options.mode === 'natural') {
-    return synthesizeContinuousKeys(keys, espeak, encodeWav, LPC, schwa);
+    return continuousVoice(keys, encodeWav, () => synthesizeContinuousKeys(keys, espeak, encodeWav, LPC, schwa));
   }
   return synthesizeKeys(keys,espeak,encodeWav);
 }
@@ -255,7 +256,7 @@ async function loadVoiceBank() {
   })().catch(error => { bankReady = undefined; throw error; });
   return bankReady;
 }
-export function synthesizeKeysWithBank(keys, bank, encodeWav) {
+export function synthesizeKeysWithBank(keys, bank, encodeWav, mode = 'didactic') {
   if (!keys.length) throw new Error('Aucune clé à prononcer.');
   const pieces = [], times = [], marks = [];
   let length = 0;
@@ -263,14 +264,41 @@ export function synthesizeKeysWithBank(keys, bank, encodeWav) {
     const entry = bank.manifest.keys[key.ipa];
     if (!entry) throw new Error('Son absent de la banque vocale : /' + key.ipa + '/.');
     times.push(length / bank.sampleRate);
-    pieces.push(bank.samples.subarray(entry.start, entry.start + entry.length));
+    const piece = bank.samples.slice(entry.start, entry.start + entry.length);
+    if (mode === 'natural') {
+      // Fade only the edges, without overlapping or shortening plosive releases.
+      const fade = Math.min(Math.round(.004 * bank.sampleRate), Math.floor(piece.length / 2));
+      for (let j = 0; j < fade; j++) { piece[j] *= j / fade; piece[piece.length - 1 - j] *= j / fade; }
+    }
+    pieces.push(piece);
     marks.push({ vowel: entry.vowel, end: entry.end });
     length += entry.length;
+    // Spaces are word boundaries, not pauses. Only punctuation / explicit | pauses.
+    if (mode === 'natural' && key.pauseAfter) {
+      const pause = new Int16Array(Math.round(.18 * bank.sampleRate));
+      pieces.push(pause); length += pause.length;
+    }
   }
   const samples = new Int16Array(length);
   let offset = 0;
   for (const piece of pieces) { samples.set(piece, offset); offset += piece.length; }
-  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, { keys, times, marks, ipa: keys.map(k => k.ipa).join(' ') }, encodeWav), voice: 'Piper · Siwis', warning: '' };
+  const timeline = { keys, times, marks, ipa: keys.map(k => k.ipa + (mode === 'natural' && k.pauseAfter ? '|' : '')).join(' ') };
+  if (mode === 'natural') {
+    return { ...timeline, mode, voice: 'Piper · Siwis', warning: '', soundOffset: 0,
+      clipTimes: times.slice(), clips: keys.map((key, i) => {
+        const entry = bank.manifest.keys[key.ipa];
+        return encodeWav(samples.slice(Math.round(times[i] * bank.sampleRate), Math.round(times[i] * bank.sampleRate) + entry.length), bank.sampleRate);
+      }), wav: encodeWav(samples, bank.sampleRate), duration: samples.length / bank.sampleRate };
+  }
+  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, timeline, encodeWav), voice: 'Piper · Siwis', warning: '' };
+}
+export async function continuousVoice(keys, encodeWav, fallback, loadBank = loadVoiceBank) {
+  try { return synthesizeKeysWithBank(keys, await loadBank(), encodeWav, 'natural'); }
+  catch {
+    const packet = await fallback();
+    packet.warning = 'Voix douce indisponible ; lecture continue avec la voix de secours eSpeak.' + (packet.warning ? ' ' + packet.warning : '');
+    return packet;
+  }
 }
 export async function synthesizeKeys(keys, espeak, encodeWav, loadBank = loadVoiceBank) {
   try {

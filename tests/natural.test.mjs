@@ -43,3 +43,34 @@ test('manual continuous pronunciation preserves keys, word boundaries, repeats a
 test('ambiguous simultaneous key onsets are rejected instead of guessed', () => {
   assert.throws(()=>naturalAudio({duration:1,sampleRate:10,samples:new Int16Array(10)}, {keys:[{},{}],times:[0,0]},encodeWav),/minutage/);
 });
+
+test('continuous Siwis uses the same bank units with variable times and exact vowel marks', async () => {
+  const { readVoiceBank, synthesizeKeysWithBank, continuousVoice } = await import('../speech-sync.mjs');
+  const manifest = JSON.parse(readFileSync('voices/manifest.json'));
+  const wav = readFileSync('voices/siwis-keys.wav');
+  const bank = readVoiceBank(manifest, wav.buffer.slice(wav.byteOffset,wav.byteOffset+wav.byteLength));
+  const keys = LPC.encode('to pa | b jɛ̃ ɥi');
+  const original = bank.samples.slice();
+  const packet = await continuousVoice(keys,encodeWav,()=>assert.fail('bank must be used'),async()=>bank);
+  const didactic = synthesizeKeysWithBank(keys,bank,encodeWav);
+  assert.equal(packet.voice,didactic.voice);
+  assert.equal(packet.warning,'');
+  assert.ok(packet.duration<didactic.duration);
+  assert.deepEqual(bank.samples,original,'shared bank must not be mutated');
+  const pcm = new Int16Array(packet.wav.buffer,packet.wav.byteOffset+44,(packet.wav.length-44)/2);
+  let cursor=0;
+  for(const [i,key] of keys.entries()) {
+    const e=manifest.keys[key.ipa];
+    assert.equal(packet.times[i],cursor/bank.sampleRate);
+    assert.deepEqual(packet.marks[i],{vowel:e.vowel,end:e.end});
+    assert.equal(packet.clips[i].length,44+e.length*2);
+    const fade=Math.round(.004*bank.sampleRate);
+    assert.deepEqual(pcm.subarray(cursor+fade,cursor+e.length-fade),bank.samples.subarray(e.start+fade,e.start+e.length-fade));
+    cursor+=e.length;
+    if(key.pauseAfter){const pause=Math.round(.18*bank.sampleRate);assert.ok(pcm.subarray(cursor,cursor+pause).every(s=>s===0));cursor+=pause;}
+  }
+  assert.equal(packet.duration,cursor/bank.sampleRate);
+  const fallback=await continuousVoice(keys,encodeWav,()=>({voice:'eSpeak NG',warning:'approximation'}),async()=>{throw Error('offline missing');});
+  assert.match(fallback.warning,/secours eSpeak/);
+  assert.match(fallback.warning,/approximation/);
+});

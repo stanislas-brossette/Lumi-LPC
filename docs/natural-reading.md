@@ -1,36 +1,38 @@
 # Lecture continue — première version
 
-Le choix « Phrase naturelle » conserve le rythme de la phrase eSpeak complète,
-à 175 mots par minute à ×1. Le mode « Clé par clé » reste sélectionné par défaut
-et garde sa banque Piper / Siwis et ses créneaux d’observation.
+Le choix « Phrase naturelle » enchaîne les mêmes extraits Piper / Siwis que le
+mode « Clé par clé », sans les créneaux réguliers d’observation. Le mode clé par
+clé reste sélectionné par défaut.
 
 ## Audio et synchronisation
 
-- Aucun moteur, modèle ni téléchargement supplémentaire. Le moteur eSpeak déjà
-  embarqué calcule la phrase dans le navigateur, y compris hors ligne après mise
-  en cache de Lumi.
-- Le WAV complet conserve exactement les échantillons synthétisés, sans montage
-  ni silence ajouté. Les clés suivent les débuts de phonèmes fournis par eSpeak ;
-  les repères de bouche suivent les mêmes événements. Les mouvements de main
-  sont raccourcis lorsque les clés passent vite.
-- La pause, le ralenti, la boucle et la reprise suivent toujours l’horloge audio.
-  Cliquer sur une clé joue une découpe de la phrase ; de petits fondus limitent
-  les clics de coupe, uniquement sur ces extraits.
-- La transcription manuelle est synthétisée en un seul appel phonétique. Les
-  espaces gardent les frontières de mots, `|` force une pause. Le nombre et
-  l’ordre des phonèmes émis sont vérifiés avant de permettre la lecture.
-- Le mode choisi est conservé avec les réglages. Changer de mode prépare de
-  nouveau l’audio et écarte le résultat d’une préparation devenue obsolète.
+- Aucun moteur, modèle ni téléchargement supplémentaire. La banque incluse
+  fonctionne dans le navigateur, hors ligne après mise en cache de Lumi.
+- Chaque clé garde son extrait complet, avec un fondu de 4 ms sur les bords
+  pour limiter les clics. Aucun chevauchement ne masque l’attaque des consonnes.
+  Les gestes suivent les durées des extraits et la bouche leurs repères Siwis.
+- Seule la ponctuation ou un `|` explicite ajoute une pause de 180 ms. Les
+  frontières de mots ne créent pas de pause. À ×1, les sons gardent leur durée
+  d’origine ; aucune cadence de 175 mots par minute n’est imposée.
+- Pause, ralenti, boucle et reprise suivent l’horloge audio. Cliquer sur une clé
+  rejoue son extrait, avec les mêmes repères de bouche.
+- Les clés automatiques et les transcriptions manuelles utilisent la même banque.
+  Le mode choisi est conservé avec les réglages. Changer de mode prépare de
+  nouveau l’audio et écarte les résultats devenus obsolètes.
+- Si la banque ne charge pas, toute la phrase revient à eSpeak avec un message
+  explicite. Ce secours conserve son waveform complet et ses événements réels.
+  Les transcriptions manuelles y sont vérifiées phonème par phonème.
 
-## Limites
+## Limites et vérification
 
-Le rythme est continu, le timbre reste synthétique et robotique. Le mode n’est
-pas présenté comme une voix humaine. eSpeak approche /ɥ/ par un /y/ bref ; un
-message le signale. Les extraits de clés gardent la coarticulation de leur
-contexte et ne remplacent pas les sons didactiques isolés. Le minutage des gestes
-reste schématique et demande une validation humaine et pédagogique. Les gestes
-peuvent être difficiles à observer à ×1 : utiliser le ralenti.
+Le timbre est identique entre les deux modes, mais les raccords entre extraits
+restent perceptibles. Ce montage ne fournit pas la coarticulation ni la prosodie
+d’une voix de phrase. Une vraie synthèse de phrase Siwis demanderait un moteur
+et un modèle supplémentaires ; elle reste hors de cette première version.
+La banque possède /ɥ/ ; seul le secours eSpeak l’approche par /y/ et le signale.
+Le minutage des gestes reste schématique et demande une validation humaine et
+pédagogique. Utiliser le ralenti pour mieux observer les gestes.
 
-Les tests vérifient le WAV inchangé, les repères réels, les transcriptions,
-les pauses, le pilotage audio et les transitions rapides. Ils ne certifient pas
-la qualité perceptive de la voix. Aucune publication Netlify n’est effectuée.
+Les tests contrôlent la provenance des sons, les durées cumulées, les repères de
+bouche, les pauses explicites, le secours et le pilotage audio. Ils ne certifient
+pas la qualité perceptive de la voix. Aucun déploiement Netlify n’est effectué.
