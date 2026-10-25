@@ -71,3 +71,18 @@ conservée avant la borne initiale du modèle. Son repère de voyelle est estim�
 sur la montée d’énergie ; cette exception est tracée dans le manifeste. Les
 328 autres unités sont inchangées. L’ancien /pa/ est disponible dans la page
 locale de comparaison. Voir [le détail et ses limites](../docs/connected-speech.md).
+
+La correction 0.4.5 remplace uniquement le /y/ isolé (« usine »). Le modèle
+synthétise /ʒə dˈi ˈy ./ avec `length_scale=2.0`, puis extrait la voyelle avec 60 ms
+d’avance sur le début prédit et 25 ms retirées en fin, avec des fondus de 3 ms.
+Le début prédit était tardif et la fin contenait une transition gênante. L’ancien extrait
+présentait une attaque parasite (reconnue /v i/ par le contrôle indépendant).
+La nouvelle coupe reste une proposition à vérifier à l’écoute ; la reconnaissance
+de voyelles très courtes ne suffit pas à valider leur timbre. Les 328 autres sons
+restent identiques, contrôlés par empreinte PCM. L’ancien son, le nouveau et la
+phrase porteuse sont accessibles en première carte sur `/voice-review.html`.
+Pour reproduire uniquement cette correction :
+
+```sh
+/tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx --repair-key y
+```

@@ -201,3 +201,8 @@ examen » devient `ila ʁeysi sɔ̃nɛgzamɛ̃|`, avec les clés /la/ et /nɛ/. 
 écrits restent distincts et peuvent être surlignés ensemble. Aucune consonne de
 liaison absente du moteur n’est ajoutée ; les pauses explicites bloquent le
 regroupement. Voir [les règles et les limites](docs/connected-speech.md).
+
+La version 0.4.5 retravaille le /y/ isolé de « usine » : extraction d’une voyelle
+soutenue en contexte avec la même voix Siwis, sans modifier les 328 autres sons.
+La première carte de `/voice-review.html` propose l’ancien extrait, le nouveau
+et sa phrase porteuse pour validation à l’écoute. Voir [la méthode](voices/README.md).

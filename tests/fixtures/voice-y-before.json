@@ -1,0 +1,13 @@
+{
+  "sampleRate": 22050,
+  "entry": {
+    "start": 135483,
+    "length": 7524,
+    "vowel": null,
+    "end": 0.34122448979591835,
+    "source": "isolated"
+  },
+  "sourceBankSha256": "a9e0fd8d037c4a5bb095c9e449c9bfce287f7908a2284ae529ee193a90390221",
+  "audioSha256": "0c34f8a3e5f5108804e6527e4cf981ee652ed46392a5e1de6df44c93d6f66e5f",
+  "unmodifiedPcmSha256": "74cead417e258b91823a51e35b759718cbac1ca677d8faabf133e4b279bf9f7f"
+}

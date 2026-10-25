@@ -79,7 +79,7 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         raise ValueError('Unknown repair keys')
     for key in keys:
         c, v = key['c'], key['v']
-        contextual = (c in {'p', 'b', 't', 'd', 'k', 'g'} and not v) or key['ipa'] in {'to', 'pa'}
+        contextual = (c in {'p', 'b', 't', 'd', 'k', 'g'} and not v) or key['ipa'] in {'to', 'pa', 'y'}
         if previous is not None and key['ipa'] not in selected:
             entry = previous['keys'][key['ipa']].copy()
             pcm = previous_audio[entry['start']:entry['start'] + entry['length']].copy()
@@ -102,7 +102,8 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
             if p not in voice.config.phoneme_id_map:
                 raise ValueError(f'Unmapped phoneme: {p}')
         ids = voice.phonemes_to_ids(phonemes)
-        samples, durations = voice.phoneme_ids_to_audio(ids, config, include_alignments=True)
+        unit_config = SynthesisConfig(length_scale=2.0, noise_scale=0.667, noise_w_scale=0.8) if key['ipa'] == 'y' else config
+        samples, durations = voice.phoneme_ids_to_audio(ids, unit_config, include_alignments=True)
         if durations is None or len(durations) != len(ids) or sum(durations) != len(samples):
             raise ValueError(f'Missing or inconsistent model alignment for {key["ipa"]}')
         def id_index(phones):
@@ -116,6 +117,12 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         # Keep 100 ms of pre-roll so the /p/ is not cut into a bare vowel.
         start = max(0, target_start - round((0.100 if key['ipa'] == 'pa' else 0.008) * rate))
         end = min(len(samples), target_end + release)
+        if key['ipa'] == 'y':
+            # A sustained contextual /y/ avoids the spurious /v/ onset of the
+            # isolated synthesis. Alignment is late here: retain the vowel
+            # onset 60 ms before it and remove the last 25 ms of vocal fry.
+            start = max(0, target_start - round(0.060 * rate))
+            end = target_end - round(0.025 * rate)
         # Trim only outside the extracted unit, leaving 12 ms around audible data.
         # The low threshold preserves weak fricatives and plosive releases.
         active = np.flatnonzero(np.abs(samples[start:end]) > 0.001)
@@ -151,6 +158,9 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         entries[key['ipa']] = {'start': cursor, 'length': len(pcm), 'vowel': vowel, 'end': len(pcm) / rate,
                                'source': 'carrier' if contextual else 'isolated', 'phonemes': ''.join(phonemes),
                                'sourceStart': start, 'sourceEnd': end}
+        if key['ipa'] == 'y':
+            entries[key['ipa']]['lengthScale'] = 2.0
+            entries[key['ipa']]['cropMethod'] = '60 ms pre-roll and 25 ms tail trim'
         if key['ipa'] == 'pa':
             entries[key['ipa']]['vowelMethod'] = 'energy rise after preserved closure'
         if audit_dir:
@@ -172,8 +182,8 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         'modelSha256': hashlib.sha256(model.read_bytes()).hexdigest(),
         'generator': 'piper-tts 1.8.0', 'seed': 42,
         'lengthScale': 1.1, 'noiseScale': 0.667, 'noiseWScale': 0.8,
-        'alignment': 'Piper model durations; isolated stops and /to/ extracted from French carriers',
-        'method': 'Isolated units with targeted contextual repairs v3',
+        'alignment': 'Piper model durations with targeted carrier extraction; /y/ boundaries adjusted against contextual audio',
+        'method': 'Isolated units with targeted contextual repairs v4',
         'repairBaseSha256': base_hash,
         'keys': entries,
     }

@@ -127,6 +127,8 @@ test('the consonant pass preserves all other units and reproduces the archived c
       assert.equal(entry.vowel,null);
       if(entry.source==='carrier-eu')assert.ok(entry.sourceEnd<entry.supportVowelOnset,'stop before the supporting vowel');
       if(entry.source==='espeak-eu')assert.equal(entry.sourceEnd,entry.supportVowelOnset);
+    }else if(ipa==='y'){
+      hash.update(readFileSync('tests/fixtures/voice-y-before.wav').subarray(44));
     }else if(ipa==='pa'){
       // The later /pa/ repair is checked separately; reconstruct this pass's baseline.
       hash.update(readFileSync('tests/fixtures/voice-pa-before.wav').subarray(44));
@@ -148,6 +150,32 @@ test('/pa/ keeps the closure before the vowel and changes no other audio unit',(
  assert.ok(rms(clip.subarray(0,Math.round(.06*bank.sampleRate)))<.12*rms(clip),'keep the quiet closure before the release');
  const hash=createHash('sha256');
  for(const [ipa,e] of Object.entries(manifest.keys))if(ipa!=='pa'){
+  const samples=bank.samples.subarray(e.start,e.start+e.length);
+  // Reconstruct the earlier /pa/ baseline before the later /y/ repair.
+  hash.update(ipa==='y'?readFileSync('tests/fixtures/voice-y-before.wav').subarray(44):new Uint8Array(samples.buffer,samples.byteOffset,samples.byteLength));
+ }
+ assert.equal(hash.digest('hex'),before.unmodifiedPcmSha256,'328 other units unchanged');
+});
+
+
+test('/y/ is cropped from a sustained carrier and preserves the other 328 units',()=>{
+ const before=JSON.parse(readFileSync('tests/fixtures/voice-y-before.json'));
+ const original=readFileSync('tests/fixtures/voice-y-before.wav');
+ assert.equal(createHash('sha256').update(original).digest('hex'),before.audioSha256);
+ const entry=manifest.keys.y;
+ assert.equal(entry.source,'carrier');assert.equal(entry.phonemes,'ʒə dˈi ˈy .');
+ assert.equal(entry.lengthScale,2);assert.equal(entry.vowel,null);
+ assert.equal(entry.sourceEnd-entry.sourceStart,entry.length);
+ const meta=JSON.parse(readFileSync('tests/fixtures/voice-stops-before.json'));
+ const wav=readFileSync('tests/fixtures/voice-stops-before.wav');
+ const archive=readVoiceBank(meta,wav.buffer.slice(wav.byteOffset,wav.byteOffset+wav.byteLength));
+ const saved=meta.keys['pass-after-y'];
+ const clip=bank.samples.subarray(entry.start,entry.start+entry.length);
+ assert.deepEqual(clip,archive.samples.subarray(saved.start,saved.start+saved.length));
+ assert.notDeepEqual(new Uint8Array(clip.buffer,clip.byteOffset,clip.byteLength),original.subarray(44));
+ assert.ok(entry.sourceEnd<meta.keys['pass-context-y'].length);
+ const hash=createHash('sha256');
+ for(const [ipa,e] of Object.entries(manifest.keys))if(ipa!=='y'){
   const samples=bank.samples.subarray(e.start,e.start+e.length);
   hash.update(new Uint8Array(samples.buffer,samples.byteOffset,samples.byteLength));
  }
