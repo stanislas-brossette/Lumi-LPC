@@ -49,6 +49,11 @@ class ServerTests(unittest.TestCase):
     def test_synchronised_voice_assets_and_path_confinement(self):
         for path, mime in [
             ('/speech-sync.mjs', 'text/javascript'),
+            ('/sw.js', 'text/javascript'),
+            ('/manifest.webmanifest', 'application/manifest+json'),
+            ('/icons/icon-192.png', 'image/png'),
+            ('/icons/maskable-512.png', 'image/png'),
+            ('/icons/apple-touch-icon.png', 'image/png'),
             ('/assets/voice/dist/browser.js', 'javascript'),
             ('/assets/voice/wasm/espeak-ng.wasm', 'application/wasm'),
             ('/assets/voice/espeak-ng-data/fr_dict.gz', 'application/gzip'),

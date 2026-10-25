@@ -11,6 +11,14 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 8192
+STATIC = {
+    '/speech-sync.mjs': ('speech-sync.mjs', 'text/javascript; charset=utf-8'),
+    # Built by npm run build, like the voice files it precaches.
+    '/sw.js': ('dist/sw.js', 'text/javascript; charset=utf-8'),
+    '/manifest.webmanifest': ('manifest.webmanifest', 'application/manifest+json; charset=utf-8'),
+    **{f'/icons/{name}': (f'icons/{name}', 'image/png')
+       for name in ('icon-192.png', 'icon-512.png', 'maskable-512.png', 'apple-touch-icon.png')},
+}
 
 
 def phonemize(text, engine):
@@ -46,8 +54,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {'engine': 'eSpeak NG'})
         if path in ('/', '/Lumi-LPC-V0.html'):
             return self.reply(200, (ROOT / 'Lumi-LPC-V0.html').read_bytes(), 'text/html; charset=utf-8')
-        if path == '/speech-sync.mjs':
-            return self.reply(200, (ROOT / 'speech-sync.mjs').read_bytes(), 'text/javascript; charset=utf-8')
+        if path in STATIC and (ROOT / STATIC[path][0]).is_file():
+            name, mime = STATIC[path]
+            return self.reply(200, (ROOT / name).read_bytes(), mime)
         if path.startswith('/assets/voice/'):
             assets = (ROOT / 'dist/assets/voice').resolve()
             target = (assets / unquote(path[len('/assets/voice/'):])).resolve()

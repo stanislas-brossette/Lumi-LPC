@@ -54,6 +54,20 @@ npm run build
 
 Les tests appellent les fonctions avec de vraies requêtes et vérifient que les transcriptions françaises sont acceptées par le moteur LPC. Les tests du lecteur génèrent de vrais audios français et vérifient leurs horodatages, puis simulent la position audio pour contrôler pause/reprise, annulation, vitesse et boucle. Le rendu sonore et le calage perçu restent à vérifier sur les appareils visés. Le déploiement doit ensuite être vérifié sur Netlify.
 
+## Installation sur smartphone (PWA)
+
+Lumi est une application web installable. Depuis le site en ligne (HTTPS) :
+
+- **Android (Chrome, Edge, Samsung Internet)** : bouton « Installer Lumi » dans le Guide, ou menu du navigateur → « Installer l’application ».
+- **iPhone / iPad** : ouvrir le site dans Safari, Partager → « Sur l’écran d’accueil ».
+
+L’application s’ouvre alors en plein écran avec son icône. Après une première visite, elle fonctionne **hors connexion, voix et phrases libres comprises** : la phonétisation et les sons sont calculés dans le navigateur par Spellophone. Sans voix, le hors-ligne se limite au lexique embarqué, puisque `/api/phonemize` n’est pas joignable.
+
+- `manifest.webmanifest` décrit l’application (nom, couleurs, icônes `icons/`, dont une icône *maskable* pour Android et `apple-touch-icon.png` pour iOS). Les PNG sont rendus depuis `icons/icon.svg` et `icons/maskable.svg`.
+- `sw.js` est le service worker. Le build y injecte la liste des fichiers de voix, mis en cache dès l’installation ; la page et `speech-sync.mjs` sont servis réseau d’abord, cache en secours. Les appels `/api/` et les phrases ne sont jamais mis en cache.
+- Le nom du cache contient la version de Lumi et celle de Spellophone (vérifié par les tests) : **augmenter `version` dans `package.json` à chaque publication** pour que les applications installées reçoivent les nouveaux fichiers de voix.
+- Le service worker n’est enregistré qu’en HTTP(S) ; avec `server.py`, il est servi depuis `dist/` et nécessite donc `npm run build`.
+
 ## Fonctionnalités
 
 - Saisie de phrases jusqu’à 300 caractères.
@@ -108,6 +122,9 @@ Lorsqu’une API de phonétisation est disponible, le texte lui est envoyé. Sur
 .
 ├── Lumi-LPC-V0.html   # Interface, moteur de règles, dessins et lexique
 ├── speech-sync.mjs   # Synthèse locale et association phonèmes / horodatages / clés
+├── manifest.webmanifest # Description de l’application installable
+├── sw.js              # Service worker : cache hors ligne
+├── icons/             # Icônes de l’application (sources SVG et PNG)
 ├── server.py          # Serveur HTTP local et API eSpeak NG
 ├── netlify/functions/ # API de phonétisation pour le site public
 ├── netlify.toml       # Configuration du déploiement
