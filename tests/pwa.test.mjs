@@ -59,6 +59,7 @@ test('offline: the app shell and voice files are served from cache, phrases are 
   w.online = false;
   assert.equal((await w.run('fetch', get('/assets/voice/wasm/espeak-ng.wasm')).responded).url, 'https://lumi.test/assets/voice/wasm/espeak-ng.wasm');
   assert.equal(w.fetched.filter(u => u.includes('espeak-ng.wasm')).length, 1);
+  for (const module of ['sounds.mjs', 'sound-catalog.mjs']) assert.deepEqual(await w.run('fetch', get('/'+module)).responded, {body:module});
   // Navigation offline falls back to the cached page.
   assert.deepEqual(await w.run('fetch', get('/?x=1', 'navigate')).responded, { body: './' });
   // API calls and POSTs are left to the network and never stored.
@@ -69,7 +70,7 @@ test('offline: the app shell and voice files are served from cache, phrases are 
 
 test('build publishes the manifest, service worker and icons', () => {
   execFileSync(process.execPath, ['scripts/build.mjs']);
-  for (const file of ['dist/manifest.webmanifest', 'dist/sw.js', 'dist/icons/apple-touch-icon.png', ...manifest.icons.map(i => 'dist/' + i.src)]) assert.ok(existsSync(file), file);
+  for (const file of ['dist/sounds.mjs', 'dist/sound-catalog.mjs', 'dist/manifest.webmanifest', 'dist/sw.js', 'dist/icons/apple-touch-icon.png', ...manifest.icons.map(i => 'dist/' + i.src)]) assert.ok(existsSync(file), file);
   // The built worker precaches every voice file the browser engine needs, all present in dist.
   const voice = JSON.parse(readFileSync('dist/sw.js', 'utf8').match(/const VOICE = (\[.*\]);/)[1]);
   for (const file of ['assets/voice/dist/browser.js', 'assets/voice/wasm/espeak-ng.wasm', 'assets/voice/espeak-ng-data/fr_dict.gz', 'assets/voice/keys/manifest.json', 'assets/voice/keys/siwis-keys.wav', 'assets/voice/keys/README.md', 'assets/voice/keys/MODEL_CARD']) assert.ok(voice.includes(file), file);

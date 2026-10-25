@@ -167,3 +167,22 @@ Le contrôle de la voix et la correction des six consonnes explosives isolées s
 ## Lecture naturelle (première version)
 
 Le sélecteur **Lecture** ajoute « Phrase naturelle » au mode « Clé par clé ». Les mêmes extraits Piper / Siwis sont enchaînés sans les créneaux d’observation : aucun modèle ni dépendance supplémentaire. Les clés et la bouche suivent les durées et repères des extraits, avec une pause de 180 ms à la ponctuation ou après un `|` explicite. La pause, le ralenti, la boucle et les corrections phonétiques restent disponibles. Les raccords restent perceptibles ; ce montage n’apporte pas encore la prosodie d’une phrase synthétisée d’un seul tenant. eSpeak reste une voix de secours signalée si la banque est indisponible. Voir [le fonctionnement et les limites](docs/natural-reading.md).
+
+## Explorer les sons
+
+L’onglet **Les sons** présente les 35 phonèmes de base pris en charge par Lumi :
+21 consonnes et semi-voyelles, 14 voyelles. Chaque fiche réunit l’écoute Siwis,
+le visage et la clé, ainsi qu’un mot courant dont les lettres utiles sont
+surlignées. La recherche accepte un symbole ou un mot ; un filtre distingue les
+voyelles des consonnes. « Coder ce mot » ouvre sa transcription explicite dans
+le simulateur. La simple consultation préserve la phrase en cours.
+
+Le catalogue reprend l’inventaire LPC, sans ajouter le /ɑ/ ni traiter /ə/ comme
+un son distinct : le choix du e prononcé reste dans le simulateur. Les variantes
+régionales de « brun » et l’emprunt « parking » sont signalés. Les 329 unités de
+la banque comprennent aussi les combinaisons consonne-voyelle ; elles restent
+accessibles dans le simulateur et l’outil local de contrôle de voix.
+
+Les modules du catalogue font partie du cache hors ligne de la version 0.4.0.
+Le son nécessite le site ou le serveur local ; l’ouverture directe en `file://`
+conserve le simulateur historique, mais ne charge pas cet explorateur en module.
