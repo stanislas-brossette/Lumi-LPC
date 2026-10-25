@@ -26,6 +26,12 @@ Il est aussi possible d’ouvrir directement **[Lumi-LPC-V0.html](Lumi-LPC-V0.ht
 
 ## Déploiement sur Netlify
 
+Site public : **[lumi-lpc.netlify.app](https://lumi-lpc.netlify.app/)**.
+
+Le premier déploiement a été vérifié le 25 octobre 2026 : accès public sans authentification, moteur eSpeak NG disponible et génération de clés pour une phrase libre.
+
+**Économie de crédits : les builds Netlify sont arrêtés après cette publication.** Les pushs GitHub ne mettent donc pas automatiquement le site à jour. Regrouper les changements et les tester localement avant toute publication. Pour une prochaine mise en ligne, réactiver les builds dans les réglages Netlify, déclencher un seul déploiement, puis les arrêter à nouveau. Le site existant reste accessible lorsque les builds sont arrêtés.
+
 Le site et la phonétisation sont hébergés ensemble sur Netlify. Aucune base Supabase ni clé d’API n’est nécessaire. Le moteur eSpeak NG est exécuté dans les fonctions Node.js via le paquet `ephone`, avec les données françaises.
 
 1. Pousser les fichiers du projet sur le dépôt GitHub `stanislas-brossette/Lumi-LPC`.
