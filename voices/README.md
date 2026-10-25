@@ -86,3 +86,39 @@ Pour reproduire uniquement cette correction :
 ```sh
 /tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx --repair-key y
 ```
+
+La passe 0.4.7 répond aux défauts signalés dans « c’est extraordinaire » et
+remplace uniquement /tɛ/, /ɔ/ et /ʁ/, avec la même voix Siwis. Les 326 autres
+unités sont bit-identiques à la version 0.4.6 (empreinte dans
+`tests/fixtures/voice-extraordinaire-before.json`).
+
+- /tɛ/ vient de /ʒə dˈi tˈɛt ./ : coupe 0,77–1,20 s, avant le second /t/.
+  Les 60 premières ms conservent une fermeture calme ; le repère de bouche
+  est placé à 130 ms, après le relâchement, au début de la voyelle.
+- /ɔ/ vient de /ʒə dˈi pˈɔʁt ./ : coupe 0,81–1,04 s de la voyelle de « porte »,
+  après le /p/ et avant le /ʁ/. Le /o/ fermé reste inchangé.
+- /ʁ/ vient de /ʒə dˈi aʁˈø ./ : coupe 1,15–1,205 s dans la consonne,
+  avant la remontée d’énergie de la voyelle d’appui vers 1,21 s.
+
+Les contextes utilisent `length_scale=2.0`, puis les découpes sont normalisées
+avec un gain plafonné à 2 et des fondus de 3 ms. Les bornes ont été ajustées à
+partir de l’énergie et des horodatages d’un reconnaisseur indépendant ; il ne
+s’agit pas d’un alignement phonétique certifié. Celui-ci transcrit l’ancien
+/tɛ/ en /s e/, le nouveau en /d eː/, mais /t ɛ/ dans la phrase porteuse.
+Il transcrit l’ancien /ɔ/ en /ø/ et retrouve /ɔ/ dans son nouveau contexte ;
+la coupe seule n’a pas de résultat exploitable. Le /ʁ/ très bref reste trop
+ambigu pour ce contrôle. La perception des trois candidats doit donc être
+confirmée à l’écoute ; ils sont les trois premières cartes de
+`/voice-review.html`, avec l’ancien son et la phrase porteuse.
+
+Les PCM retenus et leurs contextes sont archivés dans le fichier de comparaison,
+avec les décisions et empreintes dans `voices/extraordinaire-audit.json`.
+Pour réappliquer exactement ces trois coupes dans une banque existante, sans
+nouvelle synthèse (après `--apply-reviewed-consonants` si régénération complète) :
+
+```sh
+/tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --apply-archived-extraordinaire
+```
+
+Le moteur Python reste un outil de préparation ; le site distribue uniquement
+la banque audio. Cette passe ne change pas la phonétisation de la phrase.

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "baseAudioSha256": "f19fe2d7cb807180ac21fc6cff12059470fe73cec1fe5f0b17a787b2acea2c0a",
-  "fixtureAudioSha256": "2caf97612e2884e414263eff9fd658e5f06ddd39e30bda48845c631c211b9dcb",
+  "fixtureAudioSha256": "6e1c1d9b3d1fea0fe2c9b4a7ecbb702a37219d4401081dc8f182fd4dda18d5c3",
   "method": "Compare isolated sounds and carrier + consonant + eu; cut before stressed vowel segment. Six stops and four other consonants retained, /ɥ/ unresolved. /ɲ,j/ extracted before /a/; /ŋ/ uses measured eSpeak events before /ø/.",
   "recognizer": "facebook/wav2vec2-xlsr-53-espeak-cv-ft, revision 2c733782da5604684829819a5eb744c193fe9398",
   "limitation": "Automatic recognition of isolated sounds is unreliable; no human or pedagogical validation claimed.",
