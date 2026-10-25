@@ -37,8 +37,8 @@ test('neural montage keeps the exact keys, repeats, clock, vowel marks and isola
   const keys = ['pa', 'pa', 'bɔ̃', 'ʒu', 'ʁ', 'ɥi', 'œ̃', 'ŋ'].map(s => byIpa[s]);
   const packet = synthesizeKeysWithBank(keys, bank, encodeWav);
   assert.equal(packet.keys, keys);
-  assert.equal(packet.voice, 'Piper · Siwis');
-  assert.equal(packet.warning, '');
+  assert.equal(packet.voice, 'Piper · Siwis + eSpeak NG');
+  assert.match(packet.warning, /ŋ.*eSpeak/);
   assert.equal(packet.clips.length, keys.length);
   assert.ok(packet.slotDuration >= 1.2);
   assert.deepEqual(packet.clips[0], packet.clips[1]);
@@ -97,4 +97,87 @@ test('network or missing-clip failure falls back to eSpeak for the whole sequenc
   }
   const retry = await synthesizeKeys(keys, engine, encodeWav, async () => bank);
   assert.equal(retry.voice, 'Piper · Siwis');
+});
+
+test('reported /to/ uses a contextual stop-vowel excerpt instead of the long isolated attack', () => {
+  const before = JSON.parse(readFileSync('tests/fixtures/voice-stops-before.json'));
+  const entry = manifest.keys.to;
+  assert.equal(entry.source, 'carrier');
+  assert.equal(entry.phonemes, 'ʒə dˈi tˈo .');
+  assert.ok(entry.vowel < before.keys.to.vowel / 2);
+  assert.ok(entry.end > entry.vowel + .04, 'retain the vowel after the stop');
+  assert.ok(entry.end < before.keys.to.end);
+});
+
+test('the consonant pass preserves all other units and reproduces the archived cuts',()=>{
+  const report=JSON.parse(readFileSync('voices/consonant-audit.json'));
+  assert.equal(report.units.length,21);
+  const fixture=readFileSync('tests/fixtures/voice-stops-before.wav');
+  assert.equal(createHash('sha256').update(fixture).digest('hex'),report.fixtureAudioSha256);
+  const meta=JSON.parse(readFileSync('tests/fixtures/voice-stops-before.json'));
+  const archive=readVoiceBank(meta,fixture.buffer.slice(fixture.byteOffset,fixture.byteOffset+fixture.byteLength));
+  const changed=new Set(report.units.filter(r=>r.status==='replaced').map(r=>r.ipa));
+  assert.equal(changed.size,10);
+  const hash=createHash('sha256');
+  for(const [ipa,entry] of Object.entries(manifest.keys)){
+    const sample=bank.samples.subarray(entry.start,entry.start+entry.length);
+    if(changed.has(ipa)){
+      const saved=meta.keys['pass-after-'+ipa];
+      assert.deepEqual(sample,archive.samples.subarray(saved.start,saved.start+saved.length),ipa);
+      assert.equal(entry.vowel,null);
+      if(entry.source==='carrier-eu')assert.ok(entry.sourceEnd<entry.supportVowelOnset,'stop before the supporting vowel');
+      if(entry.source==='espeak-eu')assert.equal(entry.sourceEnd,entry.supportVowelOnset);
+    }else if(ipa==='y'){
+      hash.update(readFileSync('tests/fixtures/voice-y-before.wav').subarray(44));
+    }else if(ipa==='pa'){
+      // The later /pa/ repair is checked separately; reconstruct this pass's baseline.
+      hash.update(readFileSync('tests/fixtures/voice-pa-before.wav').subarray(44));
+    }else hash.update(new Uint8Array(sample.buffer,sample.byteOffset,sample.byteLength));
+  }
+  assert.equal(hash.digest('hex'),report.unmodifiedPcmSha256,'319 units must remain bit-identical');
+  const ng=inventory.filter(k=>k.ipa==='ŋ');
+  const packet=synthesizeKeysWithBank(ng,bank,encodeWav);
+  assert.equal(packet.voice,'eSpeak NG');assert.match(packet.warning,/ŋ.*eSpeak/);
+});
+
+test('/pa/ keeps the closure before the vowel and changes no other audio unit',()=>{
+ const before=JSON.parse(readFileSync('tests/fixtures/voice-pa-before.json'));
+ const entry=manifest.keys.pa;
+ assert.equal(entry.source,'carrier');assert.equal(entry.phonemes,'ʒə dˈi pˈa .');
+ const clip=bank.samples.subarray(entry.start,entry.start+entry.length);
+ const rms=x=>Math.sqrt(x.reduce((sum,s)=>sum+s*s,0)/x.length);
+ assert.ok(entry.vowel>.06&&entry.vowel<entry.end);
+ assert.ok(rms(clip.subarray(0,Math.round(.06*bank.sampleRate)))<.12*rms(clip),'keep the quiet closure before the release');
+ const hash=createHash('sha256');
+ for(const [ipa,e] of Object.entries(manifest.keys))if(ipa!=='pa'){
+  const samples=bank.samples.subarray(e.start,e.start+e.length);
+  // Reconstruct the earlier /pa/ baseline before the later /y/ repair.
+  hash.update(ipa==='y'?readFileSync('tests/fixtures/voice-y-before.wav').subarray(44):new Uint8Array(samples.buffer,samples.byteOffset,samples.byteLength));
+ }
+ assert.equal(hash.digest('hex'),before.unmodifiedPcmSha256,'328 other units unchanged');
+});
+
+
+test('/y/ is cropped from a sustained carrier and preserves the other 328 units',()=>{
+ const before=JSON.parse(readFileSync('tests/fixtures/voice-y-before.json'));
+ const original=readFileSync('tests/fixtures/voice-y-before.wav');
+ assert.equal(createHash('sha256').update(original).digest('hex'),before.audioSha256);
+ const entry=manifest.keys.y;
+ assert.equal(entry.source,'carrier');assert.equal(entry.phonemes,'ʒə dˈi ˈy .');
+ assert.equal(entry.lengthScale,2);assert.equal(entry.vowel,null);
+ assert.equal(entry.sourceEnd-entry.sourceStart,entry.length);
+ const meta=JSON.parse(readFileSync('tests/fixtures/voice-stops-before.json'));
+ const wav=readFileSync('tests/fixtures/voice-stops-before.wav');
+ const archive=readVoiceBank(meta,wav.buffer.slice(wav.byteOffset,wav.byteOffset+wav.byteLength));
+ const saved=meta.keys['pass-after-y'];
+ const clip=bank.samples.subarray(entry.start,entry.start+entry.length);
+ assert.deepEqual(clip,archive.samples.subarray(saved.start,saved.start+saved.length));
+ assert.notDeepEqual(new Uint8Array(clip.buffer,clip.byteOffset,clip.byteLength),original.subarray(44));
+ assert.ok(entry.sourceEnd<meta.keys['pass-context-y'].length);
+ const hash=createHash('sha256');
+ for(const [ipa,e] of Object.entries(manifest.keys))if(ipa!=='y'){
+  const samples=bank.samples.subarray(e.start,e.start+e.length);
+  hash.update(new Uint8Array(samples.buffer,samples.byteOffset,samples.byteLength));
+ }
+ assert.equal(hash.digest('hex'),before.unmodifiedPcmSha256,'328 other units unchanged');
 });

@@ -1,0 +1,302 @@
+{
+  "version": 1,
+  "baseAudioSha256": "f19fe2d7cb807180ac21fc6cff12059470fe73cec1fe5f0b17a787b2acea2c0a",
+  "fixtureAudioSha256": "2caf97612e2884e414263eff9fd658e5f06ddd39e30bda48845c631c211b9dcb",
+  "method": "Compare isolated sounds and carrier + consonant + eu; cut before stressed vowel segment. Six stops and four other consonants retained, /ɥ/ unresolved. /ɲ,j/ extracted before /a/; /ŋ/ uses measured eSpeak events before /ø/.",
+  "recognizer": "facebook/wav2vec2-xlsr-53-espeak-cv-ft, revision 2c733782da5604684829819a5eb744c193fe9398",
+  "limitation": "Automatic recognition of isolated sounds is unreliable; no human or pedagogical validation claimed.",
+  "units": [
+    {
+      "ipa": "p",
+      "status": "retained",
+      "oldRecognition": "",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ ə d i a p y",
+      "oldMs": 104,
+      "currentMs": 104,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "d",
+      "status": "retained",
+      "oldRecognition": "d",
+      "candidateRecognition": "d",
+      "candidateContextRecognition": "ʒ ə d i a d y",
+      "oldMs": 104,
+      "currentMs": 104,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "ʒ",
+      "status": "replaced",
+      "oldRecognition": "f",
+      "candidateRecognition": "dʒ",
+      "candidateContextRecognition": "ʒ ə d i a ʒ y",
+      "oldMs": 263,
+      "currentMs": 109,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi aʒˈø .",
+        "sourceStart": 14738,
+        "sourceEnd": 17152,
+        "supportVowelOnset": 18432
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "k",
+      "status": "retained",
+      "oldRecognition": "t",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ y d i a k ø",
+      "oldMs": 127,
+      "currentMs": 127,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "v",
+      "status": "retained",
+      "oldRecognition": "θ",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ ə d i a v y",
+      "oldMs": 169,
+      "currentMs": 169,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "z",
+      "status": "replaced",
+      "oldRecognition": "",
+      "candidateRecognition": "z",
+      "candidateContextRecognition": "ʒ d i a z y",
+      "oldMs": 101,
+      "currentMs": 98,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi azˈø .",
+        "sourceStart": 14994,
+        "sourceEnd": 17152,
+        "supportVowelOnset": 19712
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "s",
+      "status": "retained",
+      "oldRecognition": "s",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ y d i a s y",
+      "oldMs": 92,
+      "currentMs": 92,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "ʁ",
+      "status": "retained",
+      "oldRecognition": "",
+      "candidateRecognition": "q",
+      "candidateContextRecognition": "ʒ ə d i a ʁ y",
+      "oldMs": 93,
+      "currentMs": 93,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "b",
+      "status": "retained",
+      "oldRecognition": "d",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ ə d i a b y",
+      "oldMs": 69,
+      "currentMs": 69,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "n",
+      "status": "replaced",
+      "oldRecognition": "n a q",
+      "candidateRecognition": "n e",
+      "candidateContextRecognition": "ʒ y d i a n ø",
+      "oldMs": 273,
+      "currentMs": 133,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi anˈø .",
+        "sourceStart": 14482,
+        "sourceEnd": 17408,
+        "supportVowelOnset": 18944
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "ɥ",
+      "status": "retained",
+      "oldRecognition": "d ø f",
+      "candidateRecognition": "ð",
+      "candidateContextRecognition": "ʒ y d i j a v y",
+      "oldMs": 146,
+      "currentMs": 146,
+      "metadata": {},
+      "caution": "Siwis /ɥ/ remains unconfirmed; no replacement claimed."
+    },
+    {
+      "ipa": "m",
+      "status": "replaced",
+      "oldRecognition": "i",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ ə d i a m y",
+      "oldMs": 180,
+      "currentMs": 63,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi amˈø .",
+        "sourceStart": 13970,
+        "sourceEnd": 15360,
+        "supportVowelOnset": 17664
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "t",
+      "status": "retained",
+      "oldRecognition": "t",
+      "candidateRecognition": "t",
+      "candidateContextRecognition": "ʒ ə d i a t y ʁ",
+      "oldMs": 93,
+      "currentMs": 93,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "f",
+      "status": "retained",
+      "oldRecognition": "",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ ə d i a f ø",
+      "oldMs": 226,
+      "currentMs": 226,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "l",
+      "status": "replaced",
+      "oldRecognition": "t uː s",
+      "candidateRecognition": "",
+      "candidateContextRecognition": "ʒ ø d i a l ø",
+      "oldMs": 266,
+      "currentMs": 63,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi alˈø .",
+        "sourceStart": 14994,
+        "sourceEnd": 16384,
+        "supportVowelOnset": 18176
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "ʃ",
+      "status": "replaced",
+      "oldRecognition": "",
+      "candidateRecognition": "ʃ",
+      "candidateContextRecognition": "ʒ y d iː a ʃ y",
+      "oldMs": 211,
+      "currentMs": 156,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi aʃˈø .",
+        "sourceStart": 13458,
+        "sourceEnd": 16896,
+        "supportVowelOnset": 18944
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "ɲ",
+      "status": "replaced",
+      "oldRecognition": "eː",
+      "candidateRecognition": "n",
+      "candidateContextRecognition": "ʒ ə d i a n j ø",
+      "oldMs": 261,
+      "currentMs": 89,
+      "metadata": {
+        "source": "carrier",
+        "phonemes": "ʒə dˈi aɲˈa .",
+        "sourceStart": 15696,
+        "sourceEnd": 17664
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "w",
+      "status": "replaced",
+      "oldRecognition": "b e",
+      "candidateRecognition": "u5",
+      "candidateContextRecognition": "ʒ ø d iː j a w ʉ",
+      "oldMs": 190,
+      "currentMs": 75,
+      "metadata": {
+        "source": "carrier-eu",
+        "phonemes": "ʒə dˈi awˈø .",
+        "sourceStart": 14738,
+        "sourceEnd": 16384,
+        "supportVowelOnset": 17920
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "g",
+      "status": "retained",
+      "oldRecognition": "d",
+      "candidateRecognition": "d",
+      "candidateContextRecognition": "ʒ ə d iː ɡ ø p",
+      "oldMs": 93,
+      "currentMs": 93,
+      "metadata": {},
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "j",
+      "status": "replaced",
+      "oldRecognition": "r iː",
+      "candidateRecognition": "iː",
+      "candidateContextRecognition": "ʒ ə d i a j ø",
+      "oldMs": 355,
+      "currentMs": 43,
+      "metadata": {
+        "source": "carrier",
+        "phonemes": "ʒə dˈi jˈa .",
+        "sourceStart": 14928,
+        "sourceEnd": 15872
+      },
+      "caution": "Short clips are not certified by recognition."
+    },
+    {
+      "ipa": "ŋ",
+      "status": "replaced",
+      "oldRecognition": "",
+      "candidateRecognition": "t",
+      "candidateContextRecognition": "ʒ y d i a t ø",
+      "oldMs": 283,
+      "currentMs": 189,
+      "metadata": {
+        "source": "espeak-eu",
+        "phonemes": "ŋø",
+        "sourceStart": 0,
+        "sourceEnd": 4160,
+        "supportVowelOnset": 4160,
+        "engine": "eSpeak NG"
+      },
+      "caution": "Short clips are not certified by recognition."
+    }
+  ],
+  "unmodifiedPcmSha256": "73a84cc626586091c4602c4c4d4aef0eb3256d03bedeb80e20df2415879d620e",
+  "unmodifiedUnits": 319
+}

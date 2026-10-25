@@ -64,9 +64,16 @@ details.bottom-note{padding:16px 0 30px}details.bottom-note summary{font-size:12
  .stage svg{max-height:250px}.stage-footer{padding:8px 12px;min-height:0}.stage-footer .current-ipa{font-size:26px}.stage-footer .current-meta{margin-top:2px}
  .strip .sequence-hint{font-size:11px;line-height:1.5;margin:0}.transport{padding:10px 14px;gap:8px}
 }
+.playback-options{padding:12px 22px 0;font-size:12px}.playback-options label{display:flex;align-items:center;gap:10px;font-weight:600}.playback-options select{min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}.playback-options p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.5}@media(max-width:850px){.playback-options{padding:10px 14px 0}.playback-options select{font-size:16px}}
+
+.sound-back{display:none}@media(max-width:850px){.sound-back{display:block;font-size:12px;margin-bottom:12px}}
+/* Sound explorer: a compact library beside one shared face and hand. */
+.sounds-intro p{color:var(--muted);font-size:14px;line-height:1.6}.sounds-intro .ref-title{margin-bottom:8px}.sounds-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);gap:22px;align-items:start;margin-bottom:28px}.sounds-library{padding:20px}.sound-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sound-filters input,.sound-filters select{width:100%;min-width:0;min-height:44px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px;color:var(--ink);font-size:16px}.sound-grid{max-height:620px;overflow-y:auto;overscroll-behavior:contain;padding:3px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.sound-choice{border:1px solid var(--line);border-radius:11px;min-height:72px;padding:10px 4px;background:transparent}.sound-choice strong,.sound-choice span{display:block}.sound-choice strong{font-family:"DejaVu Sans",Arial,sans-serif;font-size:20px;font-weight:500}.sound-choice span{font-size:12px;margin-top:6px}.sound-choice[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:white}.sound-detail{padding:18px;position:sticky;top:16px}.sound-detail-head{display:flex;align-items:center;gap:14px}.sound-detail-head h3{font:36px Georgia,serif;margin:0}.sound-detail-head p{font-size:13px;color:var(--muted);margin:0}.sound-detail .stage{margin:14px 0 0}.sound-detail .stage svg{max-height:310px}.sound-description{font-size:12px;color:var(--muted);line-height:1.6;margin:12px 0}.sound-example{border-top:1px solid var(--line);padding-top:14px}.sound-example p{margin-bottom:8px}.sound-example strong{font:28px Georgia,serif}.sound-example mark{background:#f6e1d3;color:var(--ink);border-radius:4px;padding:0 2px}.sound-example span:not(.field-label){font-size:16px;color:var(--muted)}.sound-actions{display:flex;gap:10px;flex-wrap:wrap}.sound-detail>.editor-intro{margin-bottom:0}
+@media(max-width:850px){.sounds-layout{grid-template-columns:minmax(0,1fr);gap:14px}.sounds-library{padding:14px}.sound-detail{position:static;padding:14px}.sound-detail .stage svg{max-height:235px}.sound-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.sound-filters{grid-template-columns:1fr}.sound-detail .editor-intro{font-size:12px}.sound-actions button{flex:1;white-space:nowrap}.sound-detail .stage{max-width:400px;margin:10px auto 0}.sound-grid{max-height:210px;overflow-y:auto;padding:3px}.sound-choice{min-height:68px}.sound-choice span{font-size:11px}}
+@media(max-width:380px){.sound-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.nav-btn{padding:10px 7px}.sound-actions{gap:6px}.sound-actions button{padding:10px;font-size:13px}}
 </style></head>
 <body>
-<header><div class="wrap topbar"><div class="brand"><div class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 18V8m4 10V4m4 14V7M5 14v3a7 7 0 0 0 14 0v-5"/></svg></div><div><div class="brand-word">lumi</div><small>Atelier LPC</small></div></div><nav aria-label="Navigation principale"><button class="nav-btn" data-view="simulator" aria-current="page">Simuler</button><button class="nav-btn" data-view="reference">Les cl&eacute;s</button><button class="nav-btn" data-view="help">Guide</button></nav><span class="tag">V0 &middot; Prototype</span></div></header>
+<header><div class="wrap topbar"><div class="brand"><div class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 18V8m4 10V4m4 14V7M5 14v3a7 7 0 0 0 14 0v-5"/></svg></div><div><div class="brand-word">lumi</div><small>Atelier LPC</small></div></div><nav aria-label="Navigation principale"><button class="nav-btn" data-view="simulator" aria-current="page">Simuler</button><button class="nav-btn" data-view="sounds">Les sons</button><button class="nav-btn" data-view="reference">Les cl&eacute;s</button><button class="nav-btn" data-view="help">Guide</button></nav><span class="tag">V0 &middot; Prototype</span></div></header>
 <main class="wrap">
 <div class="hero"><div><div class="eyebrow">La langue fran&ccedil;aise parl&eacute;e compl&eacute;t&eacute;e</div><h1>Les mots <em>prennent forme.</em></h1><p>D&eacute;compose une phrase, observe chaque cl&eacute;, avance &agrave; ton rythme.</p></div><div class="private"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Sans compte &middot; sans suivi</div></div>
 <section id="view-simulator" aria-label="Simulateur">
@@ -88,15 +95,16 @@ details.bottom-note{padding:16px 0 30px}details.bottom-note summary{font-size:12
 </aside>
 <section id="reader" class="card viewer" aria-label="Lecteur des cl&eacute;s">
 <div class="viewer-head"><div class="section-head"><span class="step">2</span><h2>Observe le mouvement</h2></div><div class="viewer-tools"><button id="mirror" class="mini-btn" aria-pressed="false" title="Inverser l'affichage horizontalement"><span data-icon="mirror"></span><span>Miroir</span></button><button id="points" class="mini-btn" aria-pressed="true" title="Afficher ou masquer les rep&egrave;res"><span data-icon="target"></span><span>Rep&egrave;res</span></button></div></div>
-<div class="tracker" id="tracker" hidden><p class="tracker-text" id="tracker-text" lang="fr"></p><p class="tracker-ipa" id="tracker-ipa"></p><div class="tracker-progress" aria-hidden="true"><span id="tracker-bar"></span></div></div>
+<div class="playback-options"><label for="playback-mode">Lecture <select id="playback-mode"><option value="didactic">Clé par clé</option><option value="natural">Phrase naturelle</option></select></label><p id="mode-hint">Un son par clé, avec un temps pour observer le geste.</p></div><div class="tracker" id="tracker" hidden><p class="tracker-text" id="tracker-text" lang="fr"></p><p class="tracker-ipa" id="tracker-ipa"></p><div class="tracker-progress" aria-hidden="true"><span id="tracker-bar"></span></div></div>
 <div class="stage"><div class="stage-chip" id="orientation">Vue de face &middot; main droite du codeur</div><div id="avatar-container"></div><div class="pos-legend" id="position-legend"></div><div class="stage-footer"><div><div id="current-ipa" class="current-ipa">&mdash;</div><div id="current-meta" class="current-meta">Pr&eacute;pare une phrase pour commencer</div></div><div id="current-description" class="current-description"></div></div></div>
 <div class="strip" role="group" aria-label="S&eacute;quence des cl&eacute;s"><div class="sequence-heading"><h2>Cl&eacute; par cl&eacute;</h2><span id="key-count" class="count"></span></div><div id="sequence" class="sequence"><div class="empty">Les cl&eacute;s appara&icirc;tront ici.</div></div><p class="sequence-hint"><span class="touch-hint">Touche une cl&eacute;, un mot ou un son pour l&rsquo;observer et l&rsquo;&eacute;couter.</span><span class="keyboard-hint">Clique une cl&eacute;, un mot ou un son &middot; <span class="kbd">&larr;</span> <span class="kbd">&rarr;</span> pour avancer &middot; <span class="kbd">Espace</span> pour lire.</span> &middot; &#x21bb; cl&eacute; r&eacute;p&eacute;t&eacute;e, tap&eacute;e.</p></div>
 <div class="transport"><div class="transport-group"><button id="restart" class="icon-btn" aria-label="Revenir &agrave; la premi&egrave;re cl&eacute;" title="Revenir au d&eacute;but"><span data-icon="restart"></span></button><button id="previous" class="icon-btn" aria-label="Cl&eacute; pr&eacute;c&eacute;dente" title="Pr&eacute;c&eacute;dente (fl&egrave;che gauche)"><span data-icon="previous"></span></button><button id="play" class="icon-btn play" aria-label="Lire" title="Lire / pause (espace)"><span data-icon="play"></span></button><button id="next" class="icon-btn" aria-label="Cl&eacute; suivante" title="Suivante (fl&egrave;che droite)"><span data-icon="next"></span></button></div><p id="voice-status" class="voice-status" role="status">Lecture didactique · un son par clé, à cadence régulière.</p><div class="transport-group"><label class="chip voice-chip" title="Lire &agrave; voix haute"><input id="voice" type="checkbox" checked> Voix</label><label class="speed" for="speed"><span>Vitesse</span><select id="speed"><option value="0.25">&times; 0,25</option><option value="0.5">&times; 0,5 · apprentissage</option><option value="0.75">&times; 0,75</option><option value="1" selected>&times; 1</option><option value="1.5">&times; 1,5</option></select></label><button id="loop" class="icon-btn loop" aria-pressed="false" aria-label="R&eacute;p&eacute;ter en boucle" title="R&eacute;p&eacute;ter en boucle"><span data-icon="loop"></span></button></div></div>
 </section>
-</div><details class="bottom-note"><summary>Comment se d&eacute;roule la lecture</summary><p>&times;1 correspond &agrave; au moins 1,2 seconde par cl&eacute;, &times;0,5 &agrave; au moins 2,4 secondes. Chaque cl&eacute; dispose du m&ecirc;me temps : transition de la main, son, puis observation. La vitesse initiale est &times;1 ; utilise le ralenti pour observer les gestes plus longtemps. Le mouvement entre les cl&eacute;s est sch&eacute;matique. Quand une cl&eacute; se r&eacute;p&egrave;te, la main la tape : elle s&rsquo;&eacute;carte du visage puis revient au contact. Une consonne isol&eacute;e utilise la position c&ocirc;t&eacute;, sans ajout de voyelle.</p></details>
+</div><details class="bottom-note"><summary>Comment se d&eacute;roule la lecture</summary><p><strong>Clé par clé :</strong> un créneau régulier pour chaque geste. <strong>Phrase naturelle :</strong> des sons enchaînés avec des durées variables ; ×1 garde la durée des extraits. Les sons de la voix Siwis sont enchaînés sans les temps d’observation. Les raccords restent audibles : ce n’est pas encore une voix de phrase fluide. Les explications de durée ci-dessous concernent le mode clé par clé.</p><p>&times;1 correspond &agrave; au moins 1,2 seconde par cl&eacute;, &times;0,5 &agrave; au moins 2,4 secondes. Chaque cl&eacute; dispose du m&ecirc;me temps : transition de la main, son, puis observation. La vitesse initiale est &times;1 ; utilise le ralenti pour observer les gestes plus longtemps. Le mouvement entre les cl&eacute;s est sch&eacute;matique. Quand une cl&eacute; se r&eacute;p&egrave;te, la main la tape : elle s&rsquo;&eacute;carte du visage puis revient au contact. Une consonne isol&eacute;e utilise la position c&ocirc;t&eacute;, sans ajout de voyelle.</p></details>
 </section>
+<section id="view-sounds" hidden aria-label="Explorer les sons"><div class="sounds-intro"><h2 class="ref-title">Un son, un geste, un mot.</h2><p>Explore les 329 sons de la banque : sons seuls et combinaisons consonne + voyelle. Un mot courant est proposé quand un exemple convient. Les lettres surlignées montrent où entendre le son.</p></div><p id="sound-loading" class="status">L’explorateur se charge avec le site ou le serveur local de Lumi.</p><div class="sounds-layout"><div class="card sounds-library"><div class="sound-filters"><div><label class="field-label" for="sound-search">Chercher un son ou un mot</label><input id="sound-search" type="search" placeholder="Ex. ch, chat, ʃ" autocomplete="off"></div><div><label class="field-label" for="sound-filter">Type de son</label><select id="sound-filter"><option value="all">Tout · 329 sons</option><option value="single">Sons seuls · 35</option><option value="combined">Consonne + voyelle · 294</option><option value="consonant">Consonnes et semi-voyelles</option><option value="vowel">Voyelles</option></select></div></div><p id="sound-results" class="editor-intro" role="status"></p><div id="sound-grid" class="sound-grid" aria-label="Choisir un son"></div></div><article id="sound-detail" class="card sound-detail" aria-label="Geste et exemple du son sélectionné"><a class="sound-back" href="#sound-grid">Choisir un autre son ↑</a><div class="sound-detail-head"><h3 id="sound-ipa">/p/</h3><p id="sound-meta"></p></div><div id="sound-avatar" class="stage"></div><p id="sound-description" class="sound-description"></p><div class="sound-example"><span class="field-label">Mot d’exemple</span><p><strong id="sound-word"></strong> <span id="sound-word-ipa"></span></p><p id="sound-note" class="editor-intro"></p></div><div class="sound-actions"><button id="sound-listen" class="primary" type="button" disabled>Écouter le son</button><button id="sound-use-word" class="secondary" type="button" disabled>Coder ce mot</button></div><p id="sound-status" class="status" role="status"></p><p class="editor-intro">Une consonne seule est montrée au côté, sans voyelle ajoutée. Dans un mot, la voyelle qui suit peut changer la position de la clé. Voix et gestes schématiques, à vérifier à l’écoute.</p></article></div></section>
 <section id="view-reference" hidden aria-label="R&eacute;f&eacute;rence des cl&eacute;s"><h2 class="ref-title">Huit configurations de main.</h2><p class="editor-intro">Vue de dos : la paume est dirig&eacute;e vers le visage de la personne qui code. Dessins originaux, sch&eacute;matiques, non valid&eacute;s p&eacute;dagogiquement.</p><div class="reference-grid" id="shape-reference"></div><h2 class="ref-title">Cinq positions autour du visage.</h2><div class="vowel-grid" id="vowel-reference"></div><p class="bottom-note">La configuration 5 sert aussi pour une voyelle non pr&eacute;c&eacute;d&eacute;e d'une consonne. &laquo; Sans voyelle &raquo; se code au c&ocirc;t&eacute;. Les nasales /&#x25B;&#x303;/ (in) et /&#x153;&#x303;/ (un) peuvent se distinguer selon ta prononciation.</p></section>
-<section id="view-help" hidden aria-label="Guide et sources"><div class="card help"><h2>Un petit atelier pour voir les sons.</h2><p>&Eacute;cris une phrase, pr&eacute;pare les cl&eacute;s, puis utilise le ralenti ou les fl&egrave;ches pour observer chaque geste. Le bouton &laquo; V&eacute;rifier les sons &raquo; permet de corriger la prononciation propos&eacute;e, notamment les liaisons, les e prononc&eacute;s, les pr&eacute;noms et les homographes.</p><h3>Deux fa&ccedil;ons d'utiliser cette V0</h3><p><strong>Fichier HTML ouvert directement :</strong> exemples et petit lexique embarqu&eacute;, sans serveur et sans connexion. Les mots hors lexique sont signal&eacute;s ; leur prononciation n'est jamais invent&eacute;e. Les liaisons ne sont pas g&eacute;n&eacute;r&eacute;es pour les nouvelles combinaisons de mots. La saisie phon&eacute;tique manuelle reste toujours disponible.</p><p><strong>Application avec serveur :</strong> Lumi utilise eSpeak NG pour proposer les phon&egrave;mes d'une phrase libre. Il ne requiert ni compte ni service payant. Les phrases sont envoy&eacute;es au serveur qui h&eacute;berge Lumi pour &ecirc;tre trait&eacute;es par eSpeak NG. Sur le site public, ce traitement a lieu chez Netlify ; avec le serveur Python local, il a lieu sur ton ordinateur. Le code de Lumi n&rsquo;enregistre pas les phrases et ne les &eacute;crit pas dans ses journaux.</p><h3>Ce que ce prototype ne fait pas</h3><p>La bouche est anim&eacute;e de fa&ccedil;on sch&eacute;matique : chaque son a sa forme de l&egrave;vres (ouverture, arrondi, l&egrave;vres serr&eacute;es pour p, b, m, dents sur la l&egrave;vre pour f, v), cal&eacute;e sur la voix ; en pause ou pas &agrave; pas, elle montre la voyelle de la cl&eacute;. Pas d'&eacute;valuation par cam&eacute;ra. La lecture vocale utilise une voix française synthétique douce, préparée avec Piper / Siwis et incluse dans Lumi. eSpeak reste disponible en secours. Les sons gardent une articulation modérément lente ; le temps d’observation entre les clés facilite l’apprentissage. Chaque clé a la même durée : la main se déplace, son son est joué, puis un temps d’observation précède la suivante. La phrase est volontairement découpée, sans rythme naturel. Un clic sur une clé permet de réécouter son son seul. La voix est synthétique, et les gestes restent schématiques. Une prononciation corrigée manuellement utilise les mêmes extraits, choisis à partir des phonèmes saisis. La banque utilise directement le son /ɥ/ ; la voix de secours eSpeak l’approche par un /y/ bref. Ces prononciations restent à valider à l’écoute. La pause suspend la voix et le visuel ; changer de vitesse ralentit ou accélère ensemble le son et les clés, sans repartir au début. Ce n'est pas un outil valid&eacute; d'apprentissage autonome ni un substitut &agrave; un codeur LPC.</p><p>Les doigts, le pouce et la position de la main sont animés ensemble entre les clés. Une clé répétée (même configuration, même position) est tapée : la main recule rapidement vers le poignet puis revient au contact, au moment où son son commence ; le repère de position s’allume au contact. Les trajectoires, les contacts avec le visage, les angles de poignet et les transitions entre doigts sont des simplifications graphiques. Le rep&egrave;re de la main correspond &agrave; l'index ou au majeur selon la configuration. Le mode miroir inverse l'avatar et le référentiel des mains : c'est une aide visuelle, pas une reconstruction de ton geste.</p><h3>Les r&egrave;gles employ&eacute;es</h3><p>La cha&icirc;ne de sons est lue de gauche &agrave; droite : consonne + voyelle lorsqu'elles se suivent dans le m&ecirc;me mot ; sinon consonne isol&eacute;e au c&ocirc;t&eacute; ou voyelle isol&eacute;e avec la configuration 5. Les espaces entre mots emp&ecirc;chent le regroupement de deux mots, sans cr&eacute;er de pause. Ins&egrave;re <code>|</code> pour forcer une s&eacute;paration. Les symboles inconnus bloquent la lecture au lieu d'&ecirc;tre ignor&eacute;s.</p><p>Le e prononc&eacute; /&#x259;/ est r&eacute;solu explicitement vers /&#x153;/ ou /&oslash;/ selon le choix dans l'&eacute;diteur. Cette approximation doit suivre ta prononciation. Les phon&egrave;mes restent visibles et modifiables : le moteur phon&eacute;tique peut se tromper.</p><h3>Installer Lumi sur ton t&eacute;l&eacute;phone</h3><p>Depuis le site en ligne, Lumi peut s&rsquo;ajouter &agrave; l&rsquo;&eacute;cran d&rsquo;accueil et s&rsquo;ouvrir comme une application. Sur Android, utilise le bouton ci-dessous ou le menu du navigateur &laquo; Installer l&rsquo;application &raquo;. Sur iPhone et iPad, ouvre le site dans Safari, touche Partager puis &laquo; Sur l&rsquo;&eacute;cran d&rsquo;accueil &raquo;. Une fois charg&eacute;e, l&rsquo;application fonctionne aussi hors connexion, voix comprise : la phon&eacute;tisation et les sons sont calcul&eacute;s dans le t&eacute;l&eacute;phone.</p><p id="install-status" class="key-note" hidden></p><button id="install" class="secondary" hidden>Installer Lumi</button><h3>Vie priv&eacute;e</h3><p>Le dernier texte et les r&eacute;glages sont conserv&eacute;s dans le stockage local de ce navigateur. La voix est assemblée dans ton navigateur à partir de sons inclus dans Lumi, sans envoyer le texte à un fournisseur vocal. Aucun cookie, aucun suivi d'usage, aucune police ni biblioth&egrave;que charg&eacute;e depuis un tiers. Pour fonctionner hors connexion, le navigateur garde une copie des fichiers de Lumi ; elle ne contient ni tes phrases ni tes r&eacute;glages. Les liens de sources ci-dessous sont ouverts uniquement &agrave; ta demande.</p><button id="clear-storage" class="secondary">Effacer les donn&eacute;es locales et r&eacute;initialiser</button><h3>Sources et distinction avec TextCueS</h3><p>Voix des clés : Piper / Siwis, à partir de la base SIWIS (Yamagishi, Honnet, Garner et Lazaridis, 2017, CC BY 4.0). <a href="assets/voice/keys/README.md" target="_blank" rel="noopener noreferrer">Provenance et attribution de la voix</a>. Les extraits sont synthétiques et ne sont pas validés pédagogiquement.</p><p>R&eacute;f&eacute;rence du syst&egrave;me et des groupes de sons : <a href="https://alpc.asso.fr/les-cles-du-code-lpc/" target="_blank" rel="noopener noreferrer">ALPC &mdash; Les cl&eacute;s du code LPC</a>. Les illustrations de l'affiche ALPC ne sont pas reproduites dans l'application.</p><p>Moteur phon&eacute;tique : <a href="https://github.com/espeak-ng/espeak-ng" target="_blank" rel="noopener noreferrer">eSpeak NG</a>. Pour le serveur Python, il est install&eacute; s&eacute;par&eacute;ment. Sur Netlify, le port <a href="https://github.com/sjmik/ephone-js" target="_blank" rel="noopener noreferrer">ephone</a> est inclus dans les fonctions c&ocirc;t&eacute; serveur.</p><p>Projet de recherche &agrave; comparer : <a href="https://auto-cuedspeech.org/textcues.html" target="_blank" rel="noopener noreferrer">TextCueS / AutoCuedSpeech</a>. Cette V0 n'utilise pas son moteur et n'h&eacute;rite pas de sa validation. Auto-CS fonctionne au sein de SPPAS ; il n'a pas &eacute;t&eacute; int&eacute;gr&eacute; ici.</p><p>Version 0.2.1 &middot; 25 octobre 2026 &middot; Prototype ind&eacute;pendant, sans affiliation &agrave; l'ALPC.</p></div></section>
+<section id="view-help" hidden aria-label="Guide et sources"><div class="card help"><h2>Un petit atelier pour voir les sons.</h2><p>&Eacute;cris une phrase, pr&eacute;pare les cl&eacute;s, puis utilise le ralenti ou les fl&egrave;ches pour observer chaque geste. Le bouton &laquo; V&eacute;rifier les sons &raquo; permet de corriger la prononciation propos&eacute;e, notamment les liaisons, les e prononc&eacute;s, les pr&eacute;noms et les homographes.</p><h3>Deux modes de lecture</h3><p>Le sélecteur Lecture propose « Clé par clé » pour observer chaque son, et « Phrase naturelle » pour entendre la phrase entière. Les mêmes extraits Piper / Siwis que le mode clé par clé sont enchaînés dans ton navigateur, sans téléchargement supplémentaire. Les pauses d’observation sont supprimées ; les raccords entre sons restent perceptibles. eSpeak sert de voix de secours si la banque est indisponible. La vitesse, la pause et la boucle restent disponibles. Les phonèmes corrigés manuellement sont également pris en compte. Les gestes et le minutage restent schématiques et doivent être validés à l’écoute et avec un professionnel du LPC.</p><h3>Deux fa&ccedil;ons d'utiliser cette V0</h3><p><strong>Fichier HTML ouvert directement :</strong> exemples et petit lexique embarqu&eacute;, sans serveur et sans connexion. Les mots hors lexique sont signal&eacute;s ; leur prononciation n'est jamais invent&eacute;e. Les liaisons ne sont pas g&eacute;n&eacute;r&eacute;es pour les nouvelles combinaisons de mots. La saisie phon&eacute;tique manuelle reste toujours disponible.</p><p><strong>Application avec serveur :</strong> Lumi utilise eSpeak NG pour proposer les phon&egrave;mes d'une phrase libre. Il ne requiert ni compte ni service payant. Les phrases sont envoy&eacute;es au serveur qui h&eacute;berge Lumi pour &ecirc;tre trait&eacute;es par eSpeak NG. Sur le site public, ce traitement a lieu chez Netlify ; avec le serveur Python local, il a lieu sur ton ordinateur. Le code de Lumi n&rsquo;enregistre pas les phrases et ne les &eacute;crit pas dans ses journaux.</p><h3>Ce que ce prototype ne fait pas</h3><p>La bouche est anim&eacute;e de fa&ccedil;on sch&eacute;matique : chaque son a sa forme de l&egrave;vres (ouverture, arrondi, l&egrave;vres serr&eacute;es pour p, b, m, dents sur la l&egrave;vre pour f, v), cal&eacute;e sur la voix ; en pause ou pas &agrave; pas, elle montre la voyelle de la cl&eacute;. Pas d'&eacute;valuation par cam&eacute;ra. La lecture vocale utilise une voix française synthétique douce, préparée avec Piper / Siwis et incluse dans Lumi. eSpeak reste disponible en secours. Les sons gardent une articulation modérément lente ; le temps d’observation entre les clés facilite l’apprentissage. Chaque clé a la même durée : la main se déplace, son son est joué, puis un temps d’observation précède la suivante. En mode clé par clé, la phrase est volontairement découpée, sans rythme naturel. Un clic sur une clé permet de réécouter son son seul. La voix est synthétique, et les gestes restent schématiques. Une prononciation corrigée manuellement utilise les mêmes extraits, choisis à partir des phonèmes saisis. La banque utilise directement le son /ɥ/ ; la voix de secours eSpeak l’approche par un /y/ bref. Ces prononciations restent à valider à l’écoute. La pause suspend la voix et le visuel ; changer de vitesse ralentit ou accélère ensemble le son et les clés, sans repartir au début. Ce n'est pas un outil valid&eacute; d'apprentissage autonome ni un substitut &agrave; un codeur LPC.</p><p>Les doigts, le pouce et la position de la main sont animés ensemble entre les clés. Une clé répétée (même configuration, même position) est tapée : la main recule rapidement vers le poignet puis revient au contact, au moment où son son commence ; le repère de position s’allume au contact. Les trajectoires, les contacts avec le visage, les angles de poignet et les transitions entre doigts sont des simplifications graphiques. Le rep&egrave;re de la main correspond &agrave; l'index ou au majeur selon la configuration. Le mode miroir inverse l'avatar et le référentiel des mains : c'est une aide visuelle, pas une reconstruction de ton geste.</p><h3>Les r&egrave;gles employ&eacute;es</h3><p>La cha&icirc;ne de sons est lue de gauche &agrave; droite : consonne + voyelle lorsqu'elles se suivent sans pause, y compris entre deux mots ; sinon consonne isol&eacute;e au c&ocirc;t&eacute; ou voyelle isol&eacute;e avec la configuration 5. Les espaces gardent les mots visibles : une consonne finale déjà prononcée peut s’enchaîner à la voyelle suivante. Aucun son de liaison n’est inventé. Ins&egrave;re <code>|</code> pour forcer une pause et empêcher cet enchaînement. Les symboles inconnus bloquent la lecture au lieu d'&ecirc;tre ignor&eacute;s.</p><p>Le e prononc&eacute; /&#x259;/ est r&eacute;solu explicitement vers /&#x153;/ ou /&oslash;/ selon le choix dans l'&eacute;diteur. Cette approximation doit suivre ta prononciation. Les phon&egrave;mes restent visibles et modifiables : le moteur phon&eacute;tique peut se tromper.</p><h3>Installer Lumi sur ton t&eacute;l&eacute;phone</h3><p>Depuis le site en ligne, Lumi peut s&rsquo;ajouter &agrave; l&rsquo;&eacute;cran d&rsquo;accueil et s&rsquo;ouvrir comme une application. Sur Android, utilise le bouton ci-dessous ou le menu du navigateur &laquo; Installer l&rsquo;application &raquo;. Sur iPhone et iPad, ouvre le site dans Safari, touche Partager puis &laquo; Sur l&rsquo;&eacute;cran d&rsquo;accueil &raquo;. Une fois charg&eacute;e, l&rsquo;application fonctionne aussi hors connexion, voix comprise : la phon&eacute;tisation et les sons sont calcul&eacute;s dans le t&eacute;l&eacute;phone.</p><p id="install-status" class="key-note" hidden></p><button id="install" class="secondary" hidden>Installer Lumi</button><h3>Vie priv&eacute;e</h3><p>Le dernier texte et les r&eacute;glages sont conserv&eacute;s dans le stockage local de ce navigateur. La voix est assemblée dans ton navigateur à partir de sons inclus dans Lumi, sans envoyer le texte à un fournisseur vocal. Aucun cookie, aucun suivi d'usage, aucune police ni biblioth&egrave;que charg&eacute;e depuis un tiers. Pour fonctionner hors connexion, le navigateur garde une copie des fichiers de Lumi ; elle ne contient ni tes phrases ni tes r&eacute;glages. Les liens de sources ci-dessous sont ouverts uniquement &agrave; ta demande.</p><button id="clear-storage" class="secondary">Effacer les donn&eacute;es locales et r&eacute;initialiser</button><h3>Sources et distinction avec TextCueS</h3><p>Voix des clés : Piper / Siwis, à partir de la base SIWIS (Yamagishi, Honnet, Garner et Lazaridis, 2017, CC BY 4.0). <a href="assets/voice/keys/README.md" target="_blank" rel="noopener noreferrer">Provenance et attribution de la voix</a>. Les extraits sont synthétiques et ne sont pas validés pédagogiquement.</p><p>R&eacute;f&eacute;rence du syst&egrave;me et des groupes de sons : <a href="https://alpc.asso.fr/les-cles-du-code-lpc/" target="_blank" rel="noopener noreferrer">ALPC &mdash; Les cl&eacute;s du code LPC</a>. Les illustrations de l'affiche ALPC ne sont pas reproduites dans l'application.</p><p>Moteur phon&eacute;tique : <a href="https://github.com/espeak-ng/espeak-ng" target="_blank" rel="noopener noreferrer">eSpeak NG</a>. Pour le serveur Python, il est install&eacute; s&eacute;par&eacute;ment. Sur Netlify, le port <a href="https://github.com/sjmik/ephone-js" target="_blank" rel="noopener noreferrer">ephone</a> est inclus dans les fonctions c&ocirc;t&eacute; serveur.</p><p>Projet de recherche &agrave; comparer : <a href="https://auto-cuedspeech.org/textcues.html" target="_blank" rel="noopener noreferrer">TextCueS / AutoCuedSpeech</a>. Cette V0 n'utilise pas son moteur et n'h&eacute;rite pas de sa validation. Auto-CS fonctionne au sein de SPPAS ; il n'a pas &eacute;t&eacute; int&eacute;gr&eacute; ici.</p><p>Version 0.4.5 &middot; 25 octobre 2026 &middot; Prototype ind&eacute;pendant, sans affiliation &agrave; l'ALPC.</p></div></section>
 </main><footer><div class="wrap footer-content"><span>lumi &middot; Atelier LPC</span><span>Explorer les gestes, un son &agrave; la fois.</span></div></footer>
 <script>/* Original LPC rule engine. No Auto-CS/SPPAS code is included. */
 (function (root) {
@@ -141,15 +149,17 @@ details.bottom-note{padding:16px 0 30px}details.bottom-note summary{font-size:12
   function encode(input, schwa='\u0153') {
     const {tokens,unknown}=tokenize(input,schwa);
     if(unknown.length) throw new Error('Symboles non pris en charge : '+unknown.join(' ')+' . Corrige la transcription ; aucun son ne sera ignor\u00e9.');
-    const keys=[];
+    const keys=[];let word=0;
     for(let i=0;i<tokens.length;i++){
       const p=tokens[i];
       if(p==='|'){ if(keys.length) keys.at(-1).pauseAfter=true; continue; }
-       if(p==='¦'){ if(keys.length) keys.at(-1).wordAfter=true; continue; }
-      let c=null,v=null;
-      if(C[p]){c=p; if(V[tokens[i+1]]) v=tokens[++i];} else v=p;
+       if(p==='¦'){ if(keys.length) keys.at(-1).wordAfter=true; word++;continue; }
+      let c=null,v=null;const wordStart=word;
+      if(C[p]){c=p; if(V[tokens[i+1]]) v=tokens[++i];
+        else if(tokens[i+1]==='¦'&&V[tokens[i+2]]){v=tokens[i+2];i+=2;word++;}
+      } else v=p;
       const shape=c ? C[c] : 5, position=v ? V[v] : 's';
-      keys.push({c,v,shape,position,ipa:(c||'')+(v||''),code:shape+'-'+position,pauseAfter:false,wordAfter:false});
+      keys.push({c,v,shape,position,ipa:(c||'')+(v||''),code:shape+'-'+position,pauseAfter:false,wordAfter:false,word:wordStart,wordEnd:word});
     }
     return keys;
   }
@@ -172,7 +182,8 @@ details.bottom-note{padding:16px 0 30px}details.bottom-note summary{font-size:12
     }).join('');
   }
   function normalizeText(text){return text.toLowerCase().normalize('NFC').replace(/[\u2019\u2018]/g,"'").replace(/\s+/g,' ').trim();}
-  root.LPC={SHAPES,POSITIONS,tokenize,encode,glideTokens,glides,normalizeText};
+  function connectedIpa(input,schwa){const ipa=encode(input,schwa).map(k=>k.ipa+(k.pauseAfter?'| ':k.wordAfter?' ':'')).join('').trim();return ipa+(/[|.!?,;:]\s*$/.test(input)&&ipa&&!ipa.endsWith('|')?'|':'');}
+  root.LPC={connectedIpa,SHAPES,POSITIONS,tokenize,encode,glideTokens,glides,normalizeText};
   if(typeof module!=='undefined') module.exports=root.LPC;
 })(typeof window!=='undefined'?window:globalThis);
 </script><script>/* Original, parameterized dorsal articulated hand drawings; not copies of ALPC artwork. */
@@ -270,14 +281,14 @@ details.bottom-note{padding:16px 0 30px}details.bottom-note summary{font-size:12
       if(!duration){paint(next);from=null;target=null;tapping=false;}else{paint(from);raf=clock.raf(tick);}
     }
     return {
-      goTo(shape,position,speed=1){
+      goTo(shape,position,speed=1,maxMs=Infinity){
         const key=[shape,position.x,position.y,position.id].join(':');if(key===signature)return;
-        signature=key;animate(frameFor(shape,position),Math.min(500,240/speed),false);
+        signature=key;animate(frameFor(shape,position),Math.min(500,240/speed,maxMs),false);
       },
       // Same key again: leave the face and come back, ending in contact. Returns the contact delay in ms.
-      tap(shape,position,speed=1){
+      tap(shape,position,speed=1,maxMs=Infinity){
         signature=[shape,position.x,position.y,position.id].join(':');
-        animate(frameFor(shape,position),Math.min(900,280/speed),true);
+        animate(frameFor(shape,position),Math.min(900,280/speed,maxMs),true);
         return duration;
       },
       pause(){if(!target||paused)return;pausedAt=clock.now();paint(sample(pausedAt));paused=true;if(raf!==null)clock.cancel(raf);raf=null;},
@@ -352,10 +363,13 @@ const icons={
 };
 const icon=name=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]||''}</svg>`;
 document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
-const state={keys:[],index:0,playing:false,timer:null,speed:1,loop:false,mirror:false,points:true,mode:'offline',engine:'',busy:false,request:0,manual:false,voice:true,audio:null,audioURL:null,voiceData:null,speechModule:null,frame:null,playRequest:0};
+const state={keys:[],index:0,playing:false,timer:null,speed:1,loop:false,mirror:false,points:true,mode:'offline',engine:'',busy:false,request:0,manual:false,voice:true,audio:null,audioURL:null,voiceData:null,speechModule:null,frame:null,playRequest:0,playbackMode:'didactic'};
 const storageKey='lumi-lpc-v0.1';
 const mediaReduced=window.matchMedia('(prefers-reduced-motion: reduce)');
-function save(){try{localStorage.setItem(storageKey,JSON.stringify({text:$('phrase').value,ipa:$('ipa').value,manual:state.manual,speed:state.speed,loop:state.loop,mirror:state.mirror,points:state.points,voice:state.voice,speedProfile:2,schwa:$('schwa').value}));}catch(_){}}
+function save(){try{localStorage.setItem(storageKey,JSON.stringify({text:$('phrase').value,ipa:$('ipa').value,manual:state.manual,speed:state.speed,loop:state.loop,mirror:state.mirror,points:state.points,voice:state.voice,playbackMode:state.playbackMode,speedProfile:2,schwa:$('schwa').value}));}catch(_){}}
+function cancelPreparation(){state.request++;state.busy=false;}
+function beginPreparation(){cancelPreparation();return state.request;}
+function speechOptions(){return {mode:state.playbackMode};}
 function notify(message,error=false){$('status').textContent=message;$('status').className='status'+(error?' error':'');}
 function updateCounter(){$('char-count').textContent=$('phrase').value.length+' / 300';}
 function controls(){
@@ -384,7 +398,7 @@ function syncAudioFrame(){
 }
 // The mouth follows the playback clock: audio time within the key slot, or elapsed time when reading without voice.
 function mouthTime(){
- if(state.audio&&state.voiceData)return state.audio.currentTime-(state.singleKey?0:state.voiceData.times[state.index]);
+ if(state.audio&&state.voiceData){const d=state.voiceData,i=state.index;return state.audio.currentTime-(state.singleKey?(d.clipTimes?d.times[i]-d.clipTimes[i]:0):d.times[i]);}
  if(state.playing)return (performance.now()-state.keyStart)/1000*state.speed;
  return null;
 }
@@ -400,7 +414,7 @@ function playAudio(audio){
  handAnimator.resume();state.playing=true;controls();
  audio.play().then(()=>{
  if(state.audio!==audio||!state.playing||request!==state.playRequest)return;
- voiceStatus(state.voiceData.warning||'Lecture didactique · une durée égale et un son pour chaque clé.');
+ voiceStatus(state.voiceData.warning||(state.voiceData.mode==='natural'?'Lecture continue · même voix que les clés, sans temps d’observation.':'Lecture didactique · une durée égale et un son pour chaque clé.'));
  syncAudioFrame();
  }).catch(()=>{if(state.audio!==audio||request!==state.playRequest)return;stop();voiceStatus('Lecture audio bloquée. Réessaie avec le bouton Lire.');});
 }
@@ -421,9 +435,10 @@ function startSpeech(single=false){
  renderCurrent();playAudio(audio);
 }
 function updateVoice(){
- const available=speechAvailable();$('voice').disabled=!available;
+ const available=speechAvailable();$('voice').disabled=!available||state.playbackMode==='natural';$('playback-mode').disabled=!available;$('playback-mode').value=state.playbackMode;
+ $('mode-hint').textContent=state.playbackMode==='natural'?'Même voix douce · sons enchaînés sans temps d’observation.':'Un son par clé, avec un temps pour observer le geste.';
  $('voice').checked=state.voice&&available;
- voiceStatus(!available?'La voix synchronisée nécessite le serveur local ou le site en ligne.':state.manual&&state.voice?'Lecture didactique de ta transcription phonétique.':state.voice?'Lecture didactique · transition, son, puis observation de chaque clé.':'Lecture visuelle seule.');
+ voiceStatus(!available?'La voix synchronisée nécessite le serveur local ou le site en ligne.':state.playbackMode==='natural'?'Lecture naturelle · phrase entière et clés synchronisées.':state.manual&&state.voice?'Lecture didactique de ta transcription phonétique.':state.voice?'Lecture didactique · transition, son, puis observation de chaque clé.':'Lecture visuelle seule.');
 }
 function clearSequence(){stop();state.voiceData=null;state.keys=[];state.index=0;renderSequence();renderCurrent();}
 function duration(){return 1200/state.speed;}
@@ -454,19 +469,20 @@ function buildKeys(source){
  if(source)notify(source);save();
 }
 async function applyPronunciation(message){
- const req=++state.request;stop();state.voiceData=null;
+ const req=beginPreparation();stop();state.voiceData=null;
  state.busy=true;controls();
  try{
  buildKeys(message);
  if(state.voice&&speechAvailable()){
  voiceStatus('Préparation des sons de ta transcription…');
  const speechModule=state.speechModule||await import('./speech-sync.mjs');
- const packet=await speechModule.synthesizePronunciation($('ipa').value,window.LPC,schwa());
+ if(req!==state.request)return;
+ const packet=await speechModule.synthesizePronunciation($('ipa').value,window.LPC,schwa(),speechOptions());
  if(req!==state.request)return;
  state.speechModule=speechModule;state.voiceData=packet;$('engine-mode').textContent=(packet.voice||'eSpeak NG')+' · voix locale';
  updateVoice();if(packet.warning)notify(message+' '+packet.warning);
  }
- }catch(error){if(req===state.request){clearSequence();notify(error.message,true);voiceStatus('Corrige la transcription ou réessaie la préparation audio.');}}
+ }catch(error){if(req===state.request){clearSequence();notify(error.message,true);voiceStatus(state.playbackMode==='natural'?'Corrige la transcription, réessaie ou choisis « Clé par clé ».':'Corrige la transcription ou réessaie la préparation audio.');}}
  finally{if(req===state.request){state.busy=false;controls();save();}}
 }
 // LPC repeats a key by tapping it: same configuration and position as the previous key.
@@ -476,22 +492,23 @@ function tapped(i){return i>0&&state.keys[i]?.code===state.keys[i-1].code;}
 function sentenceFor(text,keys,packet){
  const trim=(start,end)=>{while(end>start&&/[\s.,;:!?…«»"“”()\-–—]/.test(text[end-1]))end--;return {start,end};};
  if(packet?.words&&packet.text===text&&keys.every(k=>Number.isInteger(k.word)&&k.word>=0)){
-  return {words:packet.words.map((w,i,all)=>trim(w.start,i+1<all.length?all[i+1].start:text.length)),keyWord:keys.map(k=>k.word)};
+  return {words:packet.words.map((w,i,all)=>trim(w.start,i+1<all.length?all[i+1].start:text.length)),keyWord:keys.map(k=>k.word),keyWordEnd:keys.map(k=>k.wordEnd??k.word)};
  }
  const words=[...text.matchAll(/[\p{L}\p{M}\p{N}]+(?:['’][\p{L}\p{M}\p{N}]+)*/gu)].map(m=>({start:m.index,end:m.index+m[0].length}));
+ if(keys.length&&keys.every(k=>Number.isInteger(k.word))){if(Math.max(...keys.map(k=>k.wordEnd??k.word))+1===words.length)return {words,keyWord:keys.map(k=>k.word),keyWordEnd:keys.map(k=>k.wordEnd??k.word)};return {words,keyWord:null};}
  let group=0;const keyWord=keys.map(k=>{const g=group;if(k.wordAfter||k.pauseAfter)group++;return g;});
  return {words,keyWord:keys.length&&keyWord.at(-1)+1===words.length?keyWord:null};
 }
 function renderTracker(){
- const keys=state.keys,text=state.voiceData?.text??$('phrase').value.trim(),{words,keyWord}=sentenceFor(text,keys,state.voiceData);
+ const keys=state.keys,text=state.voiceData?.text??$('phrase').value.trim(),{words,keyWord,keyWordEnd}=sentenceFor(text,keys,state.voiceData);
  const textLine=$('tracker-text'),ipaLine=$('tracker-ipa');textLine.replaceChildren();ipaLine.replaceChildren();
- state.tracker={keyWord,words:[],keys:[]};$('tracker').hidden=!keys.length;
+ state.tracker={keyWord,keyWordEnd,words:[],keys:[]};$('tracker').hidden=!keys.length;
  if(!keys.length)return;
  let at=0;
  words.forEach((w,i)=>{
   if(w.start>at)textLine.append(text.slice(at,w.start));
   const span=document.createElement('span');span.textContent=text.slice(w.start,w.end);span.className=keyWord?'w':'w plain';
-  const first=keyWord?keyWord.indexOf(i):-1;if(first>=0)span.addEventListener('click',()=>selectKey(first));
+  const first=keyWord?keyWord.findIndex((w,k)=>i>=w&&i<=(keyWordEnd?.[k]??w)):-1;if(first>=0)span.addEventListener('click',()=>selectKey(first));
   textLine.append(span);state.tracker.words.push(span);at=w.end;
  });
  if(at<text.length)textLine.append(text.slice(at));
@@ -505,9 +522,9 @@ function renderTracker(){
 }
 function updateTracker(){
  const t=state.tracker;if(!t||!state.keys.length)return;
- const i=state.index,word=t.keyWord?.[i];
+ const i=state.index,word=t.keyWord?.[i],end=t.keyWordEnd?.[i]??word;
  t.keys.forEach((el,k)=>{el.classList.toggle('done',k<i);el.classList.toggle('now',k===i);});
- if(t.keyWord)t.words.forEach((el,w)=>{el.classList.toggle('done',w<word);el.classList.toggle('now',w===word);});
+ if(t.keyWord)t.words.forEach((el,w)=>{el.classList.toggle('done',w<word);el.classList.toggle('now',w>=word&&w<=end);});
  $('tracker-bar').style.width=state.keys.length>1?`${n2(i/(state.keys.length-1)*100)}%`:'100%';
 }
 const n2=x=>Math.round(x*100)/100;
@@ -543,7 +560,9 @@ function renderCurrent(){
  const shape=key?key.shape:5, position=key?key.position:'s';
  // Moving to an identical key of the same sequence: the hand taps it instead of staying still.
  const target={...POSITIONS[position],id:position},tap=key&&state.shownKeys===state.keys&&state.shownIndex!==state.index&&state.keys[state.shownIndex]?.code===key.code;
- const contactDelay=tap?handAnimator.tap(shape,target,state.speed):(handAnimator.goTo(shape,target,state.speed),0);
+ const d=state.voiceData,slot=d?.mode==='natural'?Math.max(.01,(d.times[state.index+1]??d.duration)-d.times[state.index]):null;
+ const movement=slot===null?Infinity:Math.min(120,slot*600/state.speed);
+ const contactDelay=tap?handAnimator.tap(shape,target,state.speed,movement):(handAnimator.goTo(shape,target,state.speed,movement),0);
  state.shownKeys=state.keys;state.shownIndex=state.index;
  $('animated-hand').style.opacity=key?'1':'.35';
  drawPoints(key,contactDelay);updateMouth();
@@ -572,7 +591,7 @@ function offlinePhonemize(text){
 // On phones, a prepare asked for by the user scrolls to the reader.
 function prepareAndShow(){return prepare().then(()=>{if(state.keys.length&&window.matchMedia('(max-width:850px)').matches)$('reader').scrollIntoView?.({behavior:mediaReduced.matches?'auto':'smooth',block:'start'});});}
 async function prepare(){
- const text=$('phrase').value.trim(); const req=++state.request;
+ const text=$('phrase').value.trim(); const req=beginPreparation();
  clearSequence();$('ipa').value='';state.manual=false;
  if(!text){notify('\u00c9cris une phrase pour commencer.');return;}
  if(text.length>300){notify('Limite : 300 caract\u00e8res.',true);return;}
@@ -582,7 +601,8 @@ async function prepare(){
  if(state.voice&&speechAvailable()){
  voiceStatus('Préparation des sons des clés…');
  const speechModule=await import('./speech-sync.mjs');
- const packet=await speechModule.synthesize(text,window.LPC,schwa());
+ if(req!==state.request)return;
+ const packet=await speechModule.synthesize(text,window.LPC,schwa(),speechOptions());
  if(req!==state.request)return;
  state.speechModule=speechModule;
  result={ipa:packet.ipa,packet,source:'Prononciation automatique à vérifier. Les sons suivent les clés affichées.'};
@@ -592,11 +612,11 @@ async function prepare(){
  result={ipa:data.ipa,source:`${data.engine} : prononciation automatique \u00e0 v\u00e9rifier. Les liaisons et les noms propres peuvent n\u00e9cessiter une correction.`};
  }else result=offlinePhonemize(text);
  if(req!==state.request)return;
- $('ipa').value=glides(result.ipa);buildKeys(result.source);
+ $('ipa').value=window.LPC.connectedIpa(glides(result.ipa),schwa());buildKeys(result.source);
  if(result.packet){state.keys=result.packet.keys;state.voiceData=result.packet;$('engine-mode').textContent=(result.packet.voice||'eSpeak NG')+' · voix locale';renderSequence();renderCurrent();if(result.packet.warning)notify(result.source+' '+result.packet.warning);}
  }catch(error){
  if(req!==state.request)return;
- clearSequence();voiceStatus('Préparation impossible. Réessaie ou désactive la voix pour lire le visuel seul.');$('phonetic-editor').open=true;notify(error.name==='TimeoutError'?'Le moteur phonétique met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie ou utilise la saisie phon\u00e9tique.':error.message,true);
+ clearSequence();voiceStatus(state.playbackMode==='natural'?'Préparation naturelle impossible. Réessaie ou choisis « Clé par clé ».':'Préparation impossible. Réessaie ou désactive la voix pour lire le visuel seul.');$('phonetic-editor').open=true;notify(error.name==='TimeoutError'?'Le moteur phonétique met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie ou utilise la saisie phon\u00e9tique.':error.message,true);
  }finally{if(req===state.request){state.busy=false;controls();save();}}
 }
 function references(){
@@ -604,17 +624,18 @@ function references(){
  $('vowel-reference').innerHTML=Object.values(POSITIONS).map(p=>`<article class="card vowel-card"><h3><span class="dot" style="display:inline-block;background:${p.color};margin-right:5px"></span>${p.name}</h3><strong>${p.sounds}</strong><p>/${p.ipa.join(' / ')}/<br>${p.examples}</p></article>`).join('');
  $('position-legend').innerHTML=Object.entries(POSITIONS).map(([id,p])=>`<span class="pos-item" data-position="${id}"><span class="dot" style="background:${p.color}"></span>${p.name}</span>`).join('');
 }
-function setView(name){stop();document.body.dataset.page=name;for(const view of ['simulator','reference','help'])$('view-'+view).hidden=view!==name;document.querySelectorAll('.nav-btn[data-view]').forEach(el=>{if(el.dataset.view===name)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});}
+function setView(name){stop();document.body.dataset.page=name;for(const view of ['simulator','sounds','reference','help'])$('view-'+view).hidden=view!==name;document.querySelectorAll('.nav-btn[data-view]').forEach(el=>{if(el.dataset.view===name)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});}
 document.body.dataset.page='simulator';$('avatar-container').innerHTML=LPCVisual.avatar();
 const handAnimator=LPCVisual.createAnimator($('hand-art'),$('animated-hand'),()=>mediaReduced.matches),mouth=LPCVisual.createMouth(document);references();
 const examples=[['Bonjour','Bonjour !'],['Papa mange\u2026','Papa mange une pomme.'],['Bonne nuit','Bonne nuit.'],['Le chat','Regarde le chat.']];
 examples.forEach(([name,text])=>{const b=document.createElement('button');b.className='chip';b.textContent=name;b.addEventListener('click',()=>{$('phrase').value=text;updateCounter();prepareAndShow();});$('examples').append(b);});
 const symbols=[['\u025b','\u00e8'],['\u0254','o ouvert'],['\u0153','neuf'],['\u00f8','feu'],['\u025b\u0303','in'],['\u0251\u0303','an'],['\u0254\u0303','on'],['\u0153\u0303','un'],['\u0283','ch'],['\u0292','j de joue'],['\u0281','r'],['\u0272','gn'],['\u0265','ui'],['j','y de fille'],['\u014b','ng'],['\u0259','e prononc\u00e9'],['|','pause']];
 symbols.forEach(([s,label])=>{const b=document.createElement('button');b.className='symbol';b.textContent=s;b.title=label;b.setAttribute('aria-label',`Ins\u00e9rer ${s} : ${label}`);b.addEventListener('click',()=>{const input=$('ipa');input.focus();input.setRangeText(s,input.selectionStart,input.selectionEnd,'end');input.dispatchEvent(new Event('input'));});$('symbols').append(b);});
-$('phrase').addEventListener('input',()=>{state.request++;state.busy=false;updateCounter();clearSequence();state.manual=false;notify('Texte modifi\u00e9 : pr\u00e9pare les cl\u00e9s pour actualiser la s\u00e9quence.');save();});
+$('phrase').addEventListener('input',()=>{cancelPreparation();updateCounter();clearSequence();state.manual=false;notify('Texte modifi\u00e9 : pr\u00e9pare les cl\u00e9s pour actualiser la s\u00e9quence.');save();});
 $('phrase').addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();prepareAndShow();}});
 $('generate').addEventListener('click',prepareAndShow);
-$('ipa').addEventListener('input',()=>{state.request++;state.busy=false;state.manual=true;clearSequence();notify('Prononciation modifi\u00e9e : applique-la pour actualiser les cl\u00e9s.');save();});
+$('ipa').addEventListener('input',()=>{cancelPreparation();state.manual=true;clearSequence();notify('Prononciation modifi\u00e9e : applique-la pour actualiser les cl\u00e9s.');save();});
+$('playback-mode').addEventListener('change',async()=>{cancelPreparation();stop();state.playbackMode=$('playback-mode').value==='natural'?'natural':'didactic';if(state.playbackMode==='natural')state.voice=true;updateVoice();save();if(state.manual)await applyPronunciation('Mode de lecture appliqué à ta prononciation.');else await prepare();});
 $('apply-ipa').addEventListener('click',()=>{state.manual=true;applyPronunciation('Prononciation manuelle appliquée. Les sons suivent les phonèmes saisis.');});
 $('schwa').addEventListener('change',()=>{if($('ipa').value)applyPronunciation('Choix du e prononcé appliqué aux clés et aux sons.');});
 $('play').addEventListener('click',togglePlay);$('previous').addEventListener('click',()=>selectKey(state.index-1));$('next').addEventListener('click',()=>selectKey(state.index+1));$('restart').addEventListener('click',()=>moveTo(0));
@@ -623,7 +644,7 @@ $('speed').addEventListener('change',()=>{
  if(state.audio)state.audio.playbackRate=state.speed;else schedule();save();
 });
 $('voice').addEventListener('change',()=>{stop();state.voice=$('voice').checked;updateVoice();save();if(state.voice){if(state.manual)applyPronunciation('Audio de ta transcription préparé.');else prepare();}});
-window.addEventListener('pagehide',stop);
+window.addEventListener('pagehide',()=>{cancelPreparation();stop();});
 $('loop').addEventListener('click',()=>{state.loop=!state.loop;controls();save();});
 $('mirror').addEventListener('click',()=>{state.mirror=!state.mirror;renderCurrent();references();save();});
 $('points').addEventListener('click',()=>{state.points=!state.points;renderCurrent();save();});
@@ -638,6 +659,7 @@ async function init(){
  if(typeof stored.text==='string')$('phrase').value=stored.text.slice(0,300);
  if(stored.speedProfile===2&&[.25,.5,.75,1,1.5].includes(stored.speed))state.speed=stored.speed;
  state.voice=stored.voice!==false;state.loop=stored.loop===true;state.mirror=stored.mirror===true;state.points=stored.points!==false;
+ state.playbackMode=stored.playbackMode==='natural'&&speechAvailable()?'natural':'didactic';if(state.playbackMode==='natural')state.voice=true;
  $('schwa').value=stored.schwa==='closed'?'closed':'open';$('speed').value=String(state.speed);
  }
  $('speed').value=String(state.speed);updateCounter();updateVoice();renderCurrent();references();
@@ -655,8 +677,16 @@ let installPrompt=null;
 window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;$('install').hidden=false;});
 window.addEventListener('appinstalled',()=>{installPrompt=null;$('install').hidden=true;$('install-status').hidden=false;$('install-status').textContent='Lumi est install\u00e9e sur cet appareil.';});
 $('install').addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('install').hidden=true;});
+window.addEventListener('lumi-example',event=>{const word=event.detail;if(!word||typeof word.word!=='string'||typeof word.wordIpa!=='string')return;cancelPreparation();setView('simulator');$('phrase').value=word.word;$('ipa').value=word.wordIpa;state.manual=true;$('phonetic-editor').open=true;updateCounter();applyPronunciation('Mot d’exemple : '+word.word+'.');});
 init();
 window.LumiTest={state,prepare,sentenceFor,renderTracker,moveTo,togglePlay,setView,offlinePhonemize,stop,syncAudioFrame,selectKey,applyPronunciation};
 })();
+</script>
+<script type="module">
+import('./sounds.mjs').catch(()=>{
+ const message=document.getElementById('sound-loading');message.hidden=false;message.setAttribute('role','alert');
+ message.textContent=location.protocol==='file:'?'Pour explorer les sons, ouvre Lumi depuis le site ou lance le serveur local.':'L’explorateur n’a pas pu se charger. En local, redémarre server.py puis recharge cette page.';
+ const retry=document.createElement('button');retry.type='button';retry.className='secondary';retry.textContent='Recharger la page';retry.addEventListener('click',()=>location.reload());message.append(document.createElement('br'),retry);
+});
 </script>
 </body></html>

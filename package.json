@@ -1,11 +1,11 @@
 {
   "name": "lumi-lpc",
-  "version": "0.2.1",
+  "version": "0.4.5",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/pwa.test.mjs && node tests/netlify.test.mjs && node tests/playback.test.mjs && node tests/hand.test.mjs && node tests/voice-bank.test.mjs"
+    "test": "node tests/pwa.test.mjs && node tests/netlify.test.mjs && node tests/playback.test.mjs && node tests/hand.test.mjs && node tests/voice-bank.test.mjs && node tests/natural.test.mjs && node tests/sounds.test.mjs"
   },
   "engines": {
     "node": ">=24"

@@ -5,6 +5,8 @@ await mkdir('dist', { recursive: true });
 await copyFile('Lumi-LPC-V0.html', 'dist/index.html');
 await copyFile('Lumi-LPC-V0.html', 'dist/Lumi-LPC-V0.html');
 await copyFile('speech-sync.mjs', 'dist/speech-sync.mjs');
+await copyFile('sounds.mjs', 'dist/sounds.mjs');
+await copyFile('sound-catalog.mjs', 'dist/sound-catalog.mjs');
 // Installable app: manifest, offline service worker and icons.
 await copyFile('manifest.webmanifest', 'dist/manifest.webmanifest');
 await mkdir('dist/icons', { recursive: true });

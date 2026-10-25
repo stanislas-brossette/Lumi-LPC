@@ -3,16 +3,16 @@
   "name": "Piper · Siwis",
   "sampleRate": 22050,
   "audio": "siwis-keys.wav",
-  "audioSha256": "1b1c92e6e0513246ed06622c113058e18ba5f82ae905c52ed243d737842f4477",
+  "audioSha256": "05175f70d710f296b35b851989628695e40ad0b2b47fea66adc732240a08a93f",
   "modelSha256": "641d1ab097da2b81128c076810edb052b385decc8be3381814802a64a73baf99",
   "generator": "piper-tts 1.8.0",
   "seed": 42,
   "lengthScale": 1.1,
   "noiseScale": 0.667,
   "noiseWScale": 0.8,
-  "alignment": "Piper model durations; isolated stops extracted from a French carrier",
-  "method": "Isolated units with contextual stop repairs v2",
-  "repairBaseSha256": "bca646818e6d4fea8f739dc567aee28b07ad7dddf7fccb3ce72961e968173d67",
+  "alignment": "Piper model durations with targeted carrier extraction; /y/ boundaries adjusted against contextual audio",
+  "method": "Isolated units with targeted contextual repairs v4",
+  "repairBaseSha256": "a9e0fd8d037c4a5bb095c9e449c9bfce287f7908a2284ae529ee193a90390221",
   "keys": {
     "p": {
       "start": 0,
@@ -36,13 +36,17 @@
     },
     "ʒ": {
       "start": 4598,
-      "length": 5793,
+      "length": 2414,
       "vowel": null,
-      "end": 0.2627210884353742,
-      "source": "isolated"
+      "end": 0.10947845804988662,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi aʒˈø .",
+      "sourceStart": 14738,
+      "sourceEnd": 17152,
+      "supportVowelOnset": 18432
     },
     "k": {
-      "start": 10391,
+      "start": 7012,
       "length": 2811,
       "vowel": null,
       "end": 0.1274829931972789,
@@ -52,35 +56,39 @@
       "sourceEnd": 13899
     },
     "v": {
-      "start": 13202,
+      "start": 9823,
       "length": 3737,
       "vowel": null,
       "end": 0.16947845804988662,
       "source": "isolated"
     },
     "z": {
-      "start": 16939,
-      "length": 2223,
+      "start": 13560,
+      "length": 2158,
       "vowel": null,
-      "end": 0.10081632653061225,
-      "source": "isolated"
+      "end": 0.09786848072562358,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi azˈø .",
+      "sourceStart": 14994,
+      "sourceEnd": 17152,
+      "supportVowelOnset": 19712
     },
     "s": {
-      "start": 19162,
+      "start": 15718,
       "length": 2035,
       "vowel": null,
       "end": 0.09229024943310657,
       "source": "isolated"
     },
     "ʁ": {
-      "start": 21197,
+      "start": 17753,
       "length": 2048,
       "vowel": null,
       "end": 0.09287981859410431,
       "source": "isolated"
     },
     "b": {
-      "start": 23245,
+      "start": 19801,
       "length": 1531,
       "vowel": null,
       "end": 0.06943310657596372,
@@ -90,28 +98,36 @@
       "sourceEnd": 13387
     },
     "n": {
-      "start": 24776,
-      "length": 6020,
+      "start": 21332,
+      "length": 2926,
       "vowel": null,
-      "end": 0.273015873015873,
-      "source": "isolated"
+      "end": 0.1326984126984127,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi anˈø .",
+      "sourceStart": 14482,
+      "sourceEnd": 17408,
+      "supportVowelOnset": 18944
     },
     "ɥ": {
-      "start": 30796,
+      "start": 24258,
       "length": 3223,
       "vowel": null,
       "end": 0.14616780045351474,
       "source": "isolated"
     },
     "m": {
-      "start": 34019,
-      "length": 3966,
+      "start": 27481,
+      "length": 1390,
       "vowel": null,
-      "end": 0.1798639455782313,
-      "source": "isolated"
+      "end": 0.06303854875283446,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi amˈø .",
+      "sourceStart": 13970,
+      "sourceEnd": 15360,
+      "supportVowelOnset": 17664
     },
     "t": {
-      "start": 37985,
+      "start": 28871,
       "length": 2043,
       "vowel": null,
       "end": 0.0926530612244898,
@@ -121,42 +137,57 @@
       "sourceEnd": 17227
     },
     "f": {
-      "start": 40028,
+      "start": 30914,
       "length": 4988,
       "vowel": null,
       "end": 0.22621315192743763,
       "source": "isolated"
     },
     "l": {
-      "start": 45016,
-      "length": 5859,
+      "start": 35902,
+      "length": 1390,
       "vowel": null,
-      "end": 0.26571428571428574,
-      "source": "isolated"
+      "end": 0.06303854875283446,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi alˈø .",
+      "sourceStart": 14994,
+      "sourceEnd": 16384,
+      "supportVowelOnset": 18176
     },
     "ʃ": {
-      "start": 50875,
-      "length": 4656,
+      "start": 37292,
+      "length": 3438,
       "vowel": null,
-      "end": 0.211156462585034,
-      "source": "isolated"
+      "end": 0.15591836734693879,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi aʃˈø .",
+      "sourceStart": 13458,
+      "sourceEnd": 16896,
+      "supportVowelOnset": 18944
     },
     "ɲ": {
-      "start": 55531,
-      "length": 5764,
+      "start": 40730,
+      "length": 1968,
       "vowel": null,
-      "end": 0.26140589569161,
-      "source": "isolated"
+      "end": 0.0892517006802721,
+      "source": "carrier",
+      "phonemes": "ʒə dˈi aɲˈa .",
+      "sourceStart": 15696,
+      "sourceEnd": 17664
     },
     "w": {
-      "start": 61295,
-      "length": 4192,
+      "start": 42698,
+      "length": 1646,
       "vowel": null,
-      "end": 0.19011337868480727,
-      "source": "isolated"
+      "end": 0.0746485260770975,
+      "source": "carrier-eu",
+      "phonemes": "ʒə dˈi awˈø .",
+      "sourceStart": 14738,
+      "sourceEnd": 16384,
+      "supportVowelOnset": 17920
     },
     "g": {
-      "start": 65487,
+      "start": 44344,
       "length": 2043,
       "vowel": null,
       "end": 0.0926530612244898,
@@ -166,2174 +197,2198 @@
       "sourceEnd": 14155
     },
     "j": {
-      "start": 67530,
-      "length": 7828,
+      "start": 46387,
+      "length": 944,
       "vowel": null,
-      "end": 0.3550113378684807,
-      "source": "isolated"
+      "end": 0.04281179138321996,
+      "source": "carrier",
+      "phonemes": "ʒə dˈi jˈa .",
+      "sourceStart": 14928,
+      "sourceEnd": 15872
     },
     "ŋ": {
-      "start": 75358,
-      "length": 6234,
+      "start": 47331,
+      "length": 4160,
       "vowel": null,
-      "end": 0.28272108843537413,
-      "source": "isolated"
+      "end": 0.18866213151927438,
+      "source": "espeak-eu",
+      "phonemes": "ŋø",
+      "sourceStart": 0,
+      "sourceEnd": 4160,
+      "supportVowelOnset": 4160,
+      "engine": "eSpeak NG"
     },
     "a": {
-      "start": 81592,
+      "start": 51491,
       "length": 8446,
       "vowel": null,
       "end": 0.38303854875283444,
       "source": "isolated"
     },
     "o": {
-      "start": 90038,
+      "start": 59937,
       "length": 8067,
       "vowel": null,
       "end": 0.36585034013605444,
       "source": "isolated"
     },
     "œ": {
-      "start": 98105,
+      "start": 68004,
       "length": 6724,
       "vowel": null,
       "end": 0.3049433106575964,
       "source": "isolated"
     },
     "ɛ̃": {
-      "start": 104829,
+      "start": 74728,
       "length": 7166,
       "vowel": null,
       "end": 0.3249886621315193,
       "source": "isolated"
     },
     "ø": {
-      "start": 111995,
+      "start": 81894,
       "length": 8921,
       "vowel": null,
       "end": 0.40458049886621317,
       "source": "isolated"
     },
     "i": {
-      "start": 120916,
+      "start": 90815,
       "length": 6089,
       "vowel": null,
       "end": 0.2761451247165533,
       "source": "isolated"
     },
     "ɔ̃": {
-      "start": 127005,
+      "start": 96904,
       "length": 6580,
       "vowel": null,
       "end": 0.2984126984126984,
       "source": "isolated"
     },
     "ɑ̃": {
-      "start": 133585,
+      "start": 103484,
       "length": 8567,
       "vowel": null,
       "end": 0.3885260770975057,
       "source": "isolated"
     },
     "ɛ": {
-      "start": 142152,
+      "start": 112051,
       "length": 6639,
       "vowel": null,
       "end": 0.30108843537414964,
       "source": "isolated"
     },
     "u": {
-      "start": 148791,
+      "start": 118690,
       "length": 9690,
       "vowel": null,
       "end": 0.43945578231292515,
       "source": "isolated"
     },
     "ɔ": {
-      "start": 158481,
+      "start": 128380,
       "length": 7103,
       "vowel": null,
       "end": 0.32213151927437644,
       "source": "isolated"
     },
     "y": {
-      "start": 165584,
-      "length": 7524,
+      "start": 135483,
+      "length": 4356,
       "vowel": null,
-      "end": 0.34122448979591835,
-      "source": "isolated"
+      "end": 0.19755102040816327,
+      "source": "carrier",
+      "phonemes": "ʒə dˈi ˈy .",
+      "sourceStart": 17877,
+      "sourceEnd": 22233,
+      "lengthScale": 2.0,
+      "cropMethod": "60 ms pre-roll and 25 ms tail trim"
     },
     "e": {
-      "start": 173108,
+      "start": 139839,
       "length": 5927,
       "vowel": null,
       "end": 0.2687981859410431,
       "source": "isolated"
     },
     "œ̃": {
-      "start": 179035,
+      "start": 145766,
       "length": 6955,
       "vowel": null,
       "end": 0.31541950113378686,
       "source": "isolated"
     },
     "pa": {
-      "start": 185990,
-      "length": 6220,
-      "vowel": 0.13596371882086167,
-      "end": 0.28208616780045354,
-      "source": "isolated"
+      "start": 152721,
+      "length": 6813,
+      "vowel": 0.09977324263038549,
+      "end": 0.3089795918367347,
+      "source": "carrier",
+      "phonemes": "ʒə dˈi pˈa .",
+      "sourceStart": 8035,
+      "sourceEnd": 14848,
+      "vowelMethod": "energy rise after preserved closure"
     },
     "po": {
-      "start": 192210,
+      "start": 159534,
       "length": 5831,
       "vowel": 0.10829931972789116,
       "end": 0.2644444444444444,
       "source": "isolated"
     },
     "pœ": {
-      "start": 198041,
+      "start": 165365,
       "length": 7075,
       "vowel": 0.10122448979591837,
       "end": 0.32086167800453513,
       "source": "isolated"
     },
     "pɛ̃": {
-      "start": 205116,
+      "start": 172440,
       "length": 6103,
       "vowel": 0.11197278911564626,
       "end": 0.27678004535147394,
       "source": "isolated"
     },
     "pø": {
-      "start": 211219,
+      "start": 178543,
       "length": 6591,
       "vowel": 0.08226757369614512,
       "end": 0.29891156462585033,
       "source": "isolated"
     },
     "pi": {
-      "start": 217810,
+      "start": 185134,
       "length": 5815,
       "vowel": 0.12226757369614512,
       "end": 0.263718820861678,
       "source": "isolated"
     },
     "pɔ̃": {
-      "start": 223625,
+      "start": 190949,
       "length": 5658,
       "vowel": 0.08507936507936507,
       "end": 0.2565986394557823,
       "source": "isolated"
     },
     "pɑ̃": {
-      "start": 229283,
+      "start": 196607,
       "length": 7385,
       "vowel": 0.15301587301587302,
       "end": 0.3349206349206349,
       "source": "isolated"
     },
     "pɛ": {
-      "start": 236668,
+      "start": 203992,
       "length": 7359,
       "vowel": 0.11319727891156463,
       "end": 0.33374149659863944,
       "source": "isolated"
     },
     "pu": {
-      "start": 244027,
+      "start": 211351,
       "length": 6895,
       "vowel": 0.09873015873015872,
       "end": 0.3126984126984127,
       "source": "isolated"
     },
     "pɔ": {
-      "start": 250922,
+      "start": 218246,
       "length": 6054,
       "vowel": 0.13451247165532879,
       "end": 0.2745578231292517,
       "source": "isolated"
     },
     "py": {
-      "start": 256976,
+      "start": 224300,
       "length": 7135,
       "vowel": 0.19160997732426305,
       "end": 0.3235827664399093,
       "source": "isolated"
     },
     "pe": {
-      "start": 264111,
+      "start": 231435,
       "length": 6668,
       "vowel": 0.14222222222222222,
       "end": 0.3024036281179138,
       "source": "isolated"
     },
     "pœ̃": {
-      "start": 270779,
+      "start": 238103,
       "length": 7124,
       "vowel": 0.09233560090702948,
       "end": 0.32308390022675737,
       "source": "isolated"
     },
     "da": {
-      "start": 277903,
+      "start": 245227,
       "length": 7793,
       "vowel": 0.21605442176870748,
       "end": 0.35342403628117913,
       "source": "isolated"
     },
     "do": {
-      "start": 285696,
+      "start": 253020,
       "length": 9083,
       "vowel": 0.2980498866213152,
       "end": 0.41192743764172335,
       "source": "isolated"
     },
     "dœ": {
-      "start": 294779,
+      "start": 262103,
       "length": 9420,
       "vowel": 0.27034013605442175,
       "end": 0.4272108843537415,
       "source": "isolated"
     },
     "dɛ̃": {
-      "start": 304199,
+      "start": 271523,
       "length": 8745,
       "vowel": 0.20848072562358277,
       "end": 0.39659863945578233,
       "source": "isolated"
     },
     "dø": {
-      "start": 312944,
+      "start": 280268,
       "length": 8830,
       "vowel": 0.30979591836734693,
       "end": 0.400453514739229,
       "source": "isolated"
     },
     "di": {
-      "start": 321774,
+      "start": 289098,
       "length": 5448,
       "vowel": 0.1054421768707483,
       "end": 0.2470748299319728,
       "source": "isolated"
     },
     "dɔ̃": {
-      "start": 327222,
+      "start": 294546,
       "length": 8081,
       "vowel": 0.2018140589569161,
       "end": 0.36648526077097504,
       "source": "isolated"
     },
     "dɑ̃": {
-      "start": 335303,
+      "start": 302627,
       "length": 10224,
       "vowel": 0.2472562358276644,
       "end": 0.4636734693877551,
       "source": "isolated"
     },
     "dɛ": {
-      "start": 345527,
+      "start": 312851,
       "length": 5917,
       "vowel": 0.14058956916099774,
       "end": 0.26834467120181404,
       "source": "isolated"
     },
     "du": {
-      "start": 351444,
+      "start": 318768,
       "length": 8217,
       "vowel": 0.2165532879818594,
       "end": 0.3726530612244898,
       "source": "isolated"
     },
     "dɔ": {
-      "start": 359661,
+      "start": 326985,
       "length": 9389,
       "vowel": 0.2636281179138322,
       "end": 0.4258049886621315,
       "source": "isolated"
     },
     "dy": {
-      "start": 369050,
+      "start": 336374,
       "length": 8977,
       "vowel": 0.2110204081632653,
       "end": 0.4071201814058957,
       "source": "isolated"
     },
     "de": {
-      "start": 378027,
+      "start": 345351,
       "length": 7985,
       "vowel": 0.26145124716553286,
       "end": 0.3621315192743764,
       "source": "isolated"
     },
     "dœ̃": {
-      "start": 386012,
+      "start": 353336,
       "length": 7483,
       "vowel": 0.21854875283446712,
       "end": 0.33936507936507937,
       "source": "isolated"
     },
     "ʒa": {
-      "start": 393495,
+      "start": 360819,
       "length": 8196,
       "vowel": 0.2365986394557823,
       "end": 0.37170068027210884,
       "source": "isolated"
     },
     "ʒo": {
-      "start": 401691,
+      "start": 369015,
       "length": 9598,
       "vowel": 0.254421768707483,
       "end": 0.43528344671201813,
       "source": "isolated"
     },
     "ʒœ": {
-      "start": 411289,
+      "start": 378613,
       "length": 11353,
       "vowel": 0.35555555555555557,
       "end": 0.5148752834467121,
       "source": "isolated"
     },
     "ʒɛ̃": {
-      "start": 422642,
+      "start": 389966,
       "length": 9297,
       "vowel": 0.2123809523809524,
       "end": 0.4216326530612245,
       "source": "isolated"
     },
     "ʒø": {
-      "start": 431939,
+      "start": 399263,
       "length": 9496,
       "vowel": 0.2503401360544218,
       "end": 0.4306575963718821,
       "source": "isolated"
     },
     "ʒi": {
-      "start": 441435,
+      "start": 408759,
       "length": 8966,
       "vowel": 0.25936507936507935,
       "end": 0.40662131519274375,
       "source": "isolated"
     },
     "ʒɔ̃": {
-      "start": 450401,
+      "start": 417725,
       "length": 9525,
       "vowel": 0.24022675736961452,
       "end": 0.43197278911564624,
       "source": "isolated"
     },
     "ʒɑ̃": {
-      "start": 459926,
+      "start": 427250,
       "length": 10623,
       "vowel": 0.21482993197278913,
       "end": 0.4817687074829932,
       "source": "isolated"
     },
     "ʒɛ": {
-      "start": 470549,
+      "start": 437873,
       "length": 10543,
       "vowel": 0.31492063492063493,
       "end": 0.478140589569161,
       "source": "isolated"
     },
     "ʒu": {
-      "start": 481092,
+      "start": 448416,
       "length": 8967,
       "vowel": 0.23124716553287983,
       "end": 0.4066666666666667,
       "source": "isolated"
     },
     "ʒɔ": {
-      "start": 490059,
+      "start": 457383,
       "length": 8271,
       "vowel": 0.27396825396825397,
       "end": 0.37510204081632653,
       "source": "isolated"
     },
     "ʒy": {
-      "start": 498330,
+      "start": 465654,
       "length": 10747,
       "vowel": 0.3016326530612245,
       "end": 0.4873922902494331,
       "source": "isolated"
     },
     "ʒe": {
-      "start": 509077,
+      "start": 476401,
       "length": 10052,
       "vowel": 0.24058956916099775,
       "end": 0.4558730158730159,
       "source": "isolated"
     },
     "ʒœ̃": {
-      "start": 519129,
+      "start": 486453,
       "length": 11819,
       "vowel": 0.24970521541950114,
       "end": 0.5360090702947846,
       "source": "isolated"
     },
     "ka": {
-      "start": 530948,
+      "start": 498272,
       "length": 6173,
       "vowel": 0.0838548752834467,
       "end": 0.2799546485260771,
       "source": "isolated"
     },
     "ko": {
-      "start": 537121,
+      "start": 504445,
       "length": 6733,
       "vowel": 0.16857142857142857,
       "end": 0.3053514739229025,
       "source": "isolated"
     },
     "kœ": {
-      "start": 543854,
+      "start": 511178,
       "length": 7176,
       "vowel": 0.21587301587301588,
       "end": 0.3254421768707483,
       "source": "isolated"
     },
     "kɛ̃": {
-      "start": 551030,
+      "start": 518354,
       "length": 6157,
       "vowel": 0.12299319727891156,
       "end": 0.27922902494331064,
       "source": "isolated"
     },
     "kø": {
-      "start": 557187,
+      "start": 524511,
       "length": 6904,
       "vowel": 0.2089795918367347,
       "end": 0.3131065759637188,
       "source": "isolated"
     },
     "ki": {
-      "start": 564091,
+      "start": 531415,
       "length": 6812,
       "vowel": 0.10077097505668935,
       "end": 0.3089342403628118,
       "source": "isolated"
     },
     "kɔ̃": {
-      "start": 570903,
+      "start": 538227,
       "length": 6672,
       "vowel": 0.08126984126984127,
       "end": 0.3025850340136054,
       "source": "isolated"
     },
     "kɑ̃": {
-      "start": 577575,
+      "start": 544899,
       "length": 8745,
       "vowel": 0.1455328798185941,
       "end": 0.39659863945578233,
       "source": "isolated"
     },
     "kɛ": {
-      "start": 586320,
+      "start": 553644,
       "length": 6515,
       "vowel": 0.14621315192743764,
       "end": 0.29546485260770977,
       "source": "isolated"
     },
     "ku": {
-      "start": 592835,
+      "start": 560159,
       "length": 7063,
       "vowel": 0.10448979591836735,
       "end": 0.32031746031746033,
       "source": "isolated"
     },
     "kɔ": {
-      "start": 599898,
+      "start": 567222,
       "length": 8021,
       "vowel": 0.23868480725623584,
       "end": 0.36376417233560093,
       "source": "isolated"
     },
     "ky": {
-      "start": 607919,
+      "start": 575243,
       "length": 7373,
       "vowel": 0.20439909297052153,
       "end": 0.3343764172335601,
       "source": "isolated"
     },
     "ke": {
-      "start": 615292,
+      "start": 582616,
       "length": 5914,
       "vowel": 0.16979591836734695,
       "end": 0.2682086167800454,
       "source": "isolated"
     },
     "kœ̃": {
-      "start": 621206,
+      "start": 588530,
       "length": 7309,
       "vowel": 0.1347845804988662,
       "end": 0.33147392290249433,
       "source": "isolated"
     },
     "va": {
-      "start": 628515,
+      "start": 595839,
       "length": 8109,
       "vowel": 0.27346938775510204,
       "end": 0.36775510204081635,
       "source": "isolated"
     },
     "vo": {
-      "start": 636624,
+      "start": 603948,
       "length": 10368,
       "vowel": 0.32022675736961453,
       "end": 0.47020408163265304,
       "source": "isolated"
     },
     "vœ": {
-      "start": 646992,
+      "start": 614316,
       "length": 11006,
       "vowel": 0.3234013605442177,
       "end": 0.4991383219954649,
       "source": "isolated"
     },
     "vɛ̃": {
-      "start": 657998,
+      "start": 625322,
       "length": 10797,
       "vowel": 0.24979591836734694,
       "end": 0.48965986394557826,
       "source": "isolated"
     },
     "vø": {
-      "start": 668795,
+      "start": 636119,
       "length": 8450,
       "vowel": 0.2621768707482993,
       "end": 0.3832199546485261,
       "source": "isolated"
     },
     "vi": {
-      "start": 677245,
+      "start": 644569,
       "length": 8117,
       "vowel": 0.21582766439909298,
       "end": 0.36811791383219955,
       "source": "isolated"
     },
     "vɔ̃": {
-      "start": 685362,
+      "start": 652686,
       "length": 8801,
       "vowel": 0.16825396825396827,
       "end": 0.39913832199546484,
       "source": "isolated"
     },
     "vɑ̃": {
-      "start": 694163,
+      "start": 661487,
       "length": 11104,
       "vowel": 0.29038548752834464,
       "end": 0.5035827664399093,
       "source": "isolated"
     },
     "vɛ": {
-      "start": 705267,
+      "start": 672591,
       "length": 8832,
       "vowel": 0.23931972789115646,
       "end": 0.4005442176870748,
       "source": "isolated"
     },
     "vu": {
-      "start": 714099,
+      "start": 681423,
       "length": 8858,
       "vowel": 0.2275736961451247,
       "end": 0.4017233560090703,
       "source": "isolated"
     },
     "vɔ": {
-      "start": 722957,
+      "start": 690281,
       "length": 10330,
       "vowel": 0.309297052154195,
       "end": 0.4684807256235828,
       "source": "isolated"
     },
     "vy": {
-      "start": 733287,
+      "start": 700611,
       "length": 8856,
       "vowel": 0.2234920634920635,
       "end": 0.4016326530612245,
       "source": "isolated"
     },
     "ve": {
-      "start": 742143,
+      "start": 709467,
       "length": 8332,
       "vowel": 0.23950113378684806,
       "end": 0.37786848072562357,
       "source": "isolated"
     },
     "vœ̃": {
-      "start": 750475,
+      "start": 717799,
       "length": 8843,
       "vowel": 0.21718820861678004,
       "end": 0.40104308390022675,
       "source": "isolated"
     },
     "za": {
-      "start": 759318,
+      "start": 726642,
       "length": 10299,
       "vowel": 0.3,
       "end": 0.4670748299319728,
       "source": "isolated"
     },
     "zo": {
-      "start": 769617,
+      "start": 736941,
       "length": 11287,
       "vowel": 0.3295238095238095,
       "end": 0.5118820861678004,
       "source": "isolated"
     },
     "zœ": {
-      "start": 780904,
+      "start": 748228,
       "length": 10708,
       "vowel": 0.35378684807256233,
       "end": 0.4856235827664399,
       "source": "isolated"
     },
     "zɛ̃": {
-      "start": 791612,
+      "start": 758936,
       "length": 11248,
       "vowel": 0.25804988662131517,
       "end": 0.5101133786848072,
       "source": "isolated"
     },
     "zø": {
-      "start": 802860,
+      "start": 770184,
       "length": 12009,
       "vowel": 0.4271201814058957,
       "end": 0.5446258503401361,
       "source": "isolated"
     },
     "zi": {
-      "start": 814869,
+      "start": 782193,
       "length": 9521,
       "vowel": 0.23505668934240362,
       "end": 0.43179138321995464,
       "source": "isolated"
     },
     "zɔ̃": {
-      "start": 824390,
+      "start": 791714,
       "length": 9924,
       "vowel": 0.2512018140589569,
       "end": 0.45006802721088435,
       "source": "isolated"
     },
     "zɑ̃": {
-      "start": 834314,
+      "start": 801638,
       "length": 9730,
       "vowel": 0.21179138321995464,
       "end": 0.44126984126984126,
       "source": "isolated"
     },
     "zɛ": {
-      "start": 844044,
+      "start": 811368,
       "length": 10012,
       "vowel": 0.2892517006802721,
       "end": 0.45405895691609977,
       "source": "isolated"
     },
     "zu": {
-      "start": 854056,
+      "start": 821380,
       "length": 9620,
       "vowel": 0.23891156462585034,
       "end": 0.436281179138322,
       "source": "isolated"
     },
     "zɔ": {
-      "start": 863676,
+      "start": 831000,
       "length": 9230,
       "vowel": 0.32612244897959186,
       "end": 0.41859410430839,
       "source": "isolated"
     },
     "zy": {
-      "start": 872906,
+      "start": 840230,
       "length": 9071,
       "vowel": 0.2839455782312925,
       "end": 0.41138321995464855,
       "source": "isolated"
     },
     "ze": {
-      "start": 881977,
+      "start": 849301,
       "length": 9025,
       "vowel": 0.2817233560090703,
       "end": 0.409297052154195,
       "source": "isolated"
     },
     "zœ̃": {
-      "start": 891002,
+      "start": 858326,
       "length": 9473,
       "vowel": 0.22802721088435374,
       "end": 0.42961451247165533,
       "source": "isolated"
     },
     "sa": {
-      "start": 900475,
+      "start": 867799,
       "length": 9334,
       "vowel": 0.23605442176870747,
       "end": 0.4233106575963719,
       "source": "isolated"
     },
     "so": {
-      "start": 909809,
+      "start": 877133,
       "length": 10103,
       "vowel": 0.2728798185941043,
       "end": 0.4581859410430839,
       "source": "isolated"
     },
     "sœ": {
-      "start": 919912,
+      "start": 887236,
       "length": 10091,
       "vowel": 0.29609977324263037,
       "end": 0.45764172335600906,
       "source": "isolated"
     },
     "sɛ̃": {
-      "start": 930003,
+      "start": 897327,
       "length": 11399,
       "vowel": 0.2416780045351474,
       "end": 0.5169614512471655,
       "source": "isolated"
     },
     "sø": {
-      "start": 941402,
+      "start": 908726,
       "length": 11691,
       "vowel": 0.38263038548752837,
       "end": 0.5302040816326531,
       "source": "isolated"
     },
     "si": {
-      "start": 953093,
+      "start": 920417,
       "length": 9458,
       "vowel": 0.2871201814058957,
       "end": 0.4289342403628118,
       "source": "isolated"
     },
     "sɔ̃": {
-      "start": 962551,
+      "start": 929875,
       "length": 10092,
       "vowel": 0.23804988662131518,
       "end": 0.457687074829932,
       "source": "isolated"
     },
     "sɑ̃": {
-      "start": 972643,
+      "start": 939967,
       "length": 10055,
       "vowel": 0.2636734693877551,
       "end": 0.4560090702947846,
       "source": "isolated"
     },
     "sɛ": {
-      "start": 982698,
+      "start": 950022,
       "length": 9581,
       "vowel": 0.24049886621315192,
       "end": 0.4345124716553288,
       "source": "isolated"
     },
     "su": {
-      "start": 992279,
+      "start": 959603,
       "length": 9472,
       "vowel": 0.1509297052154195,
       "end": 0.4295691609977324,
       "source": "isolated"
     },
     "sɔ": {
-      "start": 1001751,
+      "start": 969075,
       "length": 9824,
       "vowel": 0.2803174603174603,
       "end": 0.44553287981859413,
       "source": "isolated"
     },
     "sy": {
-      "start": 1011575,
+      "start": 978899,
       "length": 8969,
       "vowel": 0.29392290249433106,
       "end": 0.4067573696145125,
       "source": "isolated"
     },
     "se": {
-      "start": 1020544,
+      "start": 987868,
       "length": 10503,
       "vowel": 0.28680272108843535,
       "end": 0.4763265306122449,
       "source": "isolated"
     },
     "sœ̃": {
-      "start": 1031047,
+      "start": 998371,
       "length": 10076,
       "vowel": 0.21378684807256235,
       "end": 0.45696145124716553,
       "source": "isolated"
     },
     "ʁa": {
-      "start": 1041123,
+      "start": 1008447,
       "length": 9804,
       "vowel": 0.272562358276644,
       "end": 0.4446258503401361,
       "source": "isolated"
     },
     "ʁo": {
-      "start": 1050927,
+      "start": 1018251,
       "length": 9255,
       "vowel": 0.26961451247165535,
       "end": 0.4197278911564626,
       "source": "isolated"
     },
     "ʁœ": {
-      "start": 1060182,
+      "start": 1027506,
       "length": 9691,
       "vowel": 0.3293877551020408,
       "end": 0.4395011337868481,
       "source": "isolated"
     },
     "ʁɛ̃": {
-      "start": 1069873,
+      "start": 1037197,
       "length": 10383,
       "vowel": 0.2613151927437642,
       "end": 0.4708843537414966,
       "source": "isolated"
     },
     "ʁø": {
-      "start": 1080256,
+      "start": 1047580,
       "length": 9218,
       "vowel": 0.27224489795918366,
       "end": 0.4180498866213152,
       "source": "isolated"
     },
     "ʁi": {
-      "start": 1089474,
+      "start": 1056798,
       "length": 8568,
       "vowel": 0.23800453514739228,
       "end": 0.38857142857142857,
       "source": "isolated"
     },
     "ʁɔ̃": {
-      "start": 1098042,
+      "start": 1065366,
       "length": 11802,
       "vowel": 0.2947845804988662,
       "end": 0.5352380952380953,
       "source": "isolated"
     },
     "ʁɑ̃": {
-      "start": 1109844,
+      "start": 1077168,
       "length": 11033,
       "vowel": 0.28290249433106573,
       "end": 0.5003628117913832,
       "source": "isolated"
     },
     "ʁɛ": {
-      "start": 1120877,
+      "start": 1088201,
       "length": 9025,
       "vowel": 0.27006802721088435,
       "end": 0.409297052154195,
       "source": "isolated"
     },
     "ʁu": {
-      "start": 1129902,
+      "start": 1097226,
       "length": 12845,
       "vowel": 0.3409977324263039,
       "end": 0.5825396825396826,
       "source": "isolated"
     },
     "ʁɔ": {
-      "start": 1142747,
+      "start": 1110071,
       "length": 10580,
       "vowel": 0.33034013605442175,
       "end": 0.4798185941043084,
       "source": "isolated"
     },
     "ʁy": {
-      "start": 1153327,
+      "start": 1120651,
       "length": 8752,
       "vowel": 0.23800453514739228,
       "end": 0.3969160997732426,
       "source": "isolated"
     },
     "ʁe": {
-      "start": 1162079,
+      "start": 1129403,
       "length": 8355,
       "vowel": 0.24875283446712018,
       "end": 0.37891156462585035,
       "source": "isolated"
     },
     "ʁœ̃": {
-      "start": 1170434,
+      "start": 1137758,
       "length": 10888,
       "vowel": 0.2958730158730159,
       "end": 0.49378684807256235,
       "source": "isolated"
     },
     "ba": {
-      "start": 1181322,
+      "start": 1148646,
       "length": 8901,
       "vowel": 0.2384580498866213,
       "end": 0.4036734693877551,
       "source": "isolated"
     },
     "bo": {
-      "start": 1190223,
+      "start": 1157547,
       "length": 10589,
       "vowel": 0.3096598639455782,
       "end": 0.4802267573696145,
       "source": "isolated"
     },
     "bœ": {
-      "start": 1200812,
+      "start": 1168136,
       "length": 7592,
       "vowel": 0.19392290249433106,
       "end": 0.3443083900226757,
       "source": "isolated"
     },
     "bɛ̃": {
-      "start": 1208404,
+      "start": 1175728,
       "length": 8017,
       "vowel": 0.19891156462585033,
       "end": 0.3635827664399093,
       "source": "isolated"
     },
     "bø": {
-      "start": 1216421,
+      "start": 1183745,
       "length": 8294,
       "vowel": 0.20204081632653062,
       "end": 0.3761451247165533,
       "source": "isolated"
     },
     "bi": {
-      "start": 1224715,
+      "start": 1192039,
       "length": 10241,
       "vowel": 0.2597278911564626,
       "end": 0.46444444444444444,
       "source": "isolated"
     },
     "bɔ̃": {
-      "start": 1234956,
+      "start": 1202280,
       "length": 8037,
       "vowel": 0.1948299319727891,
       "end": 0.36448979591836733,
       "source": "isolated"
     },
     "bɑ̃": {
-      "start": 1242993,
+      "start": 1210317,
       "length": 10014,
       "vowel": 0.218140589569161,
       "end": 0.45414965986394557,
       "source": "isolated"
     },
     "bɛ": {
-      "start": 1253007,
+      "start": 1220331,
       "length": 7830,
       "vowel": 0.24031746031746032,
       "end": 0.3551020408163265,
       "source": "isolated"
     },
     "bu": {
-      "start": 1260837,
+      "start": 1228161,
       "length": 10401,
       "vowel": 0.2511111111111111,
       "end": 0.4717006802721088,
       "source": "isolated"
     },
     "bɔ": {
-      "start": 1271238,
+      "start": 1238562,
       "length": 8993,
       "vowel": 0.24018140589569162,
       "end": 0.40784580498866213,
       "source": "isolated"
     },
     "by": {
-      "start": 1280231,
+      "start": 1247555,
       "length": 8855,
       "vowel": 0.20421768707482993,
       "end": 0.4015873015873016,
       "source": "isolated"
     },
     "be": {
-      "start": 1289086,
+      "start": 1256410,
       "length": 9042,
       "vowel": 0.1894784580498866,
       "end": 0.41006802721088437,
       "source": "isolated"
     },
     "bœ̃": {
-      "start": 1298128,
+      "start": 1265452,
       "length": 10472,
       "vowel": 0.25564625850340134,
       "end": 0.4749206349206349,
       "source": "isolated"
     },
     "na": {
-      "start": 1308600,
+      "start": 1275924,
       "length": 7395,
       "vowel": 0.2220861678004535,
       "end": 0.33537414965986395,
       "source": "isolated"
     },
     "no": {
-      "start": 1315995,
+      "start": 1283319,
       "length": 8370,
       "vowel": 0.23673469387755103,
       "end": 0.3795918367346939,
       "source": "isolated"
     },
     "nœ": {
-      "start": 1324365,
+      "start": 1291689,
       "length": 8094,
       "vowel": 0.24834467120181405,
       "end": 0.36707482993197277,
       "source": "isolated"
     },
     "nɛ̃": {
-      "start": 1332459,
+      "start": 1299783,
       "length": 8324,
       "vowel": 0.19433106575963718,
       "end": 0.37750566893424037,
       "source": "isolated"
     },
     "nø": {
-      "start": 1340783,
+      "start": 1308107,
       "length": 8216,
       "vowel": 0.23183673469387756,
       "end": 0.3726077097505669,
       "source": "isolated"
     },
     "ni": {
-      "start": 1348999,
+      "start": 1316323,
       "length": 8247,
       "vowel": 0.2234467120181406,
       "end": 0.3740136054421769,
       "source": "isolated"
     },
     "nɔ̃": {
-      "start": 1357246,
+      "start": 1324570,
       "length": 8214,
       "vowel": 0.20979591836734693,
       "end": 0.3725170068027211,
       "source": "isolated"
     },
     "nɑ̃": {
-      "start": 1365460,
+      "start": 1332784,
       "length": 8477,
       "vowel": 0.23546485260770975,
       "end": 0.3844444444444444,
       "source": "isolated"
     },
     "nɛ": {
-      "start": 1373937,
+      "start": 1341261,
       "length": 7370,
       "vowel": 0.23378684807256236,
       "end": 0.33424036281179137,
       "source": "isolated"
     },
     "nu": {
-      "start": 1381307,
+      "start": 1348631,
       "length": 7082,
       "vowel": 0.19011337868480727,
       "end": 0.32117913832199546,
       "source": "isolated"
     },
     "nɔ": {
-      "start": 1388389,
+      "start": 1355713,
       "length": 7322,
       "vowel": 0.2508843537414966,
       "end": 0.33206349206349206,
       "source": "isolated"
     },
     "ny": {
-      "start": 1395711,
+      "start": 1363035,
       "length": 7724,
       "vowel": 0.22312925170068026,
       "end": 0.35029478458049884,
       "source": "isolated"
     },
     "ne": {
-      "start": 1403435,
+      "start": 1370759,
       "length": 8118,
       "vowel": 0.19573696145124717,
       "end": 0.3681632653061224,
       "source": "isolated"
     },
     "nœ̃": {
-      "start": 1411553,
+      "start": 1378877,
       "length": 9040,
       "vowel": 0.21297052154195012,
       "end": 0.40997732426303857,
       "source": "isolated"
     },
     "ɥa": {
-      "start": 1420593,
+      "start": 1387917,
       "length": 8760,
       "vowel": 0.2089795918367347,
       "end": 0.39727891156462586,
       "source": "isolated"
     },
     "ɥo": {
-      "start": 1429353,
+      "start": 1396677,
       "length": 7555,
       "vowel": 0.14752834467120182,
       "end": 0.34263038548752833,
       "source": "isolated"
     },
     "ɥœ": {
-      "start": 1436908,
+      "start": 1404232,
       "length": 6985,
       "vowel": 0.13215419501133788,
       "end": 0.3167800453514739,
       "source": "isolated"
     },
     "ɥɛ̃": {
-      "start": 1443893,
+      "start": 1411217,
       "length": 7313,
       "vowel": 0.1927891156462585,
       "end": 0.33165532879818593,
       "source": "isolated"
     },
     "ɥø": {
-      "start": 1451206,
+      "start": 1418530,
       "length": 7920,
       "vowel": 0.23764172335600908,
       "end": 0.35918367346938773,
       "source": "isolated"
     },
     "ɥi": {
-      "start": 1459126,
+      "start": 1426450,
       "length": 8530,
       "vowel": 0.21360544217687075,
       "end": 0.38684807256235826,
       "source": "isolated"
     },
     "ɥɔ̃": {
-      "start": 1467656,
+      "start": 1434980,
       "length": 7555,
       "vowel": 0.13519274376417234,
       "end": 0.34263038548752833,
       "source": "isolated"
     },
     "ɥɑ̃": {
-      "start": 1475211,
+      "start": 1442535,
       "length": 10420,
       "vowel": 0.20299319727891157,
       "end": 0.472562358276644,
       "source": "isolated"
     },
     "ɥɛ": {
-      "start": 1485631,
+      "start": 1452955,
       "length": 8394,
       "vowel": 0.26095238095238094,
       "end": 0.38068027210884353,
       "source": "isolated"
     },
     "ɥu": {
-      "start": 1494025,
+      "start": 1461349,
       "length": 7563,
       "vowel": 0.2036734693877551,
       "end": 0.3429931972789116,
       "source": "isolated"
     },
     "ɥɔ": {
-      "start": 1501588,
+      "start": 1468912,
       "length": 7022,
       "vowel": 0.21609977324263038,
       "end": 0.3184580498866213,
       "source": "isolated"
     },
     "ɥy": {
-      "start": 1508610,
+      "start": 1475934,
       "length": 8834,
       "vowel": 0.19401360544217688,
       "end": 0.4006349206349206,
       "source": "isolated"
     },
     "ɥe": {
-      "start": 1517444,
+      "start": 1484768,
       "length": 8317,
       "vowel": 0.21156462585034014,
       "end": 0.37718820861678004,
       "source": "isolated"
     },
     "ɥœ̃": {
-      "start": 1525761,
+      "start": 1493085,
       "length": 9956,
       "vowel": 0.13909297052154196,
       "end": 0.45151927437641726,
       "source": "isolated"
     },
     "ma": {
-      "start": 1535717,
+      "start": 1503041,
       "length": 7602,
       "vowel": 0.2255328798185941,
       "end": 0.34476190476190477,
       "source": "isolated"
     },
     "mo": {
-      "start": 1543319,
+      "start": 1510643,
       "length": 7856,
       "vowel": 0.1819047619047619,
       "end": 0.35628117913832197,
       "source": "isolated"
     },
     "mœ": {
-      "start": 1551175,
+      "start": 1518499,
       "length": 7559,
       "vowel": 0.21723356009070294,
       "end": 0.34281179138321993,
       "source": "isolated"
     },
     "mɛ̃": {
-      "start": 1558734,
+      "start": 1526058,
       "length": 6792,
       "vowel": 0.1403174603174603,
       "end": 0.30802721088435375,
       "source": "isolated"
     },
     "mø": {
-      "start": 1565526,
+      "start": 1532850,
       "length": 7967,
       "vowel": 0.22281179138321996,
       "end": 0.36131519274376417,
       "source": "isolated"
     },
     "mi": {
-      "start": 1573493,
+      "start": 1540817,
       "length": 6477,
       "vowel": 0.1545578231292517,
       "end": 0.29374149659863946,
       "source": "isolated"
     },
     "mɔ̃": {
-      "start": 1579970,
+      "start": 1547294,
       "length": 7247,
       "vowel": 0.16036281179138323,
       "end": 0.32866213151927437,
       "source": "isolated"
     },
     "mɑ̃": {
-      "start": 1587217,
+      "start": 1554541,
       "length": 7599,
       "vowel": 0.15750566893424037,
       "end": 0.34462585034013604,
       "source": "isolated"
     },
     "mɛ": {
-      "start": 1594816,
+      "start": 1562140,
       "length": 7207,
       "vowel": 0.21083900226757368,
       "end": 0.32684807256235826,
       "source": "isolated"
     },
     "mu": {
-      "start": 1602023,
+      "start": 1569347,
       "length": 8442,
       "vowel": 0.24068027210884355,
       "end": 0.38285714285714284,
       "source": "isolated"
     },
     "mɔ": {
-      "start": 1610465,
+      "start": 1577789,
       "length": 8326,
       "vowel": 0.24893424036281178,
       "end": 0.37759637188208617,
       "source": "isolated"
     },
     "my": {
-      "start": 1618791,
+      "start": 1586115,
       "length": 8256,
       "vowel": 0.21537414965986396,
       "end": 0.374421768707483,
       "source": "isolated"
     },
     "me": {
-      "start": 1627047,
+      "start": 1594371,
       "length": 7377,
       "vowel": 0.18566893424036282,
       "end": 0.3345578231292517,
       "source": "isolated"
     },
     "mœ̃": {
-      "start": 1634424,
+      "start": 1601748,
       "length": 8580,
       "vowel": 0.1946938775510204,
       "end": 0.3891156462585034,
       "source": "isolated"
     },
     "ta": {
-      "start": 1643004,
+      "start": 1610328,
       "length": 7774,
       "vowel": 0.17954648526077097,
       "end": 0.352562358276644,
       "source": "isolated"
     },
     "to": {
-      "start": 1650778,
-      "length": 9571,
-      "vowel": 0.2912018140589569,
-      "end": 0.43405895691609975,
-      "source": "isolated"
+      "start": 1618102,
+      "length": 3760,
+      "vowel": 0.10086167800453515,
+      "end": 0.17052154195011338,
+      "source": "carrier",
+      "phonemes": "ʒə dˈi tˈo .",
+      "sourceStart": 12368,
+      "sourceEnd": 16128
     },
     "tœ": {
-      "start": 1660349,
+      "start": 1621862,
       "length": 8686,
       "vowel": 0.2089795918367347,
       "end": 0.39392290249433104,
       "source": "isolated"
     },
     "tɛ̃": {
-      "start": 1669035,
+      "start": 1630548,
       "length": 9160,
       "vowel": 0.16947845804988662,
       "end": 0.41541950113378684,
       "source": "isolated"
     },
     "tø": {
-      "start": 1678195,
+      "start": 1639708,
       "length": 7622,
       "vowel": 0.2180045351473923,
       "end": 0.3456689342403628,
       "source": "isolated"
     },
     "ti": {
-      "start": 1685817,
+      "start": 1647330,
       "length": 6032,
       "vowel": 0.14666666666666667,
       "end": 0.27356009070294784,
       "source": "isolated"
     },
     "tɔ̃": {
-      "start": 1691849,
+      "start": 1653362,
       "length": 6959,
       "vowel": 0.18575963718820862,
       "end": 0.31560090702947846,
       "source": "isolated"
     },
     "tɑ̃": {
-      "start": 1698808,
+      "start": 1660321,
       "length": 7534,
       "vowel": 0.141859410430839,
       "end": 0.3416780045351474,
       "source": "isolated"
     },
     "tɛ": {
-      "start": 1706342,
+      "start": 1667855,
       "length": 5776,
       "vowel": 0.13569160997732427,
       "end": 0.2619501133786848,
       "source": "isolated"
     },
     "tu": {
-      "start": 1712118,
+      "start": 1673631,
       "length": 7150,
       "vowel": 0.18993197278911564,
       "end": 0.3242630385487528,
       "source": "isolated"
     },
     "tɔ": {
-      "start": 1719268,
+      "start": 1680781,
       "length": 10462,
       "vowel": 0.29024943310657597,
       "end": 0.4744671201814059,
       "source": "isolated"
     },
     "ty": {
-      "start": 1729730,
+      "start": 1691243,
       "length": 7375,
       "vowel": 0.12770975056689343,
       "end": 0.3344671201814059,
       "source": "isolated"
     },
     "te": {
-      "start": 1737105,
+      "start": 1698618,
       "length": 8354,
       "vowel": 0.2345124716553288,
       "end": 0.3788662131519274,
       "source": "isolated"
     },
     "tœ̃": {
-      "start": 1745459,
+      "start": 1706972,
       "length": 7411,
       "vowel": 0.11609977324263039,
       "end": 0.3360997732426304,
       "source": "isolated"
     },
     "fa": {
-      "start": 1752870,
+      "start": 1714383,
       "length": 10774,
       "vowel": 0.2654875283446712,
       "end": 0.4886167800453515,
       "source": "isolated"
     },
     "fo": {
-      "start": 1763644,
+      "start": 1725157,
       "length": 11453,
       "vowel": 0.33424036281179137,
       "end": 0.5194104308390023,
       "source": "isolated"
     },
     "fœ": {
-      "start": 1775097,
+      "start": 1736610,
       "length": 10215,
       "vowel": 0.27705215419501134,
       "end": 0.463265306122449,
       "source": "isolated"
     },
     "fɛ̃": {
-      "start": 1785312,
+      "start": 1746825,
       "length": 10417,
       "vowel": 0.2512925170068027,
       "end": 0.4724263038548753,
       "source": "isolated"
     },
     "fø": {
-      "start": 1795729,
+      "start": 1757242,
       "length": 10663,
       "vowel": 0.3013605442176871,
       "end": 0.4835827664399093,
       "source": "isolated"
     },
     "fi": {
-      "start": 1806392,
+      "start": 1767905,
       "length": 9401,
       "vowel": 0.28834467120181406,
       "end": 0.42634920634920637,
       "source": "isolated"
     },
     "fɔ̃": {
-      "start": 1815793,
+      "start": 1777306,
       "length": 11925,
       "vowel": 0.22961451247165532,
       "end": 0.5408163265306123,
       "source": "isolated"
     },
     "fɑ̃": {
-      "start": 1827718,
+      "start": 1789231,
       "length": 8190,
       "vowel": 0.2089795918367347,
       "end": 0.37142857142857144,
       "source": "isolated"
     },
     "fɛ": {
-      "start": 1835908,
+      "start": 1797421,
       "length": 9963,
       "vowel": 0.3074829931972789,
       "end": 0.45183673469387753,
       "source": "isolated"
     },
     "fu": {
-      "start": 1845871,
+      "start": 1807384,
       "length": 10084,
       "vowel": 0.29578231292517004,
       "end": 0.45732426303854873,
       "source": "isolated"
     },
     "fɔ": {
-      "start": 1855955,
+      "start": 1817468,
       "length": 11510,
       "vowel": 0.33392290249433104,
       "end": 0.5219954648526077,
       "source": "isolated"
     },
     "fy": {
-      "start": 1867465,
+      "start": 1828978,
       "length": 8322,
       "vowel": 0.2218140589569161,
       "end": 0.37741496598639457,
       "source": "isolated"
     },
     "fe": {
-      "start": 1875787,
+      "start": 1837300,
       "length": 8197,
       "vowel": 0.25011337868480726,
       "end": 0.37174603174603177,
       "source": "isolated"
     },
     "fœ̃": {
-      "start": 1883984,
+      "start": 1845497,
       "length": 12764,
       "vowel": 0.24988662131519274,
       "end": 0.5788662131519274,
       "source": "isolated"
     },
     "la": {
-      "start": 1896748,
+      "start": 1858261,
       "length": 9069,
       "vowel": 0.2857596371882086,
       "end": 0.4112925170068027,
       "source": "isolated"
     },
     "lo": {
-      "start": 1905817,
+      "start": 1867330,
       "length": 8000,
       "vowel": 0.22984126984126985,
       "end": 0.36281179138321995,
       "source": "isolated"
     },
     "lœ": {
-      "start": 1913817,
+      "start": 1875330,
       "length": 8484,
       "vowel": 0.2273469387755102,
       "end": 0.38476190476190475,
       "source": "isolated"
     },
     "lɛ̃": {
-      "start": 1922301,
+      "start": 1883814,
       "length": 9777,
       "vowel": 0.26081632653061226,
       "end": 0.4434013605442177,
       "source": "isolated"
     },
     "lø": {
-      "start": 1932078,
+      "start": 1893591,
       "length": 10012,
       "vowel": 0.2780045351473923,
       "end": 0.45405895691609977,
       "source": "isolated"
     },
     "li": {
-      "start": 1942090,
+      "start": 1903603,
       "length": 7756,
       "vowel": 0.21582766439909298,
       "end": 0.35174603174603175,
       "source": "isolated"
     },
     "lɔ̃": {
-      "start": 1949846,
+      "start": 1911359,
       "length": 9116,
       "vowel": 0.2504308390022676,
       "end": 0.41342403628117913,
       "source": "isolated"
     },
     "lɑ̃": {
-      "start": 1958962,
+      "start": 1920475,
       "length": 10697,
       "vowel": 0.23469387755102042,
       "end": 0.485124716553288,
       "source": "isolated"
     },
     "lɛ": {
-      "start": 1969659,
+      "start": 1931172,
       "length": 8970,
       "vowel": 0.2920634920634921,
       "end": 0.40680272108843535,
       "source": "isolated"
     },
     "lu": {
-      "start": 1978629,
+      "start": 1940142,
       "length": 9886,
       "vowel": 0.27546485260770975,
       "end": 0.44834467120181404,
       "source": "isolated"
     },
     "lɔ": {
-      "start": 1988515,
+      "start": 1950028,
       "length": 10929,
       "vowel": 0.32308390022675737,
       "end": 0.4956462585034014,
       "source": "isolated"
     },
     "ly": {
-      "start": 1999444,
+      "start": 1960957,
       "length": 8530,
       "vowel": 0.2802267573696145,
       "end": 0.38684807256235826,
       "source": "isolated"
     },
     "le": {
-      "start": 2007974,
+      "start": 1969487,
       "length": 8967,
       "vowel": 0.22430839002267575,
       "end": 0.4066666666666667,
       "source": "isolated"
     },
     "lœ̃": {
-      "start": 2016941,
+      "start": 1978454,
       "length": 8889,
       "vowel": 0.18253968253968253,
       "end": 0.40312925170068026,
       "source": "isolated"
     },
     "ʃa": {
-      "start": 2025830,
+      "start": 1987343,
       "length": 10190,
       "vowel": 0.28258503401360546,
       "end": 0.4621315192743764,
       "source": "isolated"
     },
     "ʃo": {
-      "start": 2036020,
+      "start": 1997533,
       "length": 10713,
       "vowel": 0.2974603174603175,
       "end": 0.48585034013605444,
       "source": "isolated"
     },
     "ʃœ": {
-      "start": 2046733,
+      "start": 2008246,
       "length": 9049,
       "vowel": 0.26448979591836735,
       "end": 0.4103854875283447,
       "source": "isolated"
     },
     "ʃɛ̃": {
-      "start": 2055782,
+      "start": 2017295,
       "length": 10252,
       "vowel": 0.23219954648526078,
       "end": 0.46494331065759636,
       "source": "isolated"
     },
     "ʃø": {
-      "start": 2066034,
+      "start": 2027547,
       "length": 10391,
       "vowel": 0.22979591836734695,
       "end": 0.4712471655328798,
       "source": "isolated"
     },
     "ʃi": {
-      "start": 2076425,
+      "start": 2037938,
       "length": 10373,
       "vowel": 0.32589569160997733,
       "end": 0.47043083900226756,
       "source": "isolated"
     },
     "ʃɔ̃": {
-      "start": 2086798,
+      "start": 2048311,
       "length": 7828,
       "vowel": 0.18575963718820862,
       "end": 0.3550113378684807,
       "source": "isolated"
     },
     "ʃɑ̃": {
-      "start": 2094626,
+      "start": 2056139,
       "length": 11755,
       "vowel": 0.30793650793650795,
       "end": 0.5331065759637188,
       "source": "isolated"
     },
     "ʃɛ": {
-      "start": 2106381,
+      "start": 2067894,
       "length": 9869,
       "vowel": 0.3214965986394558,
       "end": 0.4475736961451247,
       "source": "isolated"
     },
     "ʃu": {
-      "start": 2116250,
+      "start": 2077763,
       "length": 9863,
       "vowel": 0.3002721088435374,
       "end": 0.4473015873015873,
       "source": "isolated"
     },
     "ʃɔ": {
-      "start": 2126113,
+      "start": 2087626,
       "length": 9059,
       "vowel": 0.23941043083900226,
       "end": 0.4108390022675737,
       "source": "isolated"
     },
     "ʃy": {
-      "start": 2135172,
+      "start": 2096685,
       "length": 9324,
       "vowel": 0.26448979591836735,
       "end": 0.4228571428571429,
       "source": "isolated"
     },
     "ʃe": {
-      "start": 2144496,
+      "start": 2106009,
       "length": 11371,
       "vowel": 0.3368253968253968,
       "end": 0.5156916099773242,
       "source": "isolated"
     },
     "ʃœ̃": {
-      "start": 2155867,
+      "start": 2117380,
       "length": 10632,
       "vowel": 0.25015873015873014,
       "end": 0.48217687074829935,
       "source": "isolated"
     },
     "ɲa": {
-      "start": 2166499,
+      "start": 2128012,
       "length": 7574,
       "vowel": 0.22947845804988662,
       "end": 0.3434920634920635,
       "source": "isolated"
     },
     "ɲo": {
-      "start": 2174073,
+      "start": 2135586,
       "length": 8463,
       "vowel": 0.26031746031746034,
       "end": 0.3838095238095238,
       "source": "isolated"
     },
     "ɲœ": {
-      "start": 2182536,
+      "start": 2144049,
       "length": 9516,
       "vowel": 0.2675736961451247,
       "end": 0.4315646258503401,
       "source": "isolated"
     },
     "ɲɛ̃": {
-      "start": 2192052,
+      "start": 2153565,
       "length": 7660,
       "vowel": 0.19718820861678005,
       "end": 0.34739229024943313,
       "source": "isolated"
     },
     "ɲø": {
-      "start": 2199712,
+      "start": 2161225,
       "length": 9583,
       "vowel": 0.2840362811791383,
       "end": 0.4346031746031746,
       "source": "isolated"
     },
     "ɲi": {
-      "start": 2209295,
+      "start": 2170808,
       "length": 8262,
       "vowel": 0.2200453514739229,
       "end": 0.3746938775510204,
       "source": "isolated"
     },
     "ɲɔ̃": {
-      "start": 2217557,
+      "start": 2179070,
       "length": 10270,
       "vowel": 0.22258503401360544,
       "end": 0.4657596371882086,
       "source": "isolated"
     },
     "ɲɑ̃": {
-      "start": 2227827,
+      "start": 2189340,
       "length": 10315,
       "vowel": 0.23555555555555555,
       "end": 0.46780045351473926,
       "source": "isolated"
     },
     "ɲɛ": {
-      "start": 2238142,
+      "start": 2199655,
       "length": 8517,
       "vowel": 0.2473469387755102,
       "end": 0.38625850340136053,
       "source": "isolated"
     },
     "ɲu": {
-      "start": 2246659,
+      "start": 2208172,
       "length": 11601,
       "vowel": 0.282312925170068,
       "end": 0.5261224489795918,
       "source": "isolated"
     },
     "ɲɔ": {
-      "start": 2258260,
+      "start": 2219773,
       "length": 9149,
       "vowel": 0.2648979591836735,
       "end": 0.4149206349206349,
       "source": "isolated"
     },
     "ɲy": {
-      "start": 2267409,
+      "start": 2228922,
       "length": 8045,
       "vowel": 0.23791383219954648,
       "end": 0.3648526077097506,
       "source": "isolated"
     },
     "ɲe": {
-      "start": 2275454,
+      "start": 2236967,
       "length": 8269,
       "vowel": 0.23782312925170068,
       "end": 0.37501133786848073,
       "source": "isolated"
     },
     "ɲœ̃": {
-      "start": 2283723,
+      "start": 2245236,
       "length": 9685,
       "vowel": 0.2109297052154195,
       "end": 0.4392290249433107,
       "source": "isolated"
     },
     "wa": {
-      "start": 2293408,
+      "start": 2254921,
       "length": 9551,
       "vowel": 0.24965986394557824,
       "end": 0.43315192743764175,
       "source": "isolated"
     },
     "wo": {
-      "start": 2302959,
+      "start": 2264472,
       "length": 8548,
       "vowel": 0.24009070294784582,
       "end": 0.3876643990929705,
       "source": "isolated"
     },
     "wœ": {
-      "start": 2311507,
+      "start": 2273020,
       "length": 9842,
       "vowel": 0.29537414965986397,
       "end": 0.44634920634920633,
       "source": "isolated"
     },
     "wɛ̃": {
-      "start": 2321349,
+      "start": 2282862,
       "length": 9013,
       "vowel": 0.16997732426303855,
       "end": 0.4087528344671202,
       "source": "isolated"
     },
     "wø": {
-      "start": 2330362,
+      "start": 2291875,
       "length": 9720,
       "vowel": 0.24693877551020407,
       "end": 0.44081632653061226,
       "source": "isolated"
     },
     "wi": {
-      "start": 2340082,
+      "start": 2301595,
       "length": 8902,
       "vowel": 0.24653061224489795,
       "end": 0.403718820861678,
       "source": "isolated"
     },
     "wɔ̃": {
-      "start": 2348984,
+      "start": 2310497,
       "length": 8801,
       "vowel": 0.15850340136054422,
       "end": 0.39913832199546484,
       "source": "isolated"
     },
     "wɑ̃": {
-      "start": 2357785,
+      "start": 2319298,
       "length": 10221,
       "vowel": 0.22249433106575964,
       "end": 0.4635374149659864,
       "source": "isolated"
     },
     "wɛ": {
-      "start": 2368006,
+      "start": 2329519,
       "length": 8282,
       "vowel": 0.22480725623582767,
       "end": 0.37560090702947846,
       "source": "isolated"
     },
     "wu": {
-      "start": 2376288,
+      "start": 2337801,
       "length": 6622,
       "vowel": 0.16594104308390023,
       "end": 0.3003174603174603,
       "source": "isolated"
     },
     "wɔ": {
-      "start": 2382910,
+      "start": 2344423,
       "length": 8150,
       "vowel": 0.2595011337868481,
       "end": 0.36961451247165533,
       "source": "isolated"
     },
     "wy": {
-      "start": 2391060,
+      "start": 2352573,
       "length": 7864,
       "vowel": 0.18140589569160998,
       "end": 0.3566439909297052,
       "source": "isolated"
     },
     "we": {
-      "start": 2398924,
+      "start": 2360437,
       "length": 9131,
       "vowel": 0.21351473922902495,
       "end": 0.41410430839002266,
       "source": "isolated"
     },
     "wœ̃": {
-      "start": 2408055,
+      "start": 2369568,
       "length": 9892,
       "vowel": 0.2112471655328798,
       "end": 0.4486167800453515,
       "source": "isolated"
     },
     "ga": {
-      "start": 2417947,
+      "start": 2379460,
       "length": 7542,
       "vowel": 0.23895691609977324,
       "end": 0.3420408163265306,
       "source": "isolated"
     },
     "go": {
-      "start": 2425489,
+      "start": 2387002,
       "length": 8439,
       "vowel": 0.19900226757369616,
       "end": 0.38272108843537417,
       "source": "isolated"
     },
     "gœ": {
-      "start": 2433928,
+      "start": 2395441,
       "length": 9085,
       "vowel": 0.27374149659863944,
       "end": 0.41201814058956915,
       "source": "isolated"
     },
     "gɛ̃": {
-      "start": 2443013,
+      "start": 2404526,
       "length": 9081,
       "vowel": 0.20281179138321995,
       "end": 0.41183673469387755,
       "source": "isolated"
     },
     "gø": {
-      "start": 2452094,
+      "start": 2413607,
       "length": 6924,
       "vowel": 0.1731065759637188,
       "end": 0.3140136054421769,
       "source": "isolated"
     },
     "gi": {
-      "start": 2459018,
+      "start": 2420531,
       "length": 5806,
       "vowel": 0.1798639455782313,
       "end": 0.2633106575963719,
       "source": "isolated"
     },
     "gɔ̃": {
-      "start": 2464824,
+      "start": 2426337,
       "length": 6599,
       "vowel": 0.08893424036281179,
       "end": 0.29927437641723353,
       "source": "isolated"
     },
     "gɑ̃": {
-      "start": 2471423,
+      "start": 2432936,
       "length": 9152,
       "vowel": 0.21197278911564627,
       "end": 0.41505668934240364,
       "source": "isolated"
     },
     "gɛ": {
-      "start": 2480575,
+      "start": 2442088,
       "length": 8096,
       "vowel": 0.19242630385487527,
       "end": 0.36716553287981857,
       "source": "isolated"
     },
     "gu": {
-      "start": 2488671,
+      "start": 2450184,
       "length": 6943,
       "vowel": 0.19587301587301587,
       "end": 0.314875283446712,
       "source": "isolated"
     },
     "gɔ": {
-      "start": 2495614,
+      "start": 2457127,
       "length": 8745,
       "vowel": 0.25963718820861675,
       "end": 0.39659863945578233,
       "source": "isolated"
     },
     "gy": {
-      "start": 2504359,
+      "start": 2465872,
       "length": 8148,
       "vowel": 0.22807256235827664,
       "end": 0.36952380952380953,
       "source": "isolated"
     },
     "ge": {
-      "start": 2512507,
+      "start": 2474020,
       "length": 8095,
       "vowel": 0.2694784580498866,
       "end": 0.3671201814058957,
       "source": "isolated"
     },
     "gœ̃": {
-      "start": 2520602,
+      "start": 2482115,
       "length": 8241,
       "vowel": 0.15854875283446712,
       "end": 0.3737414965986395,
       "source": "isolated"
     },
     "ja": {
-      "start": 2528843,
+      "start": 2490356,
       "length": 8813,
       "vowel": 0.25056689342403626,
       "end": 0.3996825396825397,
       "source": "isolated"
     },
     "jo": {
-      "start": 2537656,
+      "start": 2499169,
       "length": 10298,
       "vowel": 0.3094784580498866,
       "end": 0.4670294784580499,
       "source": "isolated"
     },
     "jœ": {
-      "start": 2547954,
+      "start": 2509467,
       "length": 10048,
       "vowel": 0.3196825396825397,
       "end": 0.4556916099773243,
       "source": "isolated"
     },
     "jɛ̃": {
-      "start": 2558002,
+      "start": 2519515,
       "length": 7825,
       "vowel": 0.17959183673469387,
       "end": 0.35487528344671204,
       "source": "isolated"
     },
     "jø": {
-      "start": 2565827,
+      "start": 2527340,
       "length": 8162,
       "vowel": 0.21736961451247166,
       "end": 0.37015873015873013,
       "source": "isolated"
     },
     "ji": {
-      "start": 2573989,
+      "start": 2535502,
       "length": 8580,
       "vowel": 0.24961451247165534,
       "end": 0.3891156462585034,
       "source": "isolated"
     },
     "jɔ̃": {
-      "start": 2582569,
+      "start": 2544082,
       "length": 7762,
       "vowel": 0.19151927437641722,
       "end": 0.35201814058956915,
       "source": "isolated"
     },
     "jɑ̃": {
-      "start": 2590331,
+      "start": 2551844,
       "length": 10131,
       "vowel": 0.20299319727891157,
       "end": 0.45945578231292517,
       "source": "isolated"
     },
     "jɛ": {
-      "start": 2600462,
+      "start": 2561975,
       "length": 8779,
       "vowel": 0.22408163265306122,
       "end": 0.398140589569161,
       "source": "isolated"
     },
     "ju": {
-      "start": 2609241,
+      "start": 2570754,
       "length": 10767,
       "vowel": 0.24784580498866213,
       "end": 0.48829931972789115,
       "source": "isolated"
     },
     "jɔ": {
-      "start": 2620008,
+      "start": 2581521,
       "length": 8499,
       "vowel": 0.20285714285714285,
       "end": 0.3854421768707483,
       "source": "isolated"
     },
     "jy": {
-      "start": 2628507,
+      "start": 2590020,
       "length": 8955,
       "vowel": 0.2521995464852608,
       "end": 0.4061224489795918,
       "source": "isolated"
     },
     "je": {
-      "start": 2637462,
+      "start": 2598975,
       "length": 9319,
       "vowel": 0.2710204081632653,
       "end": 0.42263038548752835,
       "source": "isolated"
     },
     "jœ̃": {
-      "start": 2646781,
+      "start": 2608294,
       "length": 9571,
       "vowel": 0.21496598639455783,
       "end": 0.43405895691609975,
       "source": "isolated"
     },
     "ŋa": {
-      "start": 2656352,
+      "start": 2617865,
       "length": 8047,
       "vowel": 0.21532879818594106,
       "end": 0.3649433106575964,
       "source": "isolated"
     },
     "ŋo": {
-      "start": 2664399,
+      "start": 2625912,
       "length": 10387,
       "vowel": 0.32290249433106577,
       "end": 0.4710657596371882,
       "source": "isolated"
     },
     "ŋœ": {
-      "start": 2674786,
+      "start": 2636299,
       "length": 9544,
       "vowel": 0.3179138321995465,
       "end": 0.4328344671201814,
       "source": "isolated"
     },
     "ŋɛ̃": {
-      "start": 2684330,
+      "start": 2645843,
       "length": 9087,
       "vowel": 0.22829931972789116,
       "end": 0.41210884353741495,
       "source": "isolated"
     },
     "ŋø": {
-      "start": 2693417,
+      "start": 2654930,
       "length": 9002,
       "vowel": 0.293968253968254,
       "end": 0.40825396825396826,
       "source": "isolated"
     },
     "ŋi": {
-      "start": 2702419,
+      "start": 2663932,
       "length": 6466,
       "vowel": 0.19428571428571428,
       "end": 0.29324263038548753,
       "source": "isolated"
     },
     "ŋɔ̃": {
-      "start": 2708885,
+      "start": 2670398,
       "length": 7870,
       "vowel": 0.1728798185941043,
       "end": 0.3569160997732426,
       "source": "isolated"
     },
     "ŋɑ̃": {
-      "start": 2716755,
+      "start": 2678268,
       "length": 9710,
       "vowel": 0.1763718820861678,
       "end": 0.4403628117913832,
       "source": "isolated"
     },
     "ŋɛ": {
-      "start": 2726465,
+      "start": 2687978,
       "length": 8367,
       "vowel": 0.2219501133786848,
       "end": 0.37945578231292515,
       "source": "isolated"
     },
     "ŋu": {
-      "start": 2734832,
+      "start": 2696345,
       "length": 9693,
       "vowel": 0.3072108843537415,
       "end": 0.4395918367346939,
       "source": "isolated"
     },
     "ŋɔ": {
-      "start": 2744525,
+      "start": 2706038,
       "length": 10093,
       "vowel": 0.3352380952380952,
       "end": 0.45773242630385486,
       "source": "isolated"
     },
     "ŋy": {
-      "start": 2754618,
+      "start": 2716131,
       "length": 7727,
       "vowel": 0.2124263038548753,
       "end": 0.35043083900226757,
       "source": "isolated"
     },
     "ŋe": {
-      "start": 2762345,
+      "start": 2723858,
       "length": 8912,
       "vowel": 0.2650793650793651,
       "end": 0.40417233560090704,
       "source": "isolated"
     },
     "ŋœ̃": {
-      "start": 2771257,
+      "start": 2732770,
       "length": 8235,
       "vowel": 0.2290702947845805,
       "end": 0.373469387755102,
       "source": "isolated"
     }
-  }
+  },
+  "consonantRepairBaseSha256": "f19fe2d7cb807180ac21fc6cff12059470fe73cec1fe5f0b17a787b2acea2c0a",
+  "consonantReviewSha256": "f2b57937b10fd011d3d37bdc1e57bd73203366a4f40904efc799d94680333b0a",
+  "paRepairBaseSha256": "ae9d29bae16edd4bb7b843a34b014e482801c854576e7e323bf7541e436a200d",
+  "yRepairBaseSha256": "a9e0fd8d037c4a5bb095c9e449c9bfce287f7908a2284ae529ee193a90390221"
 }
