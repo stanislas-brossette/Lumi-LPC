@@ -48,7 +48,7 @@ test('consonant-vowel keys start at their consonant and never join separate word
   assert.equal(times[2], phonemes[4].sample / result.sampleRate);
 });
 
-function app(stored = null) {
+function app(stored = null, reducedMotion = true) {
   const nodes = new Map(), frames = new Map(), timers = new Map(); let id = 0;
   function element() { return { value: '', dataset: {}, style: {}, children: [], handlers: {}, attrs: {}, classList: { toggle() {} },
     addEventListener(name, fn) { this.handlers[name] = fn; }, setAttribute(name, value) { this.attrs[name] = value; },
@@ -65,7 +65,7 @@ function app(stored = null) {
   const context = {
     document: { getElementById: get, querySelectorAll: () => [], createElement: element, addEventListener() {} },
     localStorage: { getItem: () => stored && JSON.stringify(stored), setItem() {} }, location: { protocol: 'file:' }, performance: {now:()=>0},
-    matchMedia: () => ({ matches: true }), addEventListener() {}, Audio: FakeAudio, Blob,
+    matchMedia: () => ({ matches: reducedMotion }), addEventListener() {}, Audio: FakeAudio, Blob,
     URL: { createObjectURL: () => 'blob:test', revokeObjectURL: url => revoked.push(url) },
     setTimeout(fn) { timers.set(++id, fn); return id; }, clearTimeout(id) { timers.delete(id); },
     requestAnimationFrame(fn) { frames.set(++id, fn); return id; }, cancelAnimationFrame(id) { frames.delete(id); },
@@ -266,4 +266,27 @@ test('real French audio codes ui words with /ɥ/ and keeps every onset measured'
     const onsets = result.events.filter(e => e.type === 'phoneme' && e.phoneme).map(e => e.sample / result.sampleRate);
     for (const time of times) assert.ok(onsets.includes(time));
   }
+});
+
+test('a repeated key is tapped: the contact ring waits for the hand to come back', () => {
+  const a = app(null, false);
+  assert.deepEqual(a.state.keys.slice(0, 3).map(k => k.code), ['1-s', '1-s', '5-m'], 'Papa repeats pa');
+  a.moveTo(0); a.moveTo(1);
+  assert.match(a.get('reference-points').innerHTML, /class="pulse"[^>]*animation-delay:280ms/);
+  assert.match(a.get('current-meta').textContent, /clé tapée/);
+  a.get('mirror').handlers.click();
+  assert.doesNotMatch(a.get('reference-points').innerHTML, /animation-delay/, 'redrawing the same key does not tap again');
+  a.moveTo(2);
+  assert.doesNotMatch(a.get('reference-points').innerHTML, /animation-delay/);
+  assert.doesNotMatch(a.get('current-meta').textContent, /tapée/);
+  a.get('speed').value = '0.5'; a.get('speed').handlers.change(); a.moveTo(1);
+  assert.doesNotMatch(a.get('reference-points').innerHTML, /animation-delay/, 'arriving from a different key is a transition, not a tap');
+  a.moveTo(0);
+  assert.match(a.get('reference-points').innerHTML, /animation-delay:560ms/, 'tap slows down with the playback speed');
+});
+
+test('reduced motion keeps the tap label but moves nothing', () => {
+  const a = app(); a.moveTo(0); a.moveTo(1);
+  assert.doesNotMatch(a.get('reference-points').innerHTML, /animation-delay/);
+  assert.match(a.get('current-meta').textContent, /clé tapée/);
 });
