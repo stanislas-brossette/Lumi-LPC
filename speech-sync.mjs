@@ -1,7 +1,8 @@
 // Automatic text supplies the LPC keys; each key is then voiced on its own.
 // Automatic and manual pronunciations share the same didactic sound generation.
+// Each key also records the text word it comes from (key.word, an index into words).
 export function timelineFromEvents(result, LPC, schwa) {
-  const keys = [], times = [], phrases = [];
+  const keys = [], times = [], phrases = [], words = [];
   let phonemes = [];
   function flush(pause = false) {
     if (!phonemes.length) {
@@ -16,6 +17,7 @@ export function timelineFromEvents(result, LPC, schwa) {
     for (const key of group) {
       times.push(phonemes[consumed].time);
       consumed += Number(!!key.c) + Number(!!key.v);
+      key.word = words.length - 1;
       keys.push(key);
     }
     if (consumed !== phonemes.length) throw new Error('Alignement phonétique incohérent.');
@@ -24,7 +26,8 @@ export function timelineFromEvents(result, LPC, schwa) {
     phonemes = [];
   }
   for (const event of result.events) {
-    if (event.type === 'word') flush();
+    // eSpeak word events give a 1-based start in the text; a word runs until the next one.
+    if (event.type === 'word') { flush(); words.push({ start: event.textPosition - 1 }); }
     if (event.type === 'end') flush(true);
     if (event.type !== 'phoneme') continue;
     if (!event.phoneme) { flush(true); continue; }
@@ -38,7 +41,7 @@ export function timelineFromEvents(result, LPC, schwa) {
   if (!keys.length || times.some((time, i) => !Number.isFinite(time) || time < 0 || time > result.duration || (i && time < times[i - 1]))) {
     throw new Error('Le moteur vocal n’a pas fourni un minutage exploitable.');
   }
-  return { keys, times, ipa: phrases.join(' ') };
+  return { keys, times, words, ipa: phrases.join(' ') };
 }
 
 export function keyAtTime(times, seconds) {
@@ -61,7 +64,7 @@ export async function synthesize(text, LPC, schwa) {
   const result = espeak.synthesize(text, { rate: 175, phonemes: false, ssml: false });
   const timeline = timelineFromEvents(result, LPC, schwa);
   const packet=synthesizeKeysWithEngine(timeline.keys,espeak,encodeWav);
-  packet.ipa=timeline.ipa;
+  packet.ipa=timeline.ipa;packet.text=text;packet.words=timeline.words;
   return packet;
 }
 
