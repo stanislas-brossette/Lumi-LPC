@@ -69,3 +69,24 @@ son. Le /b/ de « bonjour », lui, appartient à /bɔ̃/ et n'est pas modifié.
 - Le manifeste actuel conserve la phrase source et les bornes d'extraction
   des unités réparées ainsi que l'empreinte de la banque avant réparation.
 - Cache PWA porté à 0.2.1 pour renouveler les fichiers de voix déjà installés.
+
+## Ajout : /to/ signalé comme « ste »
+
+L'utilisateur signale que l'unité /to/ ressemble à « ste ». L'extrait isolé
+initial durait 434 ms, dont 291 ms avant le repère de voyelle prédit par le
+modèle. Il est remplacé par une extraction de /ʒə dˈi tˈo ./ : 171 ms au total,
+avec un repère de voyelle à 101 ms. Cela réduit l'attaque anormalement longue.
+Le même reconnaisseur indépendant transcrit l'ancien extrait /s t e/, ce qui
+concorde avec le signalement. Il lit /ʒ d i t o/ dans la nouvelle phrase porteuse,
+mais /t u5/ dans sa découpe isolée. Ce résultat ambigu ne certifie donc pas
+l'identité de la voyelle : la conformité perceptive à /to/ doit encore être
+confirmée par l'utilisateur.
+
+Les 328 autres unités restent identiques échantillon par échantillon à la
+banque précédente. L'ancien /to/ rejoint les fixtures de comparaison locales ;
+`/voice-review.html` le présente en premier avec les boutons « Avant » et
+« Voix actuelle ». `--repair-key to` permet une régénération ciblée. Les repères
+et les empreintes sont mis à jour, ainsi que le cache PWA (0.3.1). Les deux
+modes de lecture utilisent ce même extrait corrigé.
+
+Nouveau WAV : `f19fe2d7cb807180ac21fc6cff12059470fe73cec1fe5f0b17a787b2acea2c0a`.

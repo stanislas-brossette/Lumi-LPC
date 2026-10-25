@@ -98,3 +98,13 @@ test('network or missing-clip failure falls back to eSpeak for the whole sequenc
   const retry = await synthesizeKeys(keys, engine, encodeWav, async () => bank);
   assert.equal(retry.voice, 'Piper · Siwis');
 });
+
+test('reported /to/ uses a contextual stop-vowel excerpt instead of the long isolated attack', () => {
+  const before = JSON.parse(readFileSync('tests/fixtures/voice-stops-before.json'));
+  const entry = manifest.keys.to;
+  assert.equal(entry.source, 'carrier');
+  assert.equal(entry.phonemes, 'ʒə dˈi tˈo .');
+  assert.ok(entry.vowel < before.keys.to.vowel / 2);
+  assert.ok(entry.end > entry.vowel + .04, 'retain the vowel after the stop');
+  assert.ok(entry.end < before.keys.to.end);
+});

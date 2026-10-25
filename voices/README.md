@@ -38,8 +38,10 @@ uv venv /tmp/lumi-voice-env
 uv pip install --python /tmp/lumi-voice-env/bin/python 'piper-tts[alignment]==1.8.0'
 # Télécharger le .onnx, le .onnx.json et MODEL_CARD depuis le dossier du modèle.
 /tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx
-# Pour réparer seulement les six explosives en conservant les 323 autres PCM :
+# Pour réparer les six explosives et /to/ en conservant les autres PCM :
 /tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx --repair-existing
+# Pour réparer uniquement /to/ dans une banque existante :
+/tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx --repair-key to
 npm test
 npm run build
 ```
@@ -58,6 +60,6 @@ les nasales, /ɥ/, /ɲ/ et /ŋ/. L'amélioration perçue du timbre et l'exactitu
 pédagogique ne se déduisent pas de ces contrôles techniques.
 
 Le contrôle du 25 octobre est documenté dans [le rapport acoustique](../docs/voice-audit-2026-10-25.md).
-Le serveur local expose `/voice-review.html` pour comparer les six corrections
+Le serveur local expose `/voice-review.html` pour comparer les sept corrections
 aux anciens sons et écouter l'ensemble des 329 unités. Cette page de travail
 et les anciens sons sont exclus du build Netlify.
