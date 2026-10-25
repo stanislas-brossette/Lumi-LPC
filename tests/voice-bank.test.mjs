@@ -37,8 +37,8 @@ test('neural montage keeps the exact keys, repeats, clock, vowel marks and isola
   const keys = ['pa', 'pa', 'bɔ̃', 'ʒu', 'ʁ', 'ɥi', 'œ̃', 'ŋ'].map(s => byIpa[s]);
   const packet = synthesizeKeysWithBank(keys, bank, encodeWav);
   assert.equal(packet.keys, keys);
-  assert.equal(packet.voice, 'Piper · Siwis');
-  assert.equal(packet.warning, '');
+  assert.equal(packet.voice, 'Piper · Siwis + eSpeak NG');
+  assert.match(packet.warning, /ŋ.*eSpeak/);
   assert.equal(packet.clips.length, keys.length);
   assert.ok(packet.slotDuration >= 1.2);
   assert.deepEqual(packet.clips[0], packet.clips[1]);
@@ -107,4 +107,30 @@ test('reported /to/ uses a contextual stop-vowel excerpt instead of the long iso
   assert.ok(entry.vowel < before.keys.to.vowel / 2);
   assert.ok(entry.end > entry.vowel + .04, 'retain the vowel after the stop');
   assert.ok(entry.end < before.keys.to.end);
+});
+
+test('the consonant pass preserves all other units and reproduces the archived cuts',()=>{
+  const report=JSON.parse(readFileSync('voices/consonant-audit.json'));
+  assert.equal(report.units.length,21);
+  const fixture=readFileSync('tests/fixtures/voice-stops-before.wav');
+  assert.equal(createHash('sha256').update(fixture).digest('hex'),report.fixtureAudioSha256);
+  const meta=JSON.parse(readFileSync('tests/fixtures/voice-stops-before.json'));
+  const archive=readVoiceBank(meta,fixture.buffer.slice(fixture.byteOffset,fixture.byteOffset+fixture.byteLength));
+  const changed=new Set(report.units.filter(r=>r.status==='replaced').map(r=>r.ipa));
+  assert.equal(changed.size,10);
+  const hash=createHash('sha256');
+  for(const [ipa,entry] of Object.entries(manifest.keys)){
+    const sample=bank.samples.subarray(entry.start,entry.start+entry.length);
+    if(changed.has(ipa)){
+      const saved=meta.keys['pass-after-'+ipa];
+      assert.deepEqual(sample,archive.samples.subarray(saved.start,saved.start+saved.length),ipa);
+      assert.equal(entry.vowel,null);
+      if(entry.source==='carrier-eu')assert.ok(entry.sourceEnd<entry.supportVowelOnset,'stop before the supporting vowel');
+      if(entry.source==='espeak-eu')assert.equal(entry.sourceEnd,entry.supportVowelOnset);
+    }else hash.update(new Uint8Array(sample.buffer,sample.byteOffset,sample.byteLength));
+  }
+  assert.equal(hash.digest('hex'),report.unmodifiedPcmSha256,'319 units must remain bit-identical');
+  const ng=inventory.filter(k=>k.ipa==='ŋ');
+  const packet=synthesizeKeysWithBank(ng,bank,encodeWav);
+  assert.equal(packet.voice,'eSpeak NG');assert.match(packet.warning,/ŋ.*eSpeak/);
 });

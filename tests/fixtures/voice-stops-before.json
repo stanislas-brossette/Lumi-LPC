@@ -3,7 +3,7 @@
   "sampleRate": 22050,
   "name": "Première banque Siwis",
   "audio": "voice-stops-before.wav",
-  "audioSha256": "38c1e7cf15e609aa34ae677c458d2088a4881091389a4f5a9de399966075db69",
+  "audioSha256": "af7cc36ebd78d1e578d1eb93aa651cee2cec75ad7a778d5faa84abd75957a461",
   "sourceBankSha256": "bca646818e6d4fea8f739dc567aee28b07ad7dddf7fccb3ce72961e968173d67",
   "keys": {
     "b": {
@@ -53,6 +53,318 @@
       "length": 9571,
       "end": 0.43405895691609975,
       "vowel": 0.2912018140589569
+    },
+    "pass-before-p": {
+      "start": 42826,
+      "length": 2299,
+      "end": 0.10426303854875284,
+      "vowel": null
+    },
+    "pass-after-p": {
+      "start": 45125,
+      "length": 2299,
+      "end": 0.10426303854875284,
+      "vowel": null
+    },
+    "pass-before-d": {
+      "start": 47424,
+      "length": 2299,
+      "end": 0.10426303854875284,
+      "vowel": null
+    },
+    "pass-after-d": {
+      "start": 49723,
+      "length": 2299,
+      "end": 0.10426303854875284,
+      "vowel": null
+    },
+    "pass-before-ʒ": {
+      "start": 52022,
+      "length": 5793,
+      "end": 0.2627210884353742,
+      "vowel": null
+    },
+    "pass-context-ʒ": {
+      "start": 57815,
+      "length": 24064,
+      "end": 1.0913378684807256,
+      "vowel": null
+    },
+    "pass-after-ʒ": {
+      "start": 81879,
+      "length": 2414,
+      "end": 0.10947845804988662,
+      "vowel": null
+    },
+    "pass-before-k": {
+      "start": 84293,
+      "length": 2811,
+      "end": 0.1274829931972789,
+      "vowel": null
+    },
+    "pass-after-k": {
+      "start": 87104,
+      "length": 2811,
+      "end": 0.1274829931972789,
+      "vowel": null
+    },
+    "pass-before-v": {
+      "start": 89915,
+      "length": 3737,
+      "end": 0.16947845804988662,
+      "vowel": null
+    },
+    "pass-after-v": {
+      "start": 93652,
+      "length": 3737,
+      "end": 0.16947845804988662,
+      "vowel": null
+    },
+    "pass-before-z": {
+      "start": 97389,
+      "length": 2223,
+      "end": 0.10081632653061225,
+      "vowel": null
+    },
+    "pass-context-z": {
+      "start": 99612,
+      "length": 24576,
+      "end": 1.1145578231292517,
+      "vowel": null
+    },
+    "pass-after-z": {
+      "start": 124188,
+      "length": 2158,
+      "end": 0.09786848072562358,
+      "vowel": null
+    },
+    "pass-before-s": {
+      "start": 126346,
+      "length": 2035,
+      "end": 0.09229024943310657,
+      "vowel": null
+    },
+    "pass-after-s": {
+      "start": 128381,
+      "length": 2035,
+      "end": 0.09229024943310657,
+      "vowel": null
+    },
+    "pass-before-ʁ": {
+      "start": 130416,
+      "length": 2048,
+      "end": 0.09287981859410431,
+      "vowel": null
+    },
+    "pass-after-ʁ": {
+      "start": 132464,
+      "length": 2048,
+      "end": 0.09287981859410431,
+      "vowel": null
+    },
+    "pass-before-b": {
+      "start": 134512,
+      "length": 1531,
+      "end": 0.06943310657596372,
+      "vowel": null
+    },
+    "pass-after-b": {
+      "start": 136043,
+      "length": 1531,
+      "end": 0.06943310657596372,
+      "vowel": null
+    },
+    "pass-before-n": {
+      "start": 137574,
+      "length": 6020,
+      "end": 0.273015873015873,
+      "vowel": null
+    },
+    "pass-context-n": {
+      "start": 143594,
+      "length": 23552,
+      "end": 1.0681179138321995,
+      "vowel": null
+    },
+    "pass-after-n": {
+      "start": 167146,
+      "length": 2926,
+      "end": 0.1326984126984127,
+      "vowel": null
+    },
+    "pass-before-ɥ": {
+      "start": 170072,
+      "length": 3223,
+      "end": 0.14616780045351474,
+      "vowel": null
+    },
+    "pass-after-ɥ": {
+      "start": 173295,
+      "length": 3223,
+      "end": 0.14616780045351474,
+      "vowel": null
+    },
+    "pass-before-m": {
+      "start": 176518,
+      "length": 3966,
+      "end": 0.1798639455782313,
+      "vowel": null
+    },
+    "pass-context-m": {
+      "start": 180484,
+      "length": 23296,
+      "end": 1.0565079365079366,
+      "vowel": null
+    },
+    "pass-after-m": {
+      "start": 203780,
+      "length": 1390,
+      "end": 0.06303854875283446,
+      "vowel": null
+    },
+    "pass-before-t": {
+      "start": 205170,
+      "length": 2043,
+      "end": 0.0926530612244898,
+      "vowel": null
+    },
+    "pass-after-t": {
+      "start": 207213,
+      "length": 2043,
+      "end": 0.0926530612244898,
+      "vowel": null
+    },
+    "pass-before-f": {
+      "start": 209256,
+      "length": 4988,
+      "end": 0.22621315192743763,
+      "vowel": null
+    },
+    "pass-after-f": {
+      "start": 214244,
+      "length": 4988,
+      "end": 0.22621315192743763,
+      "vowel": null
+    },
+    "pass-before-l": {
+      "start": 219232,
+      "length": 5859,
+      "end": 0.26571428571428574,
+      "vowel": null
+    },
+    "pass-context-l": {
+      "start": 225091,
+      "length": 23040,
+      "end": 1.0448979591836736,
+      "vowel": null
+    },
+    "pass-after-l": {
+      "start": 248131,
+      "length": 1390,
+      "end": 0.06303854875283446,
+      "vowel": null
+    },
+    "pass-before-ʃ": {
+      "start": 249521,
+      "length": 4656,
+      "end": 0.211156462585034,
+      "vowel": null
+    },
+    "pass-context-ʃ": {
+      "start": 254177,
+      "length": 24576,
+      "end": 1.1145578231292517,
+      "vowel": null
+    },
+    "pass-after-ʃ": {
+      "start": 278753,
+      "length": 3438,
+      "end": 0.15591836734693879,
+      "vowel": null
+    },
+    "pass-before-ɲ": {
+      "start": 282191,
+      "length": 5764,
+      "end": 0.26140589569161,
+      "vowel": null
+    },
+    "pass-context-ɲ": {
+      "start": 287955,
+      "length": 25344,
+      "end": 1.1493877551020408,
+      "vowel": null
+    },
+    "pass-after-ɲ": {
+      "start": 313299,
+      "length": 1968,
+      "end": 0.0892517006802721,
+      "vowel": null
+    },
+    "pass-before-w": {
+      "start": 315267,
+      "length": 4192,
+      "end": 0.19011337868480727,
+      "vowel": null
+    },
+    "pass-context-w": {
+      "start": 319459,
+      "length": 24320,
+      "end": 1.1029478458049886,
+      "vowel": null
+    },
+    "pass-after-w": {
+      "start": 343779,
+      "length": 1646,
+      "end": 0.0746485260770975,
+      "vowel": null
+    },
+    "pass-before-g": {
+      "start": 345425,
+      "length": 2043,
+      "end": 0.0926530612244898,
+      "vowel": null
+    },
+    "pass-after-g": {
+      "start": 347468,
+      "length": 2043,
+      "end": 0.0926530612244898,
+      "vowel": null
+    },
+    "pass-before-j": {
+      "start": 349511,
+      "length": 7828,
+      "end": 0.3550113378684807,
+      "vowel": null
+    },
+    "pass-context-j": {
+      "start": 357339,
+      "length": 26112,
+      "end": 1.18421768707483,
+      "vowel": null
+    },
+    "pass-after-j": {
+      "start": 383451,
+      "length": 944,
+      "end": 0.04281179138321996,
+      "vowel": null
+    },
+    "pass-before-ŋ": {
+      "start": 384395,
+      "length": 6234,
+      "end": 0.28272108843537413,
+      "vowel": null
+    },
+    "pass-context-ŋ": {
+      "start": 390629,
+      "length": 8064,
+      "end": 0.3657142857142857,
+      "vowel": null
+    },
+    "pass-after-ŋ": {
+      "start": 398693,
+      "length": 4160,
+      "end": 0.18866213151927438,
+      "vowel": null
     }
   }
 }

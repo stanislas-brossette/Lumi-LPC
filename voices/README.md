@@ -7,7 +7,7 @@ Cette banque contient 329 unités : les 21 consonnes, les 14 voyelles et leurs
 Le modèle `fr_FR-siwis-medium` de Piper a généré chaque unité depuis
 ses phonèmes. Depuis la correction 0.2.1, les six consonnes explosives isolées
 /p b t d k g/ sont extraites d'une phrase française porteuse, plutôt que
-synthétisées seules. Les autres extraits sont conservés. Le navigateur assemble les extraits avec un temps de transition
+synthétisées seules. La passe 0.4.3 remplace aussi dix consonnes isolées après comparaison en contexte. Sept utilisent un appui /ø/ coupé avant la voyelle ; /ɲ/ et /j/ gardent un contexte /a/. /ŋ/ utilise exceptionnellement eSpeak NG, signalé à l’écran ; /ɥ/ reste à confirmer. Les 319 autres extraits sont conservés. Le navigateur assemble les extraits avec un temps de transition
 et d'observation, sans exécuter de modèle neuronal et sans service vocal distant.
 Les fichiers sont inclus dans le cache hors ligne. eSpeak reste le phonétiseur
 et la voix de secours si la banque ne peut pas être chargée.
@@ -42,6 +42,8 @@ uv pip install --python /tmp/lumi-voice-env/bin/python 'piper-tts[alignment]==1.
 /tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx --repair-existing
 # Pour réparer uniquement /to/ dans une banque existante :
 /tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --model /chemin/fr_FR-siwis-medium.onnx --repair-key to
+# Après une régénération, réappliquer les dix coupes archivées :
+/tmp/lumi-voice-env/bin/python scripts/generate-key-voice.py --apply-reviewed-consonants
 npm test
 npm run build
 ```

@@ -28,6 +28,7 @@ test('manifest meets install criteria with real, correctly sized icons', () => {
 test('service worker cache name follows the app and voice versions', () => {
   const voice = pkg.dependencies['@spelling-creator/spellophone'];
   assert.match(sw, new RegExp(`const CACHE = 'lumi-${pkg.version}-spellophone-${voice}';`));
+  assert.ok(readFileSync('speech-sync.mjs','utf8').includes("const VOICE_BANK_VERSION = '"+pkg.version+"';"));
 });
 
 function worker() {
@@ -60,6 +61,7 @@ test('offline: the app shell and voice files are served from cache, phrases are 
   assert.equal((await w.run('fetch', get('/assets/voice/wasm/espeak-ng.wasm')).responded).url, 'https://lumi.test/assets/voice/wasm/espeak-ng.wasm');
   assert.equal(w.fetched.filter(u => u.includes('espeak-ng.wasm')).length, 1);
   for (const module of ['sounds.mjs', 'sound-catalog.mjs']) assert.deepEqual(await w.run('fetch', get('/'+module)).responded, {body:module});
+  assert.equal((await w.run('fetch', get('/assets/voice/wasm/espeak-ng.wasm?v=current')).responded).url, 'https://lumi.test/assets/voice/wasm/espeak-ng.wasm');
   // Navigation offline falls back to the cached page.
   assert.deepEqual(await w.run('fetch', get('/?x=1', 'navigate')).responded, { body: './' });
   // API calls and POSTs are left to the network and never stored.

@@ -25,7 +25,7 @@ clé reste sélectionné par défaut.
 
 ## Limites et vérification
 
-Le timbre est identique entre les deux modes, mais les raccords entre extraits
+Le timbre est identique entre les deux modes (avec une exception signalée pour le son isolé /ŋ/, extrait d’eSpeak), mais les raccords entre extraits
 restent perceptibles. Ce montage ne fournit pas la coarticulation ni la prosodie
 d’une voix de phrase. Une vraie synthèse de phrase Siwis demanderait un moteur
 et un modèle supplémentaires ; elle reste hors de cette première version.

@@ -18,6 +18,45 @@ from piper import PiperVoice, SynthesisConfig
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def apply_reviewed_consonants(output):
+    """Reapply the checked-in, individually reviewed cuts without new synthesis."""
+    review = json.loads((ROOT / 'voices/consonant-audit.json').read_text())
+    fixture_path = ROOT / 'tests/fixtures/voice-stops-before.wav'
+    fixture_meta = json.loads(fixture_path.with_suffix('.json').read_text())
+    if hashlib.sha256(fixture_path.read_bytes()).hexdigest() != review['fixtureAudioSha256']:
+        raise ValueError('Review fixture fingerprint mismatch')
+    manifest = json.loads((output / 'manifest.json').read_text())
+    path = output / manifest['audio']
+    previous_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+    with wave.open(str(path)) as wav:
+        rate = wav.getframerate()
+        original = np.frombuffer(wav.readframes(wav.getnframes()), dtype='<i2')
+    with wave.open(str(fixture_path)) as wav:
+        if wav.getframerate() != rate:
+            raise ValueError('Review sample rate mismatch')
+        fixture = np.frombuffer(wav.readframes(wav.getnframes()), dtype='<i2')
+    patches = {r['ipa']: r for r in review['units'] if r['status'] == 'replaced'}
+    pieces, cursor = [], 0
+    for ipa, entry in manifest['keys'].items():
+        if ipa in patches:
+            reviewed = fixture_meta['keys']['pass-after-' + ipa]
+            pcm = fixture[reviewed['start']:reviewed['start'] + reviewed['length']]
+            entry.update(patches[ipa]['metadata'], length=len(pcm), end=len(pcm) / rate, vowel=None)
+        else:
+            pcm = original[entry['start']:entry['start'] + entry['length']]
+        entry['start'] = cursor
+        pieces.append(pcm)
+        cursor += len(pcm)
+    with wave.open(str(path), 'wb') as wav:
+        wav.setparams((1, 2, rate, 0, 'NONE', 'not compressed'))
+        wav.writeframes(np.concatenate(pieces).astype('<i2').tobytes())
+    manifest.update(audioSha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                    consonantRepairBaseSha256=previous_hash,
+                    consonantReviewSha256=hashlib.sha256((ROOT / 'voices/consonant-audit.json').read_bytes()).hexdigest())
+    (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
+    print(f'{len(patches)} reviewed consonants applied; every other PCM preserved')
+
+
 def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=None):
     ort.set_seed(42)
     voice = PiperVoice.load(model, include_alignments=True)
@@ -131,10 +170,16 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--model', type=Path, required=True)
+    parser.add_argument('--model', type=Path)
     parser.add_argument('--output', type=Path, default=ROOT / 'voices')
     parser.add_argument('--audit-dir', type=Path)
     parser.add_argument('--repair-existing', action='store_true', help='Preserve every other clip byte for byte')
     parser.add_argument('--repair-key', action='append', help='Regenerate only this key in an existing bank (repeatable)')
+    parser.add_argument('--apply-reviewed-consonants', action='store_true', help='Reapply the archived consonant cuts exactly, without synthesis')
     args = parser.parse_args()
-    generate(args.model, args.output, args.audit_dir, args.repair_existing, args.repair_key)
+    if args.apply_reviewed_consonants:
+        apply_reviewed_consonants(args.output)
+    else:
+        if args.model is None:
+            parser.error('--model is required for synthesis')
+        generate(args.model, args.output, args.audit_dir, args.repair_existing, args.repair_key)

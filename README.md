@@ -189,3 +189,9 @@ simulateur. Les variantes régionales de « brun » et l’emprunt « parking »
 signalés. Les fichiers sont inclus dans le cache hors ligne de la version 0.4.2.
 Le son nécessite le site ou le serveur local ; l’ouverture directe en `file://`
 conserve le simulateur historique, mais ne charge pas cet explorateur en module.
+
+La passe 0.4.3 contrôle les 21 consonnes et semi-voyelles et remplace dix sons
+isolés. Voir le [rapport et les limites](docs/voice-audit-2026-10-25.md). Le /ŋ/
+isolé utilise exceptionnellement eSpeak, signalé à l’écran ; /ɥ/ reste à
+confirmer. `/voice-review.html` permet de comparer les anciens extraits, les
+nouveaux et leurs contextes de génération. Les autres 319 unités sont inchangées.

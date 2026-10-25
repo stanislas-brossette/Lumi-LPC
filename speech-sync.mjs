@@ -214,6 +214,7 @@ export async function synthesizePronunciation(ipa, LPC, schwa, options = {}) {
 // A small, pre-generated neural voice bank. eSpeak still determines the text's
 // phonemes; automatic and manually corrected keys use these same audio units.
 // No neural model, remote TTS API or AudioContext is needed during playback.
+const VOICE_BANK_VERSION = '0.4.3';
 let bankReady;
 export function readVoiceBank(manifest, buffer) {
   const view = new DataView(buffer);
@@ -246,15 +247,24 @@ export function readVoiceBank(manifest, buffer) {
 async function loadVoiceBank() {
   if (!bankReady) bankReady = (async () => {
     const base = new URL('./assets/voice/keys/', import.meta.url);
-    const request = async name => {
-      const response = await fetch(new URL(name, base), { signal: AbortSignal.timeout(12000) });
+    const request = async (name, version) => {
+      const url = new URL(name, base); url.searchParams.set('v', version);
+      const response = await fetch(url, { signal: AbortSignal.timeout(12000) });
       if (!response.ok) throw new Error('Banque vocale indisponible.');
       return response;
     };
-    const [metadata, audio] = await Promise.all([request('manifest.json'), request('siwis-keys.wav')]);
-    return readVoiceBank(await metadata.json(), await audio.arrayBuffer());
+    // A previous service worker must not reuse stale sounds during its update.
+    const metadata = await (await request('manifest.json', VOICE_BANK_VERSION)).json();
+    const audio = await request('siwis-keys.wav', metadata.audioSha256);
+    return readVoiceBank(metadata, await audio.arrayBuffer());
   })().catch(error => { bankReady = undefined; throw error; });
   return bankReady;
+}
+function bankVoice(keys, bank) {
+  const borrowed = keys.filter(k => bank.manifest.keys[k.ipa]?.engine === 'eSpeak NG');
+  const uncertain = keys.some(k => k.ipa === 'ɥ');
+  return { voice: borrowed.length === keys.length ? 'eSpeak NG' : borrowed.length ? 'Piper · Siwis + eSpeak NG' : 'Piper · Siwis',
+    warning: [borrowed.length ? 'Le son /ŋ/ utilise un extrait eSpeak ; sa réalisation Siwis reste instable.' : '', uncertain ? 'Le son isolé /ɥ/ de Siwis reste à vérifier à l’écoute.' : ''].filter(Boolean).join(' ') };
 }
 export function synthesizeKeysWithBank(keys, bank, encodeWav, mode = 'didactic') {
   if (!keys.length) throw new Error('Aucune clé à prononcer.');
@@ -284,13 +294,13 @@ export function synthesizeKeysWithBank(keys, bank, encodeWav, mode = 'didactic')
   for (const piece of pieces) { samples.set(piece, offset); offset += piece.length; }
   const timeline = { keys, times, marks, ipa: keys.map(k => k.ipa + (mode === 'natural' && k.pauseAfter ? '|' : '')).join(' ') };
   if (mode === 'natural') {
-    return { ...timeline, mode, voice: 'Piper · Siwis', warning: '', soundOffset: 0,
+    return { ...timeline, mode, ...bankVoice(keys, bank), soundOffset: 0,
       clipTimes: times.slice(), clips: keys.map((key, i) => {
         const entry = bank.manifest.keys[key.ipa];
         return encodeWav(samples.slice(Math.round(times[i] * bank.sampleRate), Math.round(times[i] * bank.sampleRate) + entry.length), bank.sampleRate);
       }), wav: encodeWav(samples, bank.sampleRate), duration: samples.length / bank.sampleRate };
   }
-  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, timeline, encodeWav), voice: 'Piper · Siwis', warning: '' };
+  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, timeline, encodeWav), ...bankVoice(keys, bank) };
 }
 export async function continuousVoice(keys, encodeWav, fallback, loadBank = loadVoiceBank) {
   try { return synthesizeKeysWithBank(keys, await loadBank(), encodeWav, 'natural'); }

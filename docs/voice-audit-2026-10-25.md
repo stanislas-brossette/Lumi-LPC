@@ -90,3 +90,71 @@ et les empreintes sont mis à jour, ainsi que le cache PWA (0.3.1). Les deux
 modes de lecture utilisent ce même extrait corrigé.
 
 Nouveau WAV : `f19fe2d7cb807180ac21fc6cff12059470fe73cec1fe5f0b17a787b2acea2c0a`.
+
+## Nouvelle passe : 21 consonnes et semi-voyelles
+
+Déclencheurs utilisateur : /l/ perçu comme « tch », /z/ comme « f », /ʒ/ de
+« jardin » comme « v », et /ŋ/ de « parking » jugé bizarre. Les 21 unités ont
+été comparées à des productions en contexte ; l'essai a ensuite suivi la
+suggestion de l'utilisateur : ajouter /ø/ (eu de « jeu »), puis retirer l'appui.
+
+Deux contextes ont été essayés par son : /ʒə dˈi Cˈø ./ et /ʒə dˈi aCˈø ./.
+La coupe retenue est conservatrice : elle s'arrête avant le segment accentué
+précédant la voyelle du modèle, car attendre le début du seul identifiant /ø/
+laissait parfois entendre une partie de la voyelle. L'alignement est une
+prédiction de durée, pas une frontière acoustique certifiée.
+
+Dix unités sont remplacées ; les 319 autres PCM restent identiques. Les
+consonnes explosives déjà corrigées et /f v s ʁ/ sont conservées. /ɥ/ reste
+inchangé, faute de variante Siwis suffisamment convaincante dans ce contrôle.
+Les 294 combinaisons consonne-voyelle et les 14 voyelles ne changent pas.
+
+| Son | Décision | Avant | Après |
+| --- | --- | ---: | ---: |
+| /p/ | Conservé | 104 ms | 104 ms |
+| /d/ | Conservé | 104 ms | 104 ms |
+| /ʒ/ | Remplacé | 263 ms | 109 ms |
+| /k/ | Conservé | 127 ms | 127 ms |
+| /v/ | Conservé | 169 ms | 169 ms |
+| /z/ | Remplacé | 101 ms | 98 ms |
+| /s/ | Conservé | 92 ms | 92 ms |
+| /ʁ/ | Conservé | 93 ms | 93 ms |
+| /b/ | Conservé | 69 ms | 69 ms |
+| /n/ | Remplacé | 273 ms | 133 ms |
+| /ɥ/ | Conservé | 146 ms | 146 ms |
+| /m/ | Remplacé | 180 ms | 63 ms |
+| /t/ | Conservé | 93 ms | 93 ms |
+| /f/ | Conservé | 226 ms | 226 ms |
+| /l/ | Remplacé | 266 ms | 63 ms |
+| /ʃ/ | Remplacé | 211 ms | 156 ms |
+| /ɲ/ | Remplacé | 261 ms | 89 ms |
+| /w/ | Remplacé | 190 ms | 75 ms |
+| /g/ | Conservé | 93 ms | 93 ms |
+| /j/ | Remplacé | 355 ms | 43 ms |
+| /ŋ/ | Remplacé | 283 ms | 189 ms |
+
+/l z ʒ n m ʃ w/ utilisent la coupe après génération avec /ø/. /ɲ/ et /j/
+utilisent une coupe en contexte /a/, plus exploitable que leur essai /ø/.
+Le /ŋ/ de Siwis restait instable dans tous les contextes essayés. Son nouvel
+extrait provient d'eSpeak NG : /ŋø/, coupé au début mesuré de /ø/ (sans voyelle
+d'appui conservée). Le changement de moteur est signalé dans les deux modes
+et la bibliothèque. Le seul extrait /ŋ/ change de timbre.
+
+La reconnaissance indépendante retrouve notamment l'ancien /ʒ/ comme /f/ et
+l'ancien /l/ comme /t uː s/. Cela soutient le besoin de contrôle sans prouver
+les perceptions exactes. Les nouveaux extraits courts restent souvent non
+reconnus ou confondus. **Ce n'est ni une certification de prononciation ni une
+validation humaine. /ɥ/ et la nouvelle réalisation de /ŋ/ restent à écouter.**
+
+`voices/consonant-audit.json` conserve les décisions des 21 sons, les résultats
+automatiques avec leurs limites, les empreintes et les bornes des coupes.
+Les anciens sons, les coupes retenues et leurs contextes sont archivés dans
+la fixture locale, exclue du build Netlify. Pour écouter, ouvrir
+`/voice-review.html` : « Avant », « Voix actuelle », « Phrase avec appui ».
+
+La commande `generate-key-voice.py --apply-reviewed-consonants` réapplique les
+coupes archivées exactement, sans nouvelle synthèse. Elle est à lancer après
+une régénération du corpus pour conserver ces corrections. Les tests vérifient
+les empreintes, l'identité des 319 autres unités et les bornes de coupe ; ils
+ne remplacent pas l'écoute. Cache PWA 0.4.3 ; le chargement versionné évite la
+réutilisation de l'ancienne banque pendant une mise à jour du service worker.
