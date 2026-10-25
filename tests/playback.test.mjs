@@ -75,7 +75,7 @@ function app(stored = null, reducedMotion = true) {
   context.location.protocol = 'http:';
   const a = context.LumiTest; const natural = packet(get('phrase').value); a.state.voiceData = didacticAudio(natural.result, natural, encodeWav);
   a.state.keys = a.state.voiceData.keys; a.state.speechModule = { keyAtTime };
-  return { ...a, get, frames, timers, audios, revoked,
+  return { ...a, get, frames, timers, audios, revoked, context,
     frame() { const [id, fn] = frames.entries().next().value; frames.delete(id); fn(); } };
 }
 
@@ -289,4 +289,27 @@ test('reduced motion keeps the tap label but moves nothing', () => {
   const a = app(); a.moveTo(0); a.moveTo(1);
   assert.doesNotMatch(a.get('reference-points').innerHTML, /animation-delay/);
   assert.match(a.get('current-meta').textContent, /clé tapée/);
+});
+
+test('real key audio records where each vowel starts, for the mouth', () => {
+  const keys = encoder.LPC.encode('pa ʃi bɔ̃ a m f');
+  const packet = synthesizeKeysWithEngine(keys, engine, encodeWav);
+  assert.equal(packet.marks.length, keys.length);
+  for (const [i, key] of keys.entries()) {
+    const { vowel, end } = packet.marks[i];
+    assert.ok(end > 0.1 && end <= packet.slotDuration - packet.soundOffset, `${key.ipa} end`);
+    if (key.c && key.v) assert.ok(vowel > 0 && vowel < end, `${key.ipa} vowel onset`); else assert.equal(vowel, null);
+  }
+  assert.ok(packet.marks[1].vowel > packet.marks[0].vowel, 'the fricative ch lasts longer than the plosive p before its vowel');
+});
+
+test('the mouth follows the audio clock, then shows the key vowel when stepping', async () => {
+  const a = app(); a.togglePlay(); await Promise.resolve();
+  const audio = a.audios[0], d = a.state.voiceData, visual = a.get('mouth-inner');
+  const inner = s => vm.runInContext(`LPCVisual.mouthPaths(LPCVisual.visemeFor(${JSON.stringify(s)})).inner`, a.context);
+  audio.currentTime = d.times[0] + d.soundOffset + 0.01; a.frame(); assert.equal(visual.attrs.d, inner('p'), 'lips closed for p');
+  audio.currentTime = d.times[0] + d.soundOffset + 0.2; a.frame(); assert.equal(visual.attrs.d, inner('a'), 'open for a');
+  audio.currentTime = d.times[2] + d.soundOffset + 0.2; a.frame(); assert.equal(a.state.index, 2); assert.equal(visual.attrs.d, inner('ɑ̃'));
+  a.togglePlay(); assert.equal(visual.attrs.d, inner('ɑ̃'), 'pause freezes the mouth');
+  a.moveTo(6); assert.equal(visual.attrs.d, inner('ɔ'), 'stepping shows the key vowel');
 });
