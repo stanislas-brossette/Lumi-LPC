@@ -89,6 +89,30 @@ test('speed defaults to 1 and preserves saved playback preferences', () => {
   assert.equal(app({ speed: 0.25, speedProfile: 2 }).state.speed, 0.25);
 });
 
+test('natural playback follows variable key times through pause, speed changes and isolated replay',async()=>{
+ const a=app(),source=packet('Bien. Papa mange une pomme.');
+ const d={...source,mode:'natural',soundOffset:0,clips:source.keys.map(()=>new Uint8Array()),clipTimes:source.times.map((t,i)=>i?t:0)};
+ a.state.voiceData=d;a.state.keys=d.keys;a.state.playbackMode='natural';
+ a.togglePlay();await Promise.resolve();const audio=a.audios[0];
+ audio.currentTime=d.times[2];a.frame();assert.equal(a.state.index,2);
+ a.togglePlay();assert.equal(audio.paused,true);
+ a.get('speed').value='0.5';a.get('speed').handlers.change();assert.equal(audio.currentTime,d.times[2]);
+ a.togglePlay();await Promise.resolve();audio.currentTime=d.times[3];a.frame();assert.equal(a.state.index,3);
+ a.selectKey(0);await Promise.resolve();assert.equal(a.state.singleKey,true);assert.equal(a.state.index,0);
+ a.audios.at(-1).onended();assert.equal(a.state.index,0);assert.equal(a.state.playing,false);
+});
+
+test('changing reading mode cancels obsolete preparation and sends the selected mode for manual IPA',async()=>{
+ const a=app();a.state.manual=true;a.get('ipa').value='pa';a.get('playback-mode').value='natural';
+ let finish,options;
+ a.state.speechModule.synthesizePronunciation=(_ipa,_lpc,_schwa,opts)=>{options=opts;return new Promise(resolve=>finish=resolve);};
+ const pending=a.get('playback-mode').handlers.change();
+ assert.equal(a.state.playbackMode,'natural');assert.equal(options.mode,'natural');assert.equal(a.state.busy,true);
+ a.get('ipa').value='fu';a.get('ipa').handlers.input();
+ finish(synthesizeKeysWithEngine(encoder.LPC.encode('pa'),engine,encodeWav));await pending;
+ assert.equal(a.state.voiceData,null);assert.equal(a.state.keys.length,0);assert.equal(a.state.busy,false);
+});
+
 test('visual follows the audio clock at every speed; pause/resume cannot drift', async () => {
   const a = app(); a.togglePlay(); await Promise.resolve();
   const audio = a.audios[0];

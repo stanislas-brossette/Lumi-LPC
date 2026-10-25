@@ -1,8 +1,8 @@
-// Automatic text supplies the LPC keys; each key is then voiced on its own.
-// Automatic and manual pronunciations share the same didactic sound generation.
+// Automatic text supplies LPC keys and measured phoneme onsets.
+// Playback either spaces individual keys or keeps the complete eSpeak phrase.
 // Each key also records the text word it comes from (key.word, an index into words).
 export function timelineFromEvents(result, LPC, schwa) {
-  const keys = [], times = [], phrases = [], words = [];
+  const keys = [], times = [], phrases = [], words = [], phones = [];
   let phonemes = [];
   function flush(pause = false) {
     if (!phonemes.length) {
@@ -16,6 +16,8 @@ export function timelineFromEvents(result, LPC, schwa) {
     let consumed = 0;
     for (const key of group) {
       times.push(phonemes[consumed].time);
+      key.phoneStart = phones.length + consumed;
+      key.phoneCount = Number(!!key.c) + Number(!!key.v);
       consumed += Number(!!key.c) + Number(!!key.v);
       key.word = words.length - 1;
       keys.push(key);
@@ -23,6 +25,7 @@ export function timelineFromEvents(result, LPC, schwa) {
     if (consumed !== phonemes.length) throw new Error('Alignement phonétique incohérent.');
     if (group.length) { keys.at(-1).wordAfter = true; keys.at(-1).pauseAfter = pause; }
     phrases.push(ipa + (pause ? '|' : ''));
+    phones.push(...phonemes.map(p => ({ raw: p.raw, sound: p.sound, time: p.time, word: words.length - 1 })));
     phonemes = [];
   }
   for (const event of result.events) {
@@ -35,13 +38,13 @@ export function timelineFromEvents(result, LPC, schwa) {
     if (unknown.length) throw new Error('Son vocal non pris en charge : ' + unknown.join(' '));
     const sounds = tokens.filter(t => t !== '|' && t !== '¦');
     // A multi-part engine event has a single onset; never invent extra times.
-    for (const sound of sounds) phonemes.push({ sound, time: event.sample / result.sampleRate });
+    sounds.forEach((sound, i) => phonemes.push({ sound, raw: (i === 0 ? event.phoneme.match(/^[ˈˌ]/)?.[0] || '' : '') + sound, time: event.sample / result.sampleRate }));
   }
   flush();
   if (!keys.length || times.some((time, i) => !Number.isFinite(time) || time < 0 || time > result.duration || (i && time < times[i - 1]))) {
     throw new Error('Le moteur vocal n’a pas fourni un minutage exploitable.');
   }
-  return { keys, times, words, ipa: phrases.join(' ') };
+  return { keys, times, words, phones, ipa: phrases.join(' ') };
 }
 
 export function keyAtTime(times, seconds) {
@@ -59,10 +62,14 @@ async function engine() {
   }).catch(error => { ready = undefined; throw error; });
   return ready;
 }
-export async function synthesize(text, LPC, schwa) {
+export async function synthesize(text, LPC, schwa, options = {}) {
   const { espeak, encodeWav } = await engine();
   const result = espeak.synthesize(text, { rate: 175, phonemes: false, ssml: false });
   const timeline = timelineFromEvents(result, LPC, schwa);
+  if (options.mode === 'natural') {
+    const packet = await continuousVoice(timeline.keys, encodeWav, () => naturalAudio(result, timeline, encodeWav));
+    return { ...packet, ipa: timeline.ipa, text, words: timeline.words };
+  }
   const packet=await synthesizeKeys(timeline.keys,espeak,encodeWav);
   packet.ipa=timeline.ipa;packet.text=text;packet.words=timeline.words;
   return packet;
@@ -98,6 +105,48 @@ export function didacticAudio(result, timeline, encodeWav) {
   return { ...timeline, times: excerpts.map((_, i) => i * slotSamples / rate),
     slotDuration: slotSamples / rate, soundOffset: lead / rate,
     clips, wav: encodeWav(samples, rate), duration: samples.length / rate };
+}
+
+// Keep the full waveform intact. Cuts and tiny fades apply only to key replays.
+export function naturalAudio(result, timeline, encodeWav) {
+  const { keys, times, phones } = timeline, rate = result.sampleRate;
+  if (!keys.length || times.length !== keys.length || times.some((t, i) => !Number.isFinite(t) || t < 0 || t >= result.duration || (i && t <= times[i - 1]))) {
+    throw new Error('Le moteur vocal n’a pas fourni un minutage continu exploitable.');
+  }
+  const marks = keys.map((key, i) => {
+    const last = phones[key.phoneStart + key.phoneCount - 1];
+    const end = result.events.find(e => e.type === 'phoneme' && e.sample / rate > last.time)?.sample / rate ?? result.duration;
+    return { vowel: key.c && key.v ? phones[key.phoneStart + 1].time - times[i] : null,
+      end: Math.min(end, times[i + 1] ?? result.duration) - times[i] };
+  });
+  const clipTimes = times.map((t, i) => i ? t : 0);
+  const clips = clipTimes.map((t, i) => {
+    const clip = result.samples.slice(Math.round(t * rate), Math.round((times[i + 1] ?? result.duration) * rate));
+    const fade = Math.min(Math.round(.004 * rate), Math.floor(clip.length / 2));
+    for (let j = 0; j < fade; j++) { clip[j] *= j / fade; clip[clip.length - 1 - j] *= j / fade; }
+    return encodeWav(clip, rate);
+  });
+  return { ...timeline, marks, clips, clipTimes, soundOffset: 0, mode: 'natural', voice: 'eSpeak NG',
+    warning: keys.some(k => k.c === 'ɥ') ? 'Le son /ɥ/ est approximé par un /y/ bref dans cette voix.' : '',
+    wav: encodeWav(result.samples, rate), duration: result.samples.length / rate };
+}
+
+export function synthesizeContinuousKeys(keys, espeak, encodeWav, LPC, schwa) {
+  if (!keys.length) throw new Error('Aucune clé à prononcer.');
+  const mnemonic = keys.map(k => keyToMnemonic(k) + (k.pauseAfter ? ' _ ' : k.wordAfter ? ' ' : '|')).join('');
+  const result = espeak.synthesize('[[' + mnemonic + ']]', { rate: 175, phonemes: true, ssml: false });
+  const phones = result.events.filter(e => e.type === 'phoneme' && e.phoneme).flatMap(e => {
+    const { tokens, unknown } = LPC.tokenize(e.phoneme, schwa);
+    if (unknown.length) throw new Error('Son vocal non pris en charge : ' + unknown.join(' '));
+    return tokens.filter(t => t !== '|' && t !== '¦').map(sound => ({ sound, time: e.sample / result.sampleRate }));
+  });
+  const expected = keys.flatMap(k => [k.c, k.v].filter(Boolean)).map(s => s === 'ɥ' ? 'y' : s);
+  if (phones.length !== expected.length || phones.some((p, i) => p.sound !== expected[i])) {
+    throw new Error('La voix continue ne respecte pas cette transcription. Choisis « Clé par clé » ou corrige les sons.');
+  }
+  let cursor = 0;
+  const aligned = keys.map(k => { const key = { ...k, phoneStart: cursor, phoneCount: Number(!!k.c) + Number(!!k.v) }; cursor += key.phoneCount; return key; });
+  return naturalAudio(result, { keys: aligned, phones, times: aligned.map(k => phones[k.phoneStart].time), ipa: keys.map(k => k.ipa + (k.pauseAfter ? '|' : '')).join(' ') }, encodeWav);
 }
 
 // eSpeak French phoneme mnemonics, never spelling or names of IPA letters.
@@ -151,17 +200,21 @@ export function synthesizeKeysWithEngine(keys, espeak, encodeWav) {
   packet.warning=keys.some(key=>key.c==='ɥ')?'Le son /ɥ/ est approximé par un /y/ bref dans cette voix.':'';
   return packet;
 }
-export async function synthesizePronunciation(ipa, LPC, schwa) {
+export async function synthesizePronunciation(ipa, LPC, schwa, options = {}) {
   // Validate the full input before starting the engine; no unsupported sounds
   // may disappear silently, and key boundaries remain exactly those of LPC.
   const keys=LPC.encode(ipa,schwa);
   const { espeak,encodeWav }=await engine();
+  if (options.mode === 'natural') {
+    return continuousVoice(keys, encodeWav, () => synthesizeContinuousKeys(keys, espeak, encodeWav, LPC, schwa));
+  }
   return synthesizeKeys(keys,espeak,encodeWav);
 }
 
 // A small, pre-generated neural voice bank. eSpeak still determines the text's
 // phonemes; automatic and manually corrected keys use these same audio units.
 // No neural model, remote TTS API or AudioContext is needed during playback.
+const VOICE_BANK_VERSION = '0.4.3';
 let bankReady;
 export function readVoiceBank(manifest, buffer) {
   const view = new DataView(buffer);
@@ -194,17 +247,26 @@ export function readVoiceBank(manifest, buffer) {
 async function loadVoiceBank() {
   if (!bankReady) bankReady = (async () => {
     const base = new URL('./assets/voice/keys/', import.meta.url);
-    const request = async name => {
-      const response = await fetch(new URL(name, base), { signal: AbortSignal.timeout(12000) });
+    const request = async (name, version) => {
+      const url = new URL(name, base); url.searchParams.set('v', version);
+      const response = await fetch(url, { signal: AbortSignal.timeout(12000) });
       if (!response.ok) throw new Error('Banque vocale indisponible.');
       return response;
     };
-    const [metadata, audio] = await Promise.all([request('manifest.json'), request('siwis-keys.wav')]);
-    return readVoiceBank(await metadata.json(), await audio.arrayBuffer());
+    // A previous service worker must not reuse stale sounds during its update.
+    const metadata = await (await request('manifest.json', VOICE_BANK_VERSION)).json();
+    const audio = await request('siwis-keys.wav', metadata.audioSha256);
+    return readVoiceBank(metadata, await audio.arrayBuffer());
   })().catch(error => { bankReady = undefined; throw error; });
   return bankReady;
 }
-export function synthesizeKeysWithBank(keys, bank, encodeWav) {
+function bankVoice(keys, bank) {
+  const borrowed = keys.filter(k => bank.manifest.keys[k.ipa]?.engine === 'eSpeak NG');
+  const uncertain = keys.some(k => k.ipa === 'ɥ');
+  return { voice: borrowed.length === keys.length ? 'eSpeak NG' : borrowed.length ? 'Piper · Siwis + eSpeak NG' : 'Piper · Siwis',
+    warning: [borrowed.length ? 'Le son /ŋ/ utilise un extrait eSpeak ; sa réalisation Siwis reste instable.' : '', uncertain ? 'Le son isolé /ɥ/ de Siwis reste à vérifier à l’écoute.' : ''].filter(Boolean).join(' ') };
+}
+export function synthesizeKeysWithBank(keys, bank, encodeWav, mode = 'didactic') {
   if (!keys.length) throw new Error('Aucune clé à prononcer.');
   const pieces = [], times = [], marks = [];
   let length = 0;
@@ -212,14 +274,41 @@ export function synthesizeKeysWithBank(keys, bank, encodeWav) {
     const entry = bank.manifest.keys[key.ipa];
     if (!entry) throw new Error('Son absent de la banque vocale : /' + key.ipa + '/.');
     times.push(length / bank.sampleRate);
-    pieces.push(bank.samples.subarray(entry.start, entry.start + entry.length));
+    const piece = bank.samples.slice(entry.start, entry.start + entry.length);
+    if (mode === 'natural') {
+      // Fade only the edges, without overlapping or shortening plosive releases.
+      const fade = Math.min(Math.round(.004 * bank.sampleRate), Math.floor(piece.length / 2));
+      for (let j = 0; j < fade; j++) { piece[j] *= j / fade; piece[piece.length - 1 - j] *= j / fade; }
+    }
+    pieces.push(piece);
     marks.push({ vowel: entry.vowel, end: entry.end });
     length += entry.length;
+    // Spaces are word boundaries, not pauses. Only punctuation / explicit | pauses.
+    if (mode === 'natural' && key.pauseAfter) {
+      const pause = new Int16Array(Math.round(.18 * bank.sampleRate));
+      pieces.push(pause); length += pause.length;
+    }
   }
   const samples = new Int16Array(length);
   let offset = 0;
   for (const piece of pieces) { samples.set(piece, offset); offset += piece.length; }
-  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, { keys, times, marks, ipa: keys.map(k => k.ipa).join(' ') }, encodeWav), voice: 'Piper · Siwis', warning: '' };
+  const timeline = { keys, times, marks, ipa: keys.map(k => k.ipa + (mode === 'natural' && k.pauseAfter ? '|' : '')).join(' ') };
+  if (mode === 'natural') {
+    return { ...timeline, mode, ...bankVoice(keys, bank), soundOffset: 0,
+      clipTimes: times.slice(), clips: keys.map((key, i) => {
+        const entry = bank.manifest.keys[key.ipa];
+        return encodeWav(samples.slice(Math.round(times[i] * bank.sampleRate), Math.round(times[i] * bank.sampleRate) + entry.length), bank.sampleRate);
+      }), wav: encodeWav(samples, bank.sampleRate), duration: samples.length / bank.sampleRate };
+  }
+  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, timeline, encodeWav), ...bankVoice(keys, bank) };
+}
+export async function continuousVoice(keys, encodeWav, fallback, loadBank = loadVoiceBank) {
+  try { return synthesizeKeysWithBank(keys, await loadBank(), encodeWav, 'natural'); }
+  catch {
+    const packet = await fallback();
+    packet.warning = 'Voix douce indisponible ; lecture continue avec la voix de secours eSpeak.' + (packet.warning ? ' ' + packet.warning : '');
+    return packet;
+  }
 }
 export async function synthesizeKeys(keys, espeak, encodeWav, loadBank = loadVoiceBank) {
   try {

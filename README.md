@@ -22,7 +22,7 @@ npm run build
 python3 server.py
 ```
 
-Ouvrir [Lumi dans le navigateur](http://127.0.0.1:8000). Le serveur écoute uniquement sur la machine locale. Pour changer de port : `python3 server.py --port 8001`.
+Ouvrir [Lumi dans le navigateur](http://127.0.0.1:8000). Le serveur écoute uniquement sur la machine locale. Après une mise à jour du code ou l’ajout de modules, relancer `npm run build`, arrêter le serveur avec Ctrl+C puis relancer `python3 server.py` : un ancien processus conserve ses anciennes routes même si le HTML change. Pour changer de port : `python3 server.py --port 8001`.
 
 Il est aussi possible d’ouvrir directement **[Lumi-LPC-V0.html](Lumi-LPC-V0.html)** dans un navigateur récent. Ce mode autonome se limite aux exemples, au lexique embarqué et à la saisie phonétique manuelle.
 
@@ -163,3 +163,35 @@ La phonétisation locale et la voix de secours utilisent [Spellophone](https://g
 La voix principale clé par clé utilise une banque générée avec Piper / Siwis. Le modèle neuronal et Python ne sont nécessaires que pour régénérer les extraits ; le build Netlify copie les fichiers déjà présents dans `voices/`. Voir [la provenance, les réglages et la procédure de génération](voices/README.md). La banque est incluse dans le cache hors ligne de la version 0.2.1.
 
 Le contrôle de la voix et la correction des six consonnes explosives isolées sont décrits dans [le rapport du 25 octobre](docs/voice-audit-2026-10-25.md). Le serveur local propose `/voice-review.html` pour écouter et comparer les sons.
+
+## Lecture naturelle (première version)
+
+Le sélecteur **Lecture** ajoute « Phrase naturelle » au mode « Clé par clé ». Les mêmes extraits Piper / Siwis sont enchaînés sans les créneaux d’observation : aucun modèle ni dépendance supplémentaire. Les clés et la bouche suivent les durées et repères des extraits, avec une pause de 180 ms à la ponctuation ou après un `|` explicite. La pause, le ralenti, la boucle et les corrections phonétiques restent disponibles. Les raccords restent perceptibles ; ce montage n’apporte pas encore la prosodie d’une phrase synthétisée d’un seul tenant. eSpeak reste une voix de secours signalée si la banque est indisponible. Voir [le fonctionnement et les limites](docs/natural-reading.md).
+
+## Explorer les sons
+
+L’onglet **Les sons** présente les **329 unités de la banque vocale** :
+35 sons seuls (21 consonnes et semi-voyelles, 14 voyelles) et 294 combinaisons
+consonne-voyelle. Le catalogue est dérivé du référentiel LPC. Les filtres
+« Tout », « Sons seuls » et « Consonne + voyelle » permettent de les parcourir ;
+les filtres consonnes et voyelles restent disponibles. La recherche accepte un
+symbole, une combinaison comme `/to/`, ou un mot d’exemple.
+
+Chaque fiche réunit l’écoute Siwis, le visage et la clé. Les exemples sont
+explicites, avec les lettres utiles surlignées. Lorsqu’aucun exemple courant
+n’est proposé, la fiche le signale et désactive « Coder ce mot » ; l’écoute et
+le geste restent disponibles. Aucune orthographe de mot n’est inventée.
+« Coder ce mot » ouvre sa transcription dans le simulateur ; la simple
+consultation préserve la phrase en cours.
+
+Le /ɑ/ n’est pas dans l’inventaire ; le choix du e prononcé reste dans le
+simulateur. Les variantes régionales de « brun » et l’emprunt « parking » sont
+signalés. Les fichiers sont inclus dans le cache hors ligne de la version 0.4.2.
+Le son nécessite le site ou le serveur local ; l’ouverture directe en `file://`
+conserve le simulateur historique, mais ne charge pas cet explorateur en module.
+
+La passe 0.4.3 contrôle les 21 consonnes et semi-voyelles et remplace dix sons
+isolés. Voir le [rapport et les limites](docs/voice-audit-2026-10-25.md). Le /ŋ/
+isolé utilise exceptionnellement eSpeak, signalé à l’écran ; /ɥ/ reste à
+confirmer. `/voice-review.html` permet de comparer les anciens extraits, les
+nouveaux et leurs contextes de génération. Les autres 319 unités sont inchangées.
