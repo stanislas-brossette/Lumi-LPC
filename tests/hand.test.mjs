@@ -116,6 +116,14 @@ test('a tap leaves the face and returns to the same contact, pausable and interr
   assert.equal(a.rig.tap(1,pos('s'),.25),900,'slow motion is capped');
 });
 
+test('natural timing finishes transitions and repeated-key taps within a short audio key',()=>{
+ const a=animator();a.rig.goTo(1,pos());a.rig.goTo(5,pos('s'),1,30);
+ a.advance(30);same(a.rig.snapshot().pose,visual.pose(5));
+ const contact=a.rig.snapshot();assert.equal(a.rig.tap(5,pos('s'),1,40),40);
+ a.advance(50);assert.ok(a.rig.snapshot().lift>contact.lift);
+ a.advance(70);same(a.rig.snapshot(),contact);
+});
+
 test('reduced motion taps without moving',()=>{
   const a=animator(true);a.rig.goTo(5,pos(),1);
   assert.equal(a.rig.tap(5,pos(),1),0);assert.equal(a.rig.snapshot().lift,0);assert.equal(a.callbacks.size,0);

@@ -163,3 +163,7 @@ La phonétisation locale et la voix de secours utilisent [Spellophone](https://g
 La voix principale clé par clé utilise une banque générée avec Piper / Siwis. Le modèle neuronal et Python ne sont nécessaires que pour régénérer les extraits ; le build Netlify copie les fichiers déjà présents dans `voices/`. Voir [la provenance, les réglages et la procédure de génération](voices/README.md). La banque est incluse dans le cache hors ligne de la version 0.2.1.
 
 Le contrôle de la voix et la correction des six consonnes explosives isolées sont décrits dans [le rapport du 25 octobre](docs/voice-audit-2026-10-25.md). Le serveur local propose `/voice-review.html` pour écouter et comparer les sons.
+
+## Lecture naturelle (première version)
+
+Le sélecteur **Lecture** ajoute « Phrase naturelle » au mode « Clé par clé ». La phrase entière est synthétisée avec eSpeak, déjà inclus dans Lumi : aucun modèle ni dépendance supplémentaire. Les clés et la bouche suivent les événements phonétiques du même audio, avec des durées variables et sans silence ajouté pour observer les gestes. La pause, le ralenti, la boucle et les corrections phonétiques restent disponibles. Le timbre reste celui d’eSpeak ; cette première version améliore le rythme. Voir [le fonctionnement et les limites](docs/natural-reading.md).
