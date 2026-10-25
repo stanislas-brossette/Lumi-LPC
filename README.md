@@ -170,19 +170,22 @@ Le sélecteur **Lecture** ajoute « Phrase naturelle » au mode « Clé par clé
 
 ## Explorer les sons
 
-L’onglet **Les sons** présente les 35 phonèmes de base pris en charge par Lumi :
-21 consonnes et semi-voyelles, 14 voyelles. Chaque fiche réunit l’écoute Siwis,
-le visage et la clé, ainsi qu’un mot courant dont les lettres utiles sont
-surlignées. La recherche accepte un symbole ou un mot ; un filtre distingue les
-voyelles des consonnes. « Coder ce mot » ouvre sa transcription explicite dans
-le simulateur. La simple consultation préserve la phrase en cours.
+L’onglet **Les sons** présente les **329 unités de la banque vocale** :
+35 sons seuls (21 consonnes et semi-voyelles, 14 voyelles) et 294 combinaisons
+consonne-voyelle. Le catalogue est dérivé du référentiel LPC. Les filtres
+« Tout », « Sons seuls » et « Consonne + voyelle » permettent de les parcourir ;
+les filtres consonnes et voyelles restent disponibles. La recherche accepte un
+symbole, une combinaison comme `/to/`, ou un mot d’exemple.
 
-Le catalogue reprend l’inventaire LPC, sans ajouter le /ɑ/ ni traiter /ə/ comme
-un son distinct : le choix du e prononcé reste dans le simulateur. Les variantes
-régionales de « brun » et l’emprunt « parking » sont signalés. Les 329 unités de
-la banque comprennent aussi les combinaisons consonne-voyelle ; elles restent
-accessibles dans le simulateur et l’outil local de contrôle de voix.
+Chaque fiche réunit l’écoute Siwis, le visage et la clé. Les exemples sont
+explicites, avec les lettres utiles surlignées. Lorsqu’aucun exemple courant
+n’est proposé, la fiche le signale et désactive « Coder ce mot » ; l’écoute et
+le geste restent disponibles. Aucune orthographe de mot n’est inventée.
+« Coder ce mot » ouvre sa transcription dans le simulateur ; la simple
+consultation préserve la phrase en cours.
 
-Les modules du catalogue font partie du cache hors ligne de la version 0.4.0.
+Le /ɑ/ n’est pas dans l’inventaire ; le choix du e prononcé reste dans le
+simulateur. Les variantes régionales de « brun » et l’emprunt « parking » sont
+signalés. Les fichiers sont inclus dans le cache hors ligne de la version 0.4.2.
 Le son nécessite le site ou le serveur local ; l’ouverture directe en `file://`
 conserve le simulateur historique, mais ne charge pas cet explorateur en module.

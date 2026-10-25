@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
-import {SOUNDS} from '../sound-catalog.mjs';
+import {BASE_SOUNDS as SOUNDS, createSoundCatalog, filterSounds} from '../sound-catalog.mjs';
 const root={};vm.runInNewContext(readFileSync('Lumi-LPC-V0.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1],root);
 const manifest=JSON.parse(readFileSync('voices/manifest.json'));
 test('explorer covers each supported phoneme once with an exact LPC key and an existing voice',()=>{
@@ -38,4 +38,30 @@ test('a missing explorer module shows a recovery message and working reload butt
   assert.match(message.textContent,protocol==='http:'?/redémarre server.py/:/serveur local/);
   const retry=message.children.find(n=>n.tag==='button');assert.equal(retry.textContent,'Recharger la page');retry.click();assert.equal(reloads,1);
  }
+});
+
+test('complete catalogue covers the 329 bank units with one exact LPC key each',()=>{
+ const all=createSoundCatalog(root.LPC);
+ assert.equal(all.length,329);assert.equal(new Set(all.map(s=>s.ipa)).size,329);
+ assert.deepEqual(all.map(s=>s.ipa).sort(),Object.keys(manifest.keys).sort());
+ for(const s of all){
+  const keys=root.LPC.encode(s.ipa);assert.equal(keys.length,1);assert.equal(keys[0].ipa,s.ipa);
+  if(s.word){
+   assert.ok(s.start>=0&&s.end>s.start&&s.end<=s.word.length,s.ipa+' highlight');
+   assert.ok(root.LPC.encode(s.wordIpa).some(k=>k.ipa===s.ipa)||s.kind!=='combined',s.word+' has the key /'+s.ipa+'/');
+  }else assert.equal(s.wordIpa,'');
+ }
+ assert.equal(all.find(s=>s.ipa==='to').word,'tôt');
+ assert.equal(all.find(s=>s.ipa==='ŋœ̃').word,'');
+});
+test('filters expose every unit, singles, CVs and searches with or without an example',()=>{
+ const all=createSoundCatalog(root.LPC);
+ assert.equal(filterSounds(all,'','single').length,35);
+ assert.equal(filterSounds(all,'','combined').length,294);
+ assert.equal(filterSounds(all,'','all').length,329);
+ assert.equal(filterSounds(all,'/ŋœ̃/','all')[0].ipa,'ŋœ̃');
+ assert.equal(filterSounds(all,'/to/','all').length,1);
+ assert.equal(filterSounds(all,'TÔT','combined')[0].ipa,'to');
+ assert.equal(filterSounds(all,'papa','combined')[0].ipa,'pa');
+ assert.equal(filterSounds(all,'introuvable','all').length,0);
 });
