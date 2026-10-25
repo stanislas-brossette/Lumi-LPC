@@ -12,6 +12,10 @@ import subprocess
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 8192
 STATIC = {
+    # Local listening-review tools; intentionally excluded from the Netlify build.
+    '/voice-review.html': ('tools/voice-review.html', 'text/html; charset=utf-8'),
+    '/voice-review-before.json': ('tests/fixtures/voice-stops-before.json', 'application/json'),
+    '/voice-review-before.wav': ('tests/fixtures/voice-stops-before.wav', 'audio/wav'),
     '/speech-sync.mjs': ('speech-sync.mjs', 'text/javascript; charset=utf-8'),
     # Built by npm run build, like the voice files it precaches.
     '/sw.js': ('dist/sw.js', 'text/javascript; charset=utf-8'),

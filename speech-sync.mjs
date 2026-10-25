@@ -63,7 +63,7 @@ export async function synthesize(text, LPC, schwa) {
   const { espeak, encodeWav } = await engine();
   const result = espeak.synthesize(text, { rate: 175, phonemes: false, ssml: false });
   const timeline = timelineFromEvents(result, LPC, schwa);
-  const packet=synthesizeKeysWithEngine(timeline.keys,espeak,encodeWav);
+  const packet=await synthesizeKeys(timeline.keys,espeak,encodeWav);
   packet.ipa=timeline.ipa;packet.text=text;packet.words=timeline.words;
   return packet;
 }
@@ -156,5 +156,79 @@ export async function synthesizePronunciation(ipa, LPC, schwa) {
   // may disappear silently, and key boundaries remain exactly those of LPC.
   const keys=LPC.encode(ipa,schwa);
   const { espeak,encodeWav }=await engine();
-  return synthesizeKeysWithEngine(keys,espeak,encodeWav);
+  return synthesizeKeys(keys,espeak,encodeWav);
+}
+
+// A small, pre-generated neural voice bank. eSpeak still determines the text's
+// phonemes; automatic and manually corrected keys use these same audio units.
+// No neural model, remote TTS API or AudioContext is needed during playback.
+let bankReady;
+export function readVoiceBank(manifest, buffer) {
+  const view = new DataView(buffer);
+  const text = (at, n) => String.fromCharCode(...new Uint8Array(buffer, at, n));
+  if (view.byteLength < 44 || text(0, 4) !== 'RIFF' || text(8, 4) !== 'WAVE' || manifest.version !== 1) throw new Error('Banque vocale invalide.');
+  let samples, rate;
+  for (let at = 12; at + 8 <= view.byteLength;) {
+    const size = view.getUint32(at + 4, true), start = at + 8;
+    if (start + size > view.byteLength) throw new Error('Banque vocale incomplète.');
+    if (text(at, 4) === 'fmt ') {
+      if (size < 16 || view.getUint16(start, true) !== 1 || view.getUint16(start + 2, true) !== 1 || view.getUint16(start + 14, true) !== 16) throw new Error('Format vocal non pris en charge.');
+      rate = view.getUint32(start + 4, true);
+    }
+    if (text(at, 4) === 'data') {
+      if (size % 2) throw new Error('Données vocales invalides.');
+      // Decode explicitly as little endian (without depending on host byte order).
+      samples = new Int16Array(size / 2);
+      for (let i = 0; i < samples.length; i++) samples[i] = view.getInt16(start + i * 2, true);
+    }
+    at = start + size + size % 2;
+  }
+  if (!samples?.length || !rate || rate !== manifest.sampleRate || !manifest.keys) throw new Error('Banque vocale incomplète.');
+  for (const entry of Object.values(manifest.keys)) {
+    if (!Number.isInteger(entry.start) || !Number.isInteger(entry.length) || entry.start < 0 || entry.length <= 0 || entry.start + entry.length > samples.length ||
+        !Number.isFinite(entry.end) || Math.abs(entry.end - entry.length / rate) > 1 / rate ||
+        (entry.vowel !== null && (!Number.isFinite(entry.vowel) || entry.vowel <= 0 || entry.vowel >= entry.end))) throw new Error('Repères vocaux invalides.');
+  }
+  return { manifest, samples, sampleRate: rate };
+}
+async function loadVoiceBank() {
+  if (!bankReady) bankReady = (async () => {
+    const base = new URL('./assets/voice/keys/', import.meta.url);
+    const request = async name => {
+      const response = await fetch(new URL(name, base), { signal: AbortSignal.timeout(12000) });
+      if (!response.ok) throw new Error('Banque vocale indisponible.');
+      return response;
+    };
+    const [metadata, audio] = await Promise.all([request('manifest.json'), request('siwis-keys.wav')]);
+    return readVoiceBank(await metadata.json(), await audio.arrayBuffer());
+  })().catch(error => { bankReady = undefined; throw error; });
+  return bankReady;
+}
+export function synthesizeKeysWithBank(keys, bank, encodeWav) {
+  if (!keys.length) throw new Error('Aucune clé à prononcer.');
+  const pieces = [], times = [], marks = [];
+  let length = 0;
+  for (const key of keys) {
+    const entry = bank.manifest.keys[key.ipa];
+    if (!entry) throw new Error('Son absent de la banque vocale : /' + key.ipa + '/.');
+    times.push(length / bank.sampleRate);
+    pieces.push(bank.samples.subarray(entry.start, entry.start + entry.length));
+    marks.push({ vowel: entry.vowel, end: entry.end });
+    length += entry.length;
+  }
+  const samples = new Int16Array(length);
+  let offset = 0;
+  for (const piece of pieces) { samples.set(piece, offset); offset += piece.length; }
+  return { ...didacticAudio({ samples, sampleRate: bank.sampleRate }, { keys, times, marks, ipa: keys.map(k => k.ipa).join(' ') }, encodeWav), voice: 'Piper · Siwis', warning: '' };
+}
+export async function synthesizeKeys(keys, espeak, encodeWav, loadBank = loadVoiceBank) {
+  try {
+    return synthesizeKeysWithBank(keys, await loadBank(), encodeWav);
+  } catch (error) {
+    // Fall back for the whole phrase: never mix two timbres within a sequence.
+    const packet = synthesizeKeysWithEngine(keys, espeak, encodeWav);
+    packet.voice = 'eSpeak NG';
+    packet.warning = 'Voix douce indisponible ; voix de secours eSpeak.' + (packet.warning ? ' ' + packet.warning : '');
+    return packet;
+  }
 }

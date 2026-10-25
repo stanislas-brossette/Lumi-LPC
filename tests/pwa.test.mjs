@@ -72,7 +72,7 @@ test('build publishes the manifest, service worker and icons', () => {
   for (const file of ['dist/manifest.webmanifest', 'dist/sw.js', 'dist/icons/apple-touch-icon.png', ...manifest.icons.map(i => 'dist/' + i.src)]) assert.ok(existsSync(file), file);
   // The built worker precaches every voice file the browser engine needs, all present in dist.
   const voice = JSON.parse(readFileSync('dist/sw.js', 'utf8').match(/const VOICE = (\[.*\]);/)[1]);
-  for (const file of ['assets/voice/dist/browser.js', 'assets/voice/wasm/espeak-ng.wasm', 'assets/voice/espeak-ng-data/fr_dict.gz']) assert.ok(voice.includes(file), file);
+  for (const file of ['assets/voice/dist/browser.js', 'assets/voice/wasm/espeak-ng.wasm', 'assets/voice/espeak-ng-data/fr_dict.gz', 'assets/voice/keys/manifest.json', 'assets/voice/keys/siwis-keys.wav', 'assets/voice/keys/README.md', 'assets/voice/keys/MODEL_CARD']) assert.ok(voice.includes(file), file);
   assert.ok(voice.some(f => /^assets\/voice\/dist\/core-.+\.js$/.test(f)));
   assert.ok(!voice.some(f => f.includes('legacy')));
   for (const file of voice) assert.ok(existsSync('dist/' + file), file);

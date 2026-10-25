@@ -40,7 +40,7 @@ Le site et la phonétisation sont hébergés ensemble sur Netlify. Aucune base S
 2. Dans Netlify, choisir **Add new project → Import an existing project**, puis sélectionner ce dépôt.
 3. Vérifier les réglages détectés depuis `netlify.toml` : commande `npm run build`, dossier publié `dist`, fonctions `netlify/functions`, Node.js 24.
 4. Déployer et ouvrir l’URL HTTPS fournie par Netlify.
-5. Tester une phrase absente des exemples et vérifier que le bandeau affiche « eSpeak NG · serveur ». `/api/health` doit renvoyer un JSON avec `engine`.
+5. Tester une phrase absente des exemples : avec la voix, le bandeau doit afficher « Piper · Siwis · voix locale ». Sans voix, le serveur eSpeak phonétise le texte. `/api/health` doit renvoyer un JSON avec `engine`.
 
 Un simple dépôt du dossier `dist` par glisser-déposer ne suffit pas : les fonctions doivent aussi être déployées. L’utilisation des fonctions est soumise aux quotas et à la facturation du compte Netlify.
 
@@ -61,7 +61,7 @@ Lumi est une application web installable. Depuis le site en ligne (HTTPS) :
 - **Android (Chrome, Edge, Samsung Internet)** : bouton « Installer Lumi » dans le Guide, ou menu du navigateur → « Installer l’application ».
 - **iPhone / iPad** : ouvrir le site dans Safari, Partager → « Sur l’écran d’accueil ».
 
-L’application s’ouvre alors en plein écran avec son icône. Après une première visite, elle fonctionne **hors connexion, voix et phrases libres comprises** : la phonétisation et les sons sont calculés dans le navigateur par Spellophone. Sans voix, le hors-ligne se limite au lexique embarqué, puisque `/api/phonemize` n’est pas joignable.
+L’application s’ouvre alors en plein écran avec son icône. Après une première visite, elle fonctionne **hors connexion, voix et phrases libres comprises** : la phonétisation est calculée dans le navigateur par Spellophone et les sons proviennent de la banque vocale incluse. Sans voix, le hors-ligne se limite au lexique embarqué, puisque `/api/phonemize` n’est pas joignable.
 
 - `manifest.webmanifest` décrit l’application (nom, couleurs, icônes `icons/`, dont une icône *maskable* pour Android et `apple-touch-icon.png` pour iOS). Les PNG sont rendus depuis `icons/icon.svg` et `icons/maskable.svg`.
 - `sw.js` est le service worker. Le build y injecte la liste des fichiers de voix, mis en cache dès l’installation ; la page et `speech-sync.mjs` sont servis réseau d’abord, cache en secours. Les appels `/api/` et les phrases ne sont jamais mis en cache.
@@ -86,7 +86,7 @@ L’application s’ouvre alors en plein écran avec son icône. Après une prem
 
 1. Choisir un exemple ou saisir une phrase, puis préparer sa prononciation.
 2. Vérifier les phonèmes et les corriger si nécessaire dans l’éditeur, puis cliquer sur « Appliquer cette prononciation » pour préparer les clés et leurs sons. La saisie phonétique peut être utilisée seule, sans texte.
-3. Laisser « Lire à voix haute » activé pour entendre la phrase avec le visuel, ou le désactiver pour observer les clés seules. La voix française eSpeak est incluse ; aucune voix système n’est nécessaire. La durée minimale est de 1,2 seconde par clé à ×1 (vitesse par défaut), donc 2,4 secondes à ×0,5. Si un extrait sonore est plus long, tous les créneaux de la phrase sont allongés de façon égale. Le ralenti ×0,25 laisse encore plus de temps.
+3. Laisser « Lire à voix haute » activé pour entendre la phrase avec le visuel, ou le désactiver pour observer les clés seules. La voix française Piper / Siwis et la voix de secours eSpeak sont incluses ; aucune voix système n’est nécessaire. La durée minimale est de 1,2 seconde par clé à ×1 (vitesse par défaut), donc 2,4 secondes à ×0,5. Si un extrait sonore est plus long, tous les créneaux de la phrase sont allongés de façon égale. Le ralenti ×0,25 laisse encore plus de temps.
 4. Utiliser la pause pour suspendre la voix et le visuel. Changer la vitesse conserve la position de lecture et ralentit ensemble la voix et les clés. Un clic sur une clé ou les flèches rejoue uniquement son son ; le bouton Lire relance la séquence à partir de cette clé (ou du début si elle était terminée). La navigation vers une clé arrête la voix.
 
 En mode autonome, les liaisons ne sont pas calculées automatiquement. Pour un mot absent du lexique, saisir sa transcription phonétique dans l’éditeur. Le symbole `|` permet de forcer une séparation ; les symboles non pris en charge bloquent la lecture et sont signalés.
@@ -104,8 +104,8 @@ L’interface prévoit une connexion à une API sur la même origine :
 
 ## Limites du prototype
 
-- La bouche est animée de façon schématique : une forme de lèvres par son français (ouverture, arrondi, étirement, lèvres closes pour p/b/m, dents sur la lèvre pour f/v), calée sur les débuts de consonne et de voyelle mesurés dans l’audio de chaque clé. En pause ou en pas à pas, elle montre la voyelle de la clé (ou sa consonne seule). Ces formes ne remplacent pas la lecture labiale d’une vraie personne. La voix eSpeak est synthétique. Chaque clé est synthétisée séparément à partir de ses phonèmes, puis placée dans un créneau de durée égale, avec du silence avant et après. Ce traitement est identique pour les phrases automatiques et les transcriptions manuelles. Les sons sont produits avec une articulation plus lente (125 mots/minute) et un allongement des voyelles et consonnes continues. Les nasales et le /l/ isolés sont tenus sans ajout de voyelle ; les consonnes explosives comme /p/ et /t/ gardent leur attaque brève. Les sons ne sont pas répétés pour remplir le créneau. Le rythme de phrase est volontairement abandonné pour faciliter l’observation. Ce calage technique ne valide pas les gestes ni leur valeur pédagogique. Le son et le rendu visuel peuvent subir la latence de l’appareil, notamment avec un casque Bluetooth.
-- Une transcription phonétique manuelle est également audible : chaque clé est synthétisée directement depuis ses phonèmes, indépendamment du texte original, même vide. Tous les sons du référentiel LPC sont pris en charge ; /ɥ/ est approximé par un /y/ bref et cette limite est signalée. Les symboles hors référentiel bloquent la préparation au lieu d’être ignorés.
+- La bouche est animée de façon schématique : une forme de lèvres par son français (ouverture, arrondi, étirement, lèvres closes pour p/b/m, dents sur la lèvre pour f/v), calée sur les durées de phonèmes prédites par Piper pour chaque extrait (ou les événements eSpeak en secours). En pause ou en pas à pas, elle montre la voyelle de la clé (ou sa consonne seule). Ces formes ne remplacent pas la lecture labiale d’une vraie personne. La voix Piper / Siwis est synthétique. Chaque clé utilise un des 329 extraits préparés à partir de ses phonèmes (consonnes, voyelles et combinaisons consonne-voyelle), puis placé dans un créneau de durée égale avec du silence avant et après. Ce traitement est identique pour les phrases automatiques et les transcriptions manuelles. L’articulation est modérément ralentie (facteur de durée 1,1), sans l’allongement artificiel des sons de l’ancienne voix. Les repères de bouche proviennent des durées du modèle, ajustées au rognage des extraits. En cas d’échec de chargement de la banque, toute la séquence revient à eSpeak avec un message explicite. Les sons ne sont pas répétés pour remplir le créneau. Le rythme de phrase est volontairement abandonné pour faciliter l’observation. Ce calage technique ne valide pas les gestes ni leur valeur pédagogique. Le son et le rendu visuel peuvent subir la latence de l’appareil, notamment avec un casque Bluetooth.
+- Une transcription phonétique manuelle est également audible : chaque clé est synthétisée directement depuis ses phonèmes, indépendamment du texte original, même vide. Tous les sons du référentiel LPC ont un extrait, dont /ɥ/. En secours eSpeak, /ɥ/ est approximé par un /y/ bref et cette limite est signalée. La qualité perceptive et la fidélité phonétique de la banque restent à valider humainement. Les symboles hors référentiel bloquent la préparation au lieu d’être ignorés.
 - La main est articulée en SVG : flexion des doigts, ouverture du pouce, déplacement et orientation évoluent ensemble. Le point de contact est interpolé pour éviter les sauts de paume lors d’un changement de doigt de référence. La géométrie reste une projection 2D schématique, sans validation pédagogique des gestes.
 - eSpeak NG écrit la semi-voyelle /ɥ/ comme un /y/ (`plyi` pour « pluie »). Les transcriptions automatiques sont corrigées : un /y/ suivi d’une voyelle dans le même mot devient /ɥ/ (pluie, nuit, huit, nuage), sauf après consonne + l/r devant une voyelle autre que /i/ (cruel, truand). Une transcription manuelle n’est pas modifiée.
 - Les transcriptions automatiques peuvent nécessiter des corrections, notamment pour les liaisons et les noms propres. Des mots étrangers peuvent produire des sons hors du système français : le lecteur les signale et demande une correction manuelle.
@@ -113,7 +113,7 @@ L’interface prévoit une connexion à une API sur la même origine :
 
 ## Données et stockage
 
-Le fichier embarque ses ressources visuelles et son lexique, sans bibliothèque ni police chargée depuis un tiers. La lecture vocale utilise eSpeak NG via Spellophone, avec ses ressources hébergées avec Lumi. La génération et le découpage de l’audio s’effectue dans le navigateur sans envoyer le texte à un fournisseur vocal. Quand la voix est activée, la préparation des clés utilise également ces phonèmes locaux. Aucun service vocal supplémentaire ni clé d’API ne sont ajoutés au projet.
+Le fichier embarque ses ressources visuelles et son lexique, sans bibliothèque ni police chargée depuis un tiers. La lecture vocale assemble une banque française Piper / Siwis hébergée avec Lumi (environ 5,6 Mo d’audio PCM). Spellophone reste utilisé pour la phonétisation locale et la voix de secours eSpeak. L’assemblage de l’audio s’effectue dans le navigateur sans envoyer le texte à un fournisseur vocal. Quand la voix est activée, la préparation des clés utilise également ces phonèmes locaux. Aucun service vocal supplémentaire ni clé d’API ne sont ajoutés au projet.
 
 Le texte et les réglages sont enregistrés dans le `localStorage` du navigateur. L’aide contient un bouton pour effacer ces données.
 
@@ -124,7 +124,8 @@ Lorsqu’une API de phonétisation est disponible, le texte lui est envoyé. Sur
 ```text
 .
 ├── Lumi-LPC-V0.html   # Interface, moteur de règles, dessins et lexique
-├── speech-sync.mjs   # Synthèse locale et association phonèmes / horodatages / clés
+├── speech-sync.mjs   # Banque vocale, synthèse de secours et horodatages des clés
+├── voices/           # Banque Piper / Siwis, repères et attribution
 ├── manifest.webmanifest # Description de l’application installable
 ├── sw.js              # Service worker : cache hors ligne
 ├── icons/             # Icônes de l’application (sources SVG et PNG)
@@ -157,4 +158,8 @@ Lumi est un prototype indépendant, sans affiliation à l’ALPC. Il n’intègr
 
 Le backend Netlify utilise [ephone](https://github.com/sjmik/ephone-js), un port d’eSpeak NG sous GPL-3.0-or-later. Le paquet est installé côté serveur avec sa licence et ses données de langues ; il n’est pas chargé dans le navigateur.
 
-La voix synchronisée utilise [Spellophone](https://github.com/Spelling-Creator/spellophone), un port WebAssembly d’eSpeak NG sous GPL-3.0-or-later. Le build copie son moteur, sa licence et les données nécessaires dans `dist/assets/voice/`. Le chargement initial récupère ces fichiers depuis le même serveur, sans CDN. Le fichier HTML ouvert directement reste utilisable pour le visuel seul.
+La phonétisation locale et la voix de secours utilisent [Spellophone](https://github.com/Spelling-Creator/spellophone), un port WebAssembly d’eSpeak NG sous GPL-3.0-or-later. Le build copie son moteur, sa licence et les données nécessaires dans `dist/assets/voice/`. Le chargement initial récupère ces fichiers depuis le même serveur, sans CDN. Le fichier HTML ouvert directement reste utilisable pour le visuel seul.
+
+La voix principale clé par clé utilise une banque générée avec Piper / Siwis. Le modèle neuronal et Python ne sont nécessaires que pour régénérer les extraits ; le build Netlify copie les fichiers déjà présents dans `voices/`. Voir [la provenance, les réglages et la procédure de génération](voices/README.md). La banque est incluse dans le cache hors ligne de la version 0.2.1.
+
+Le contrôle de la voix et la correction des six consonnes explosives isolées sont décrits dans [le rapport du 25 octobre](docs/voice-audit-2026-10-25.md). Le serveur local propose `/voice-review.html` pour écouter et comparer les sons.
