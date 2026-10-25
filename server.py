@@ -2,6 +2,8 @@
 """Serve Lumi and phonemize French locally using eSpeak NG."""
 import argparse
 import json
+import mimetypes
+from urllib.parse import unquote
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import shutil
@@ -44,6 +46,14 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {'engine': 'eSpeak NG'})
         if path in ('/', '/Lumi-LPC-V0.html'):
             return self.reply(200, (ROOT / 'Lumi-LPC-V0.html').read_bytes(), 'text/html; charset=utf-8')
+        if path == '/speech-sync.mjs':
+            return self.reply(200, (ROOT / 'speech-sync.mjs').read_bytes(), 'text/javascript; charset=utf-8')
+        if path.startswith('/assets/voice/'):
+            assets = (ROOT / 'dist/assets/voice').resolve()
+            target = (assets / unquote(path[len('/assets/voice/'):])).resolve()
+            if target.is_relative_to(assets) and target.is_file():
+                mime = 'application/gzip' if target.suffix == '.gz' else mimetypes.guess_type(target.name)[0] or 'application/octet-stream'
+                return self.reply(200, target.read_bytes(), mime)
         self.reply(404, {'error': 'Page introuvable.'})
 
     def do_POST(self):

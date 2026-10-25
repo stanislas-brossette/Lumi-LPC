@@ -46,6 +46,22 @@ class ServerTests(unittest.TestCase):
             urlopen(self.url + '/server.py')
         self.assertEqual(error.exception.code, 404)
 
+    def test_synchronised_voice_assets_and_path_confinement(self):
+        for path, mime in [
+            ('/speech-sync.mjs', 'text/javascript'),
+            ('/assets/voice/dist/browser.js', 'javascript'),
+            ('/assets/voice/wasm/espeak-ng.wasm', 'application/wasm'),
+            ('/assets/voice/espeak-ng-data/fr_dict.gz', 'application/gzip'),
+            ('/assets/voice/espeak-ng-data/en_dict.gz', 'application/gzip'),
+        ]:
+            with urlopen(self.url + path) as response:
+                self.assertIn(mime, response.headers['Content-Type'])
+                self.assertGreater(len(response.read()), 0)
+        for path in ['/assets/voice/%2e%2e/%2e%2e/%2e%2e/server.py', '/assets/voice/missing.js']:
+            with self.assertRaises(HTTPError) as error:
+                urlopen(self.url + path)
+            self.assertEqual(error.exception.code, 404)
+
     def test_free_phrases_encode_with_real_lpc_engine(self):
         phrases = [
             'Demain, les astronautes visiteront une bibliothèque extraordinaire.',

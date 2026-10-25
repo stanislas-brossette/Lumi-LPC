@@ -14,9 +14,11 @@ Sur Ubuntu, installer le moteur si nécessaire :
 sudo apt install espeak-ng
 ```
 
-Puis, depuis la racine du dépôt :
+Avec Node.js 24 ou plus récent et Python 3, préparer les ressources vocales une première fois (et après une mise à jour des dépendances), puis lancer le serveur :
 
 ```bash
+npm ci
+npm run build
 python3 server.py
 ```
 
@@ -36,7 +38,7 @@ Le site et la phonétisation sont hébergés ensemble sur Netlify. Aucune base S
 
 1. Pousser les fichiers du projet sur le dépôt GitHub `stanislas-brossette/Lumi-LPC`.
 2. Dans Netlify, choisir **Add new project → Import an existing project**, puis sélectionner ce dépôt.
-3. Vérifier les réglages détectés depuis `netlify.toml` : commande `npm run build`, dossier publié `dist`, fonctions `netlify/functions`, Node.js 22.
+3. Vérifier les réglages détectés depuis `netlify.toml` : commande `npm run build`, dossier publié `dist`, fonctions `netlify/functions`, Node.js 24.
 4. Déployer et ouvrir l’URL HTTPS fournie par Netlify.
 5. Tester une phrase absente des exemples et vérifier que le bandeau affiche « eSpeak NG · serveur ». `/api/health` doit renvoyer un JSON avec `engine`.
 
@@ -50,7 +52,7 @@ npm test
 npm run build
 ```
 
-Les tests appellent les fonctions avec de vraies requêtes et vérifient que les transcriptions françaises sont acceptées par le moteur LPC. Le déploiement doit ensuite être vérifié sur Netlify.
+Les tests appellent les fonctions avec de vraies requêtes et vérifient que les transcriptions françaises sont acceptées par le moteur LPC. Les tests du lecteur génèrent de vrais audios français et vérifient leurs horodatages, puis simulent la position audio pour contrôler pause/reprise, annulation, vitesse et boucle. Le rendu sonore et le calage perçu restent à vérifier sur les appareils visés. Le déploiement doit ensuite être vérifié sur Netlify.
 
 ## Fonctionnalités
 
@@ -58,16 +60,17 @@ Les tests appellent les fonctions avec de vraies requêtes et vérifient que les
 - Conversion en phonèmes à partir d’exemples et d’un lexique embarqués ; les mots inconnus sont signalés.
 - Édition manuelle des phonèmes et choix de l’interprétation du schwa `/ə/`.
 - Conversion des phonèmes en configurations de main et positions LPC.
-- Lecture de la séquence, navigation pas à pas, vitesse réglable et boucle.
-- Avatar schématique avec mode miroir et repères de position.
+- Lecture de la séquence avec voix française optionnelle, pause, navigation pas à pas, vitesse réglable et boucle. Lecture didactique à cadence régulière : chaque clé dispose de la même durée, avec transition animée, son associé, puis temps d’observation. Un clic sur une clé rejoue son son seul.
+- Avatar avec main droite vue de dos, transitions articulées et repères de position. Le mode miroir s’applique aussi aux illustrations du référentiel. Le repère dorsal est commun aux huit configurations : main redressée, pouce et index à gauche du dessin, auriculaire à droite. En position « ki » près de la bouche, l’index est au-dessus du majeur, avec les doigts repliés en dessous et le pouce replié masqué derrière la main.
 - Référentiel des huit configurations de main et des cinq positions.
 - Conservation du dernier texte et des réglages dans le navigateur, avec une commande de réinitialisation dans l’aide.
 
 ## Utilisation
 
 1. Choisir un exemple ou saisir une phrase, puis préparer sa prononciation.
-2. Vérifier les phonèmes et les corriger si nécessaire dans l’éditeur.
-3. Lancer la lecture ou sélectionner une clé dans la séquence pour l’examiner.
+2. Vérifier les phonèmes et les corriger si nécessaire dans l’éditeur, puis cliquer sur « Appliquer cette prononciation » pour préparer les clés et leurs sons. La saisie phonétique peut être utilisée seule, sans texte.
+3. Laisser « Lire à voix haute » activé pour entendre la phrase avec le visuel, ou le désactiver pour observer les clés seules. La voix française eSpeak est incluse ; aucune voix système n’est nécessaire. La durée minimale est de 1,2 seconde par clé à ×1, donc 2,4 secondes à ×0,5 par défaut. Si un extrait sonore est plus long, tous les créneaux de la phrase sont allongés de façon égale. Le ralenti ×0,25 laisse encore plus de temps.
+4. Utiliser la pause pour suspendre la voix et le visuel. Changer la vitesse conserve la position de lecture et ralentit ensemble la voix et les clés. Un clic sur une clé ou les flèches rejoue uniquement son son ; le bouton Lire relance la séquence à partir de cette clé (ou du début si elle était terminée). La navigation vers une clé arrête la voix.
 
 En mode autonome, les liaisons ne sont pas calculées automatiquement. Pour un mot absent du lexique, saisir sa transcription phonétique dans l’éditeur. Le symbole `|` permet de forcer une séparation ; les symboles non pris en charge bloquent la lecture et sont signalés.
 
@@ -84,14 +87,17 @@ L’interface prévoit une connexion à une API sur la même origine :
 
 ## Limites du prototype
 
-- La bouche n’est pas animée et la lecture n’est pas synchronisée avec une voix.
-- Les formes de main sont fixes ; les déplacements, contacts et transitions sont simplifiés.
+- La bouche n’est pas animée. La voix eSpeak est synthétique. Chaque clé est synthétisée séparément à partir de ses phonèmes, puis placée dans un créneau de durée égale, avec du silence avant et après. Ce traitement est identique pour les phrases automatiques et les transcriptions manuelles. Les sons sont produits avec une articulation plus lente (125 mots/minute) et un allongement des voyelles et consonnes continues. Les nasales et le /l/ isolés sont tenus sans ajout de voyelle ; les consonnes explosives comme /p/ et /t/ gardent leur attaque brève. Les sons ne sont pas répétés pour remplir le créneau. Le rythme de phrase est volontairement abandonné pour faciliter l’observation. Ce calage technique ne valide pas les gestes ni leur valeur pédagogique. Le son et le rendu visuel peuvent subir la latence de l’appareil, notamment avec un casque Bluetooth.
+- Une transcription phonétique manuelle est également audible : chaque clé est synthétisée directement depuis ses phonèmes, indépendamment du texte original, même vide. Tous les sons du référentiel LPC sont pris en charge ; /ɥ/ est approximé par un /y/ bref et cette limite est signalée. Les symboles hors référentiel bloquent la préparation au lieu d’être ignorés.
+- La main est articulée en SVG : flexion des doigts, ouverture du pouce, déplacement et orientation évoluent ensemble. Le point de contact est interpolé pour éviter les sauts de paume lors d’un changement de doigt de référence. La géométrie reste une projection 2D schématique, sans validation pédagogique des gestes.
 - Les transcriptions automatiques peuvent nécessiter des corrections, notamment pour les liaisons et les noms propres. Des mots étrangers peuvent produire des sons hors du système français : le lecteur les signale et demande une correction manuelle.
 - Le prototype n’est pas un outil validé d’apprentissage autonome et ne remplace pas l’accompagnement d’un codeur LPC.
 
 ## Données et stockage
 
-Le fichier embarque ses ressources visuelles et son lexique, sans bibliothèque ni police chargée depuis un tiers. Le texte et les réglages sont enregistrés dans le `localStorage` du navigateur. L’aide contient un bouton pour effacer ces données.
+Le fichier embarque ses ressources visuelles et son lexique, sans bibliothèque ni police chargée depuis un tiers. La lecture vocale utilise eSpeak NG via Spellophone, avec ses ressources hébergées avec Lumi. La génération et le découpage de l’audio s’effectue dans le navigateur sans envoyer le texte à un fournisseur vocal. Quand la voix est activée, la préparation des clés utilise également ces phonèmes locaux. Aucun service vocal supplémentaire ni clé d’API ne sont ajoutés au projet.
+
+Le texte et les réglages sont enregistrés dans le `localStorage` du navigateur. L’aide contient un bouton pour effacer ces données.
 
 Lorsqu’une API de phonétisation est disponible, le texte lui est envoyé. Sur le site public, Netlify reçoit donc le texte et le traite avec eSpeak NG. Avec le serveur Python local, le traitement reste sur la machine. Le code de Lumi ne conserve pas les phrases et ne les écrit pas dans ses journaux ; l’hébergeur applique ses propres politiques de traitement et de journalisation.
 
@@ -100,6 +106,7 @@ Lorsqu’une API de phonétisation est disponible, le texte lui est envoyé. Sur
 ```text
 .
 ├── Lumi-LPC-V0.html   # Interface, moteur de règles, dessins et lexique
+├── speech-sync.mjs   # Synthèse locale et association phonèmes / horodatages / clés
 ├── server.py          # Serveur HTTP local et API eSpeak NG
 ├── netlify/functions/ # API de phonétisation pour le site public
 ├── netlify.toml       # Configuration du déploiement
@@ -117,7 +124,7 @@ python3 -m unittest discover -s tests -v
 
 La génération du site et le déploiement Netlify sont configurés dans `package.json` et `netlify.toml`.
 
-Pour une vérification manuelle, essayer un exemple, un mot hors lexique, une transcription manuelle et un symbole inconnu, puis contrôler la lecture, les réglages et la restauration après rechargement.
+Les tests de la main contrôlent notamment l’orientation projetée de « ki » d’après la référence photographique fournie, les huit poses, les 64 transitions, les changements de destination en cours de mouvement, la pause/reprise et le mouvement réduit. Pour une vérification manuelle, essayer un exemple, un mot hors lexique, une transcription manuelle et un symbole inconnu, puis contrôler la lecture, les réglages et la restauration après rechargement.
 
 ## Références
 
@@ -128,3 +135,5 @@ Pour une vérification manuelle, essayer un exemple, un mot hors lexique, une tr
 Lumi est un prototype indépendant, sans affiliation à l’ALPC. Il n’intègre pas le moteur TextCueS / Auto-CS / SPPAS et ne bénéficie pas de sa validation.
 
 Le backend Netlify utilise [ephone](https://github.com/sjmik/ephone-js), un port d’eSpeak NG sous GPL-3.0-or-later. Le paquet est installé côté serveur avec sa licence et ses données de langues ; il n’est pas chargé dans le navigateur.
+
+La voix synchronisée utilise [Spellophone](https://github.com/Spelling-Creator/spellophone), un port WebAssembly d’eSpeak NG sous GPL-3.0-or-later. Le build copie son moteur, sa licence et les données nécessaires dans `dist/assets/voice/`. Le chargement initial récupère ces fichiers depuis le même serveur, sans CDN. Le fichier HTML ouvert directement reste utilisable pour le visuel seul.

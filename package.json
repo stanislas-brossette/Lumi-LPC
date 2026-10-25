@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/netlify.test.mjs"
+    "test": "node tests/netlify.test.mjs && node tests/playback.test.mjs && node tests/hand.test.mjs"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "dependencies": {
+    "@spelling-creator/spellophone": "0.2.1",
     "ephone": "1.0.2"
   }
 }
