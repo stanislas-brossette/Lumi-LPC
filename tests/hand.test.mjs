@@ -120,3 +120,41 @@ test('reduced motion taps without moving',()=>{
   const a=animator(true);a.rig.goTo(5,pos(),1);
   assert.equal(a.rig.tap(5,pos(),1),0);assert.equal(a.rig.snapshot().lift,0);assert.equal(a.callbacks.size,0);
 });
+
+test('every LPC sound has a mouth shape: closed bilabials, bitten f/v, spread i, rounded u, open a',()=>{
+  const rest=visual.visemeOf(null),shape=s=>visual.visemeFor(s);
+  for(const s of ['p','b','m','f','v','t','d','n','l','s','z','k','g','ʁ','ŋ','ʃ','ʒ','j','ɲ','w','ɥ','a','ɑ̃','e','ɛ','ɛ̃','i','o','ɔ̃','ɔ','u','y','ø','œ','œ̃'])assert.notEqual(shape(s),rest,s);
+  for(const s of ['p','b','m'])assert.equal(shape(s).open,0);
+  for(const s of ['f','v'])assert.equal(shape(s).bite,1);
+  assert.ok(shape('i').w>shape('e').w&&shape('e').w>shape('o').w&&shape('o').w>shape('u').w,'spread to rounded');
+  assert.ok(['e','ɛ','i','o','u','y','ø','œ'].every(s=>shape('a').open>shape(s).open),'a is the most open');
+  assert.equal(shape('ʃ').w<shape('s').w,true,'ch is rounded, s is not');
+  // The resting mouth keeps the original drawing.
+  const d=visual.mouthPaths(rest);
+  assert.match(d.lips,/^M293 244 Q304 235 318 240 Q332 235 343 244 Q318 264 293 244Z$/);
+  assert.equal(d.inner,'M295 244 Q318 248 341 244 Q318 248 295 244Z');assert.equal(d.teeth,'');
+});
+
+test('mouth timeline: anticipation, consonant, vowel, hold, rest — without jumps',()=>{
+  const key={c:'p',v:'a'},marks={vowel:.02,end:.29},lead=.3,at=t=>visual.mouthAt(key,marks,t,lead);
+  same(at(0),visual.visemeOf(null));same(at(lead),visual.visemeFor('p'));
+  same(at(lead+.2),visual.visemeFor('a'));same(at(lead+marks.end+.35),visual.visemeOf(null));
+  let previous=at(0);
+  for(let t=.005;t<1.2;t+=.005){const m=at(t);assert.ok(Math.abs(m.open-previous.open)<4.5&&Math.abs(m.w-previous.w)<4.5,`no snap at ${t.toFixed(3)}`);previous=m;}
+  // An isolated consonant keeps its own shape for the whole sound; a lone vowel starts open.
+  same(visual.mouthAt({c:'m',v:null},{vowel:null,end:.24},lead+.2,lead),visual.visemeFor('m'));
+  same(visual.mouthAt({c:null,v:'u'},{vowel:null,end:.3},lead,lead),visual.visemeFor('u'));
+  // Reduced motion: no in-between shapes.
+  for(let t=0;t<1.2;t+=.01){const m=visual.mouthAt(key,marks,t,lead,true);assert.ok([visual.visemeOf(null),visual.visemeFor('p'),visual.visemeFor('a')].some(v=>JSON.stringify(v)===JSON.stringify(m)));}
+});
+
+test('mouth painter updates the SVG in place and only bites for f/v',()=>{
+  const nodes=new Map(),get=id=>{if(!nodes.has(id))nodes.set(id,{attrs:{},setAttribute(k,v){this.attrs[k]=v;},removeAttribute(k){delete this.attrs[k];}});return nodes.get(id);};
+  const mouth=visual.createMouth({getElementById:get});
+  mouth.paint(visual.visemeFor('a'));
+  assert.equal(get('mouth-inner').attrs.d,visual.mouthPaths(visual.visemeFor('a')).inner);
+  assert.equal(get('mouth-clip-path').attrs.d,get('mouth-inner').attrs.d);
+  assert.equal(get('mouth-teeth').attrs['clip-path'],'url(#mouth-clip)');
+  mouth.paint(visual.visemeFor('f'));assert.equal(get('mouth-teeth').attrs['clip-path'],undefined,'teeth rest on the lower lip');
+  assert.match(visual.avatar(),/<g id="mouth"><path id="mouth-lips"/);
+});

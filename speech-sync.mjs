@@ -120,9 +120,16 @@ function sustainedMnemonic(key) {
   if(held[key.c]) return held[key.c];
   return ['f','v','s','z','ʃ','ʒ','ʁ'].includes(key.c)?base+':':base;
 }
+// For the mouth: vowel onset and sound end, in seconds from the start of the key's sound.
+export function soundMarks(key, result) {
+  const events = (result.events || []).filter(e => e.type === 'phoneme'), voiced = events.filter(e => e.phoneme);
+  const end = Math.min(result.samples.length, events.find(e => !e.phoneme)?.sample ?? result.samples.length) / result.sampleRate;
+  const vowel = key.c && key.v ? (voiced.length > 1 ? voiced.at(-1).sample / result.sampleRate : Math.min(0.08, end / 2)) : null;
+  return { vowel, end };
+}
 export function synthesizeKeysWithEngine(keys, espeak, encodeWav) {
   if (!keys.length) throw new Error('Aucune clé à prononcer.');
-  const cache = new Map(), pieces = [], times = [];
+  const cache = new Map(), pieces = [], times = [], marks = [];
   let length = 0;
   for (const key of keys) {
     const mnemonic = sustainedMnemonic(key);
@@ -133,11 +140,11 @@ export function synthesizeKeysWithEngine(keys, espeak, encodeWav) {
     }
     const result = cache.get(mnemonic);
     if (pieces.length && result.sampleRate !== pieces[0].sampleRate) throw new Error('Fréquence audio incohérente.');
-    times.push(length/result.sampleRate);pieces.push(result);length+=result.samples.length;
+    times.push(length/result.sampleRate);pieces.push(result);marks.push(soundMarks(key,result));length+=result.samples.length;
   }
   const samples = new Int16Array(length);let offset=0;
   for (const piece of pieces) { samples.set(piece.samples,offset);offset+=piece.samples.length; }
-  const packet = didacticAudio({ samples, sampleRate:pieces[0].sampleRate }, { keys,times,ipa:keys.map(key=>key.ipa).join(' ') },encodeWav);
+  const packet = didacticAudio({ samples, sampleRate:pieces[0].sampleRate }, { keys,times,marks,ipa:keys.map(key=>key.ipa).join(' ') },encodeWav);
   packet.warning=keys.some(key=>key.c==='ɥ')?'Le son /ɥ/ est approximé par un /y/ bref dans cette voix.':'';
   return packet;
 }
