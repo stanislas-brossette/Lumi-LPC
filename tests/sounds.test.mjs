@@ -22,3 +22,20 @@ test('every example has a highlighted spelling and includes the actual selected 
  assert.equal(SOUNDS.find(s=>s.ipa==='œ').word,'neuf');
  assert.equal(SOUNDS.find(s=>s.ipa==='ɔ̃').word,'pont');
 });
+
+test('a missing explorer module shows a recovery message and working reload button',async()=>{
+ const html=readFileSync('Lumi-LPC-V0.html','utf8');
+ const script=html.match(/<script type="module">([\s\S]*?)<\/script>/)[1];
+ for(const protocol of ['http:','file:']){
+  const message={hidden:true,children:[],setAttribute(name,value){this[name]=value;},append(...nodes){this.children.push(...nodes);}};
+  let reloads=0;
+  const doc={getElementById:()=>message,createElement:tag=>({tag,addEventListener(name,fn){this[name]=fn;}})};
+  const location={protocol,reload(){reloads++;}};
+  // Reject the module load, as the stale local server did with HTTP 404.
+  const run=new Function('document','location','load','return '+script.trim().replace("import('./sounds.mjs')",'load()'));
+  await run(doc,location,()=>Promise.reject(Error('HTTP 404')));
+  assert.equal(message.hidden,false);assert.equal(message.role,'alert');
+  assert.match(message.textContent,protocol==='http:'?/redémarre server.py/:/serveur local/);
+  const retry=message.children.find(n=>n.tag==='button');assert.equal(retry.textContent,'Recharger la page');retry.click();assert.equal(reloads,1);
+ }
+});

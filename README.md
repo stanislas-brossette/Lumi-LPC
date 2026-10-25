@@ -22,7 +22,7 @@ npm run build
 python3 server.py
 ```
 
-Ouvrir [Lumi dans le navigateur](http://127.0.0.1:8000). Le serveur écoute uniquement sur la machine locale. Pour changer de port : `python3 server.py --port 8001`.
+Ouvrir [Lumi dans le navigateur](http://127.0.0.1:8000). Le serveur écoute uniquement sur la machine locale. Après une mise à jour du code ou l’ajout de modules, relancer `npm run build`, arrêter le serveur avec Ctrl+C puis relancer `python3 server.py` : un ancien processus conserve ses anciennes routes même si le HTML change. Pour changer de port : `python3 server.py --port 8001`.
 
 Il est aussi possible d’ouvrir directement **[Lumi-LPC-V0.html](Lumi-LPC-V0.html)** dans un navigateur récent. Ce mode autonome se limite aux exemples, au lexique embarqué et à la saisie phonétique manuelle.
 
