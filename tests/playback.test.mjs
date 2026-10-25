@@ -49,7 +49,7 @@ test('consonant-vowel keys start at their consonant, including across connected 
 });
 
 function app(stored = null, reducedMotion = true) {
-  const nodes = new Map(), frames = new Map(), timers = new Map(); let id = 0;
+  const nodes = new Map(), frames = new Map(), timers = new Map(); let id = 0, saved = stored;
   function element() { return { value: '', dataset: {}, style: {}, children: [], handlers: {}, attrs: {}, classList: { toggle() {} },
     addEventListener(name, fn) { this.handlers[name] = fn; }, setAttribute(name, value) { this.attrs[name] = value; },
     removeAttribute(name) { delete this.attrs[name]; }, querySelectorAll() { return []; }, replaceChildren() { this.children = []; },
@@ -67,7 +67,7 @@ function app(stored = null, reducedMotion = true) {
   }
   const context = {
     document: { getElementById: get, querySelectorAll: selector => queried(selector), createElement: element, addEventListener() {}, body },
-    localStorage: { getItem: () => stored && JSON.stringify(stored), setItem() {} }, location: { protocol: 'file:' }, performance: {now:()=>0},
+    localStorage: { getItem: () => stored && JSON.stringify(stored), setItem(key,value) { saved=JSON.parse(value); } }, location: { protocol: 'file:' }, performance: {now:()=>0},
     matchMedia: () => ({ matches: reducedMotion }), addEventListener() {}, Audio: FakeAudio, Blob,
     URL: { createObjectURL: () => 'blob:test', revokeObjectURL: url => revoked.push(url) },
     setTimeout(fn) { timers.set(++id, fn); return id; }, clearTimeout(id) { timers.delete(id); },
@@ -78,7 +78,7 @@ function app(stored = null, reducedMotion = true) {
   context.location.protocol = 'http:';
   const a = context.LumiTest; const natural = packet(get('phrase').value); a.state.voiceData = didacticAudio(natural.result, natural, encodeWav);
   a.state.keys = a.state.voiceData.keys; a.state.speechModule = { keyAtTime };
-  return { ...a, get, frames, timers, audios, revoked, context, body, nav, drawing,
+  return { ...a, get, frames, timers, audios, revoked, context, body, nav, drawing, saved:()=>saved,
     frame() { const [id, fn] = frames.entries().next().value; frames.delete(id); fn(); } };
 }
 
@@ -87,6 +87,25 @@ test('speed defaults to 1 and preserves saved playback preferences', () => {
   assert.equal(app({ speed: 1 }).state.speed, 1);
   assert.equal(app({ speed: 0.5, speedProfile: 2 }).state.speed, 0.5);
   assert.equal(app({ speed: 0.25, speedProfile: 2 }).state.speed, 0.25);
+});
+
+test('each reading mode starts at its own speed and remembers changes separately',async()=>{
+ const a=app({speed:1,speedProfile:2,playbackMode:'natural'});
+ a.get('phrase').value=''; // Test the mode transition without resynthesizing a phrase.
+ assert.equal(a.state.speed,1);
+ a.get('playback-mode').value='natural';await a.get('playback-mode').handlers.change();
+ assert.equal(a.state.speed,.75);assert.equal(a.get('speed').value,'0.75');
+ a.get('speed').value='0.5';a.get('speed').handlers.change();
+ a.get('playback-mode').value='didactic';await a.get('playback-mode').handlers.change();
+ assert.equal(a.state.speed,1);assert.equal(a.get('speed').value,'1');
+ const reloaded=app({...a.saved(),text:'Papa mange une pomme.'});reloaded.get('phrase').value='';
+ reloaded.get('playback-mode').value='natural';await reloaded.get('playback-mode').handlers.change();
+ assert.equal(reloaded.state.speed,.5);assert.equal(reloaded.get('speed').value,'0.5');
+});
+
+test('invalid saved mode speeds fall back independently to their defaults',()=>{
+ const a=app({speedProfile:3,speeds:{didactic:100,natural:'0.5'}});
+ assert.equal(a.state.speeds.didactic,1);assert.equal(a.state.speeds.natural,.75);
 });
 
 test('natural playback follows variable key times through pause, speed changes and isolated replay',async()=>{

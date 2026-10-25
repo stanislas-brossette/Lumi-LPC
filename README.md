@@ -206,3 +206,9 @@ La version 0.4.5 retravaille le /y/ isolé de « usine » : extraction d’une v
 soutenue en contexte avec la même voix Siwis, sans modifier les 328 autres sons.
 La première carte de `/voice-review.html` propose l’ancien extrait, le nouveau
 et sa phrase porteuse pour validation à l’écoute. Voir [la méthode](voices/README.md).
+
+La version 0.4.6 règle les vitesses initiales à **×1 en clé par clé** et
+**×0,75 en phrase naturelle**. Une modification manuelle est mémorisée séparément
+pour chaque mode, y compris après rechargement. L’ancien réglage commun ×1
+est remplacé par ces valeurs ; les autres vitesses personnalisées sont conservées
+pour leur mode précédent.
