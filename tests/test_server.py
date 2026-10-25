@@ -49,6 +49,8 @@ class ServerTests(unittest.TestCase):
     def test_synchronised_voice_assets_and_path_confinement(self):
         for path, mime in [
             ('/speech-sync.mjs', 'text/javascript'),
+            ('/sounds.mjs', 'text/javascript'),
+            ('/sound-catalog.mjs', 'text/javascript'),
             ('/sw.js', 'text/javascript'),
             ('/manifest.webmanifest', 'application/manifest+json'),
             ('/icons/icon-192.png', 'image/png'),

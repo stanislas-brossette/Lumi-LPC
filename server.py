@@ -16,6 +16,8 @@ STATIC = {
     '/voice-review.html': ('tools/voice-review.html', 'text/html; charset=utf-8'),
     '/voice-review-before.json': ('tests/fixtures/voice-stops-before.json', 'application/json'),
     '/voice-review-before.wav': ('tests/fixtures/voice-stops-before.wav', 'audio/wav'),
+    '/sounds.mjs': ('sounds.mjs', 'text/javascript; charset=utf-8'),
+    '/sound-catalog.mjs': ('sound-catalog.mjs', 'text/javascript; charset=utf-8'),
     '/speech-sync.mjs': ('speech-sync.mjs', 'text/javascript; charset=utf-8'),
     # Built by npm run build, like the voice files it precaches.
     '/sw.js': ('dist/sw.js', 'text/javascript; charset=utf-8'),
