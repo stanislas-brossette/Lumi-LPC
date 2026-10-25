@@ -8,6 +8,8 @@ export function timelineFromEvents(result, LPC, schwa) {
       if (pause && keys.length && !keys.at(-1).pauseAfter) { keys.at(-1).pauseAfter = true; phrases[phrases.length - 1] += '|'; }
       return;
     }
+    // eSpeak writes /ɥ/ as /y/; same phoneme count, so onsets stay aligned.
+    LPC.glideTokens(phonemes.map(p => p.sound)).forEach((sound, i) => { phonemes[i].sound = sound; });
     const ipa = phonemes.map(p => p.sound).join('');
     const group = LPC.encode(ipa, schwa);
     let consumed = 0;

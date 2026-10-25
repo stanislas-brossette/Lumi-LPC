@@ -249,3 +249,21 @@ test('restored mirror preference also mirrors the reference hand drawings',()=>{
   assert.match(a.get('shape-reference').innerHTML,/translate\(142 0\) scale\(-1 1\)/);
   assert.match(a.get('shape-reference').innerHTML,/main droite · miroir/);
 });
+
+test('eSpeak /y/ before a vowel in the same word becomes the LPC semi-vowel /ɥ/', () => {
+  const cases = { 'plyˈi': 'plɥˈi', 'nyˈi': 'nɥˈi', 'yˈit': 'ɥˈit', 'nyˈaʒ': 'nɥˈaʒ', 'tyˈe': 'tɥˈe', 'esyijˈe': 'esɥijˈe',
+    'bʁyˈi': 'bʁɥˈi', 'oʒuʁdyˈi': 'oʒuʁdɥˈi', 'kʁyˈɛl': 'kʁyˈɛl', 'tʁyˈɑ̃': 'tʁyˈɑ̃', 'ɡlyˈɑ̃': 'ɡlyˈɑ̃',
+    'ty ˈɛ': 'ty ˈɛ', 'statˈy': 'statˈy', 'yn pˈɔm': 'yn pˈɔm', 'ʒə- syˈi.': 'ʒə- sɥˈi.' };
+  for (const [espeak, expected] of Object.entries(cases)) assert.equal(encoder.LPC.glides(espeak), expected, espeak);
+  assert.deepEqual(Array.from(encoder.LPC.encode(encoder.LPC.glides('plyˈi')), k => k.ipa + ' ' + k.code), ['p 1-s', 'l 6-s', 'ɥi 4-m']);
+});
+
+test('real French audio codes ui words with /ɥ/ and keeps every onset measured', () => {
+  for (const [text, expected] of [['Pluie', ['p', 'l', 'ɥi']], ['Il fait nuit.', ['i', 'l', 'fɛ', 'n', 'ɥi']], ['Huit', ['ɥi', 't']]]) {
+    const { keys, times, ipa, result } = packet(text);
+    assert.deepEqual(keys.map(k => k.ipa), expected, text);
+    assert.ok(ipa.includes('ɥ') && !/y[iɛ]/.test(ipa), ipa);
+    const onsets = result.events.filter(e => e.type === 'phoneme' && e.phoneme).map(e => e.sample / result.sampleRate);
+    for (const time of times) assert.ok(onsets.includes(time));
+  }
+});
