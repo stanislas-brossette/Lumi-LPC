@@ -55,6 +55,9 @@ function app(stored = null, reducedMotion = true) {
     removeAttribute(name) { delete this.attrs[name]; }, querySelectorAll() { return []; }, replaceChildren() { this.children = []; },
     append(...children) { this.children.push(...children); }, scrollTo() {} }; }
   const get = name => { if (!nodes.has(name)) nodes.set(name, element()); return nodes.get(name); };
+  // A broad [data-view] query would also reach the body and the hand drawings; only nav buttons match the scoped one.
+  const body = element(), nav = Object.assign(element(), { className: 'nav-btn', dataset: { view: 'help' } }), drawing = Object.assign(element(), { dataset: { view: 'direct' } });
+  const queried = selector => selector === '[data-view]' ? [nav, body, drawing] : selector === '.nav-btn[data-view]' ? [nav] : [];
   get('phrase').value = 'Papa mange une pomme.';
   const audios = [], revoked = [];
   class FakeAudio {
@@ -63,7 +66,7 @@ function app(stored = null, reducedMotion = true) {
     pause() { this.paused = true; } removeAttribute() {} load() {}
   }
   const context = {
-    document: { getElementById: get, querySelectorAll: () => [], createElement: element, addEventListener() {} },
+    document: { getElementById: get, querySelectorAll: selector => queried(selector), createElement: element, addEventListener() {}, body },
     localStorage: { getItem: () => stored && JSON.stringify(stored), setItem() {} }, location: { protocol: 'file:' }, performance: {now:()=>0},
     matchMedia: () => ({ matches: reducedMotion }), addEventListener() {}, Audio: FakeAudio, Blob,
     URL: { createObjectURL: () => 'blob:test', revokeObjectURL: url => revoked.push(url) },
@@ -75,7 +78,7 @@ function app(stored = null, reducedMotion = true) {
   context.location.protocol = 'http:';
   const a = context.LumiTest; const natural = packet(get('phrase').value); a.state.voiceData = didacticAudio(natural.result, natural, encodeWav);
   a.state.keys = a.state.voiceData.keys; a.state.speechModule = { keyAtTime };
-  return { ...a, get, frames, timers, audios, revoked, context,
+  return { ...a, get, frames, timers, audios, revoked, context, body, nav, drawing,
     frame() { const [id, fn] = frames.entries().next().value; frames.delete(id); fn(); } };
 }
 
@@ -312,4 +315,48 @@ test('the mouth follows the audio clock, then shows the key vowel when stepping'
   audio.currentTime = d.times[2] + d.soundOffset + 0.2; a.frame(); assert.equal(a.state.index, 2); assert.equal(visual.attrs.d, inner('ɑ̃'));
   a.togglePlay(); assert.equal(visual.attrs.d, inner('ɑ̃'), 'pause freezes the mouth');
   a.moveTo(6); assert.equal(visual.attrs.d, inner('ɔ'), 'stepping shows the key vowel');
+});
+
+test('voice timeline links every key to the word of the text it comes from', () => {
+  const text = 'J’ai acheté 23 croissants, pour l’ami.';
+  const { keys, words } = packet(text);
+  assert.ok(keys.every(k => Number.isInteger(k.word) && k.word >= 0 && k.word < words.length));
+  assert.deepEqual(keys.map(k => k.word), [...keys.map(k => k.word)].sort((a, b) => a - b), 'words advance with the keys');
+  const a = app();
+  const { words: ranges, keyWord } = a.sentenceFor(text, keys, { text, words });
+  const shown = ranges.map(r => text.slice(r.start, r.end));
+  assert.deepEqual(shown, ['J’ai', 'acheté', '23', 'croissants', 'pour', 'l’ami'], 'punctuation and spaces are trimmed');
+  const byWord = i => keys.filter((_, k) => keyWord[k] === i).map(k => k.ipa).join('');
+  assert.equal(byWord(0), 'ʒe'); assert.equal(byWord(2).startsWith('vɛ̃'), true, '23 is read with its own keys');
+  assert.equal(byWord(5), 'lami');
+});
+
+test('without voice, words match IPA words only when their counts agree', () => {
+  const a = app(), encode = ipa => encoder.LPC.encode(ipa);
+  const ok = a.sentenceFor('Papa mange une pomme.', encode('papa mɑ̃ʒ yn pɔm|'), null);
+  assert.deepEqual(Array.from(ok.keyWord), [0, 0, 1, 1, 2, 2, 3, 3]);
+  const off = a.sentenceFor('Tu veux de l’eau', encode('ty vø də l o'), null);
+  assert.equal(off.keyWord, null, 'l’eau is one written word but two IPA words: no guess');
+  assert.equal(off.words.length, 4, 'the sentence is still shown');
+});
+
+test('the tracker shows the sentence and the keys, and follows playback', async () => {
+  const a = app(), text = a.get('tracker-text'), ipa = a.get('tracker-ipa');
+  a.renderTracker(); a.moveTo(0);
+  assert.equal(a.get('tracker').hidden, false);
+  const spans = ipa.children.filter(c => c.className === 'k');
+  assert.deepEqual(spans.map(s => s.textContent), a.state.keys.map(k => k.ipa));
+  assert.ok(text.children.some(c => c.textContent === 'Papa'));
+  a.moveTo(3); assert.equal(a.get('tracker-bar').style.width, `${Math.round(3 / (a.state.keys.length - 1) * 10000) / 100}%`);
+  spans[5].handlers.click(); assert.equal(a.state.index, 5, 'clicking a sound selects its key');
+});
+
+test('clicking anywhere on the page does not stop playback; only nav buttons switch views', async () => {
+  const a = app(); a.togglePlay(); await Promise.resolve();
+  assert.equal(a.state.playing, true);
+  assert.equal(a.body.handlers.click, undefined, 'the body is not a view switch');
+  assert.equal(a.drawing.handlers.click, undefined, 'a reference hand drawing is not a view switch');
+  assert.equal(a.state.playing, true);
+  a.nav.handlers.click(); assert.equal(a.state.playing, false, 'changing view stops playback');
+  assert.equal(a.get('view-help').hidden, false); assert.equal(a.get('view-simulator').hidden, true);
 });
