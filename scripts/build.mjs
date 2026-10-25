@@ -25,6 +25,12 @@ for (const file of ['manifest.json', 'core.bin.gz', 'fr_dict.gz', 'en_dict.gz'])
   await copyFile(`${pkg}/espeak-ng-data/${file}`, `dist/assets/voice/espeak-ng-data/${file}`);
   voice.push(`assets/voice/espeak-ng-data/${file}`);
 }
+// Pre-generated neural sounds are deployed and precached like the phonemizer.
+await mkdir('dist/assets/voice/keys', { recursive: true });
+for (const file of ['manifest.json', 'siwis-keys.wav', 'README.md', 'MODEL_CARD']) {
+  await copyFile(`voices/${file}`, `dist/assets/voice/keys/${file}`);
+  voice.push(`assets/voice/keys/${file}`);
+}
 // The legacy (no WebAssembly) fallback stays out of the precache; it is cached if ever used.
 const worker = await readFile('sw.js', 'utf8');
 if (!worker.includes('const VOICE = [];')) throw new Error('sw.js: liste VOICE introuvable');

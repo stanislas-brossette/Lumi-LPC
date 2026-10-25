@@ -58,6 +58,11 @@ class ServerTests(unittest.TestCase):
             ('/assets/voice/wasm/espeak-ng.wasm', 'application/wasm'),
             ('/assets/voice/espeak-ng-data/fr_dict.gz', 'application/gzip'),
             ('/assets/voice/espeak-ng-data/en_dict.gz', 'application/gzip'),
+            ('/assets/voice/keys/manifest.json', 'application/json'),
+            ('/assets/voice/keys/siwis-keys.wav', 'audio/'),
+            ('/voice-review.html', 'text/html'),
+            ('/voice-review-before.json', 'application/json'),
+            ('/voice-review-before.wav', 'audio/wav'),
         ]:
             with urlopen(self.url + path) as response:
                 self.assertIn(mime, response.headers['Content-Type'])
