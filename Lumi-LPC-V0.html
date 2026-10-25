@@ -30,7 +30,7 @@
 /* Reader: sentence tracker, stage, key strip and transport in one card. */
 .hero{padding:22px 0 16px}.hero h1{font-size:32px;margin:6px 0 6px}
 /* The simulator gives its height to the reader. */
-body[data-view="simulator"] .hero{display:none}body[data-view="simulator"] main{padding-top:18px}
+body[data-page="simulator"] .hero{display:none}body[data-page="simulator"] main{padding-top:18px}
 .topbar{height:64px}
 .tracker{padding:14px 22px 0}
 .tracker-text{font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1.55;margin:0 0 6px;overflow-wrap:anywhere}
@@ -43,7 +43,7 @@ body[data-view="simulator"] .hero{display:none}body[data-view="simulator"] main{
 .tracker .sep{color:#b8bfb3;padding:0 6px}.tracker .gap{display:inline-block;width:.75em}
 .tracker-progress{height:3px;background:var(--line);border-radius:2px;margin-top:10px;overflow:hidden}
 .tracker-progress span{display:block;height:100%;width:0;background:var(--green);transition:width .25s}
-.stage{margin-top:10px}.stage svg{max-height:280px}.viewer-head{padding-top:14px}body[data-view="simulator"] main{padding-top:10px}
+.stage{margin-top:10px}.stage svg{max-height:280px}.viewer-head{padding-top:14px}body[data-page="simulator"] main{padding-top:10px}
 .strip{padding:12px 22px 2px}
 .strip .sequence-heading h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:650}
 .strip .sequence{padding-top:8px;padding-bottom:6px}.strip .key-card{min-height:72px;padding:7px 6px}.strip .key-card .key-ipa{margin:4px 0}
@@ -604,8 +604,8 @@ function references(){
  $('vowel-reference').innerHTML=Object.values(POSITIONS).map(p=>`<article class="card vowel-card"><h3><span class="dot" style="display:inline-block;background:${p.color};margin-right:5px"></span>${p.name}</h3><strong>${p.sounds}</strong><p>/${p.ipa.join(' / ')}/<br>${p.examples}</p></article>`).join('');
  $('position-legend').innerHTML=Object.entries(POSITIONS).map(([id,p])=>`<span class="pos-item" data-position="${id}"><span class="dot" style="background:${p.color}"></span>${p.name}</span>`).join('');
 }
-function setView(name){stop();document.body.dataset.view=name;for(const view of ['simulator','reference','help'])$('view-'+view).hidden=view!==name;document.querySelectorAll('[data-view]').forEach(el=>{if(el.dataset.view===name)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});}
-document.body.dataset.view='simulator';$('avatar-container').innerHTML=LPCVisual.avatar();
+function setView(name){stop();document.body.dataset.page=name;for(const view of ['simulator','reference','help'])$('view-'+view).hidden=view!==name;document.querySelectorAll('.nav-btn[data-view]').forEach(el=>{if(el.dataset.view===name)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});}
+document.body.dataset.page='simulator';$('avatar-container').innerHTML=LPCVisual.avatar();
 const handAnimator=LPCVisual.createAnimator($('hand-art'),$('animated-hand'),()=>mediaReduced.matches),mouth=LPCVisual.createMouth(document);references();
 const examples=[['Bonjour','Bonjour !'],['Papa mange\u2026','Papa mange une pomme.'],['Bonne nuit','Bonne nuit.'],['Le chat','Regarde le chat.']];
 examples.forEach(([name,text])=>{const b=document.createElement('button');b.className='chip';b.textContent=name;b.addEventListener('click',()=>{$('phrase').value=text;updateCounter();prepareAndShow();});$('examples').append(b);});
@@ -627,7 +627,8 @@ window.addEventListener('pagehide',stop);
 $('loop').addEventListener('click',()=>{state.loop=!state.loop;controls();save();});
 $('mirror').addEventListener('click',()=>{state.mirror=!state.mirror;renderCurrent();references();save();});
 $('points').addEventListener('click',()=>{state.points=!state.points;renderCurrent();save();});
-document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>setView(el.dataset.view)));
+// Only the navigation buttons switch views: hand drawings also carry a data-view attribute.
+document.querySelectorAll('.nav-btn[data-view]').forEach(el=>el.addEventListener('click',()=>setView(el.dataset.view)));
 $('clear-storage').addEventListener('click',()=>{try{localStorage.removeItem(storageKey);}catch(_){}location.reload();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
 document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey||['INPUT','TEXTAREA','SELECT','BUTTON','SUMMARY'].includes(document.activeElement.tagName)||$('view-simulator').hidden)return;if(e.code==='Space'){e.preventDefault();togglePlay();}else if(e.key==='ArrowRight'){e.preventDefault();selectKey(state.index+1);}else if(e.key==='ArrowLeft'){e.preventDefault();selectKey(state.index-1);}});

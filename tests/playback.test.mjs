@@ -55,6 +55,9 @@ function app(stored = null, reducedMotion = true) {
     removeAttribute(name) { delete this.attrs[name]; }, querySelectorAll() { return []; }, replaceChildren() { this.children = []; },
     append(...children) { this.children.push(...children); }, scrollTo() {} }; }
   const get = name => { if (!nodes.has(name)) nodes.set(name, element()); return nodes.get(name); };
+  // A broad [data-view] query would also reach the body and the hand drawings; only nav buttons match the scoped one.
+  const body = element(), nav = Object.assign(element(), { className: 'nav-btn', dataset: { view: 'help' } }), drawing = Object.assign(element(), { dataset: { view: 'direct' } });
+  const queried = selector => selector === '[data-view]' ? [nav, body, drawing] : selector === '.nav-btn[data-view]' ? [nav] : [];
   get('phrase').value = 'Papa mange une pomme.';
   const audios = [], revoked = [];
   class FakeAudio {
@@ -63,7 +66,7 @@ function app(stored = null, reducedMotion = true) {
     pause() { this.paused = true; } removeAttribute() {} load() {}
   }
   const context = {
-    document: { getElementById: get, querySelectorAll: () => [], createElement: element, addEventListener() {}, body: element() },
+    document: { getElementById: get, querySelectorAll: selector => queried(selector), createElement: element, addEventListener() {}, body },
     localStorage: { getItem: () => stored && JSON.stringify(stored), setItem() {} }, location: { protocol: 'file:' }, performance: {now:()=>0},
     matchMedia: () => ({ matches: reducedMotion }), addEventListener() {}, Audio: FakeAudio, Blob,
     URL: { createObjectURL: () => 'blob:test', revokeObjectURL: url => revoked.push(url) },
@@ -75,7 +78,7 @@ function app(stored = null, reducedMotion = true) {
   context.location.protocol = 'http:';
   const a = context.LumiTest; const natural = packet(get('phrase').value); a.state.voiceData = didacticAudio(natural.result, natural, encodeWav);
   a.state.keys = a.state.voiceData.keys; a.state.speechModule = { keyAtTime };
-  return { ...a, get, frames, timers, audios, revoked, context,
+  return { ...a, get, frames, timers, audios, revoked, context, body, nav, drawing,
     frame() { const [id, fn] = frames.entries().next().value; frames.delete(id); fn(); } };
 }
 
@@ -346,4 +349,14 @@ test('the tracker shows the sentence and the keys, and follows playback', async 
   assert.ok(text.children.some(c => c.textContent === 'Papa'));
   a.moveTo(3); assert.equal(a.get('tracker-bar').style.width, `${Math.round(3 / (a.state.keys.length - 1) * 10000) / 100}%`);
   spans[5].handlers.click(); assert.equal(a.state.index, 5, 'clicking a sound selects its key');
+});
+
+test('clicking anywhere on the page does not stop playback; only nav buttons switch views', async () => {
+  const a = app(); a.togglePlay(); await Promise.resolve();
+  assert.equal(a.state.playing, true);
+  assert.equal(a.body.handlers.click, undefined, 'the body is not a view switch');
+  assert.equal(a.drawing.handlers.click, undefined, 'a reference hand drawing is not a view switch');
+  assert.equal(a.state.playing, true);
+  a.nav.handlers.click(); assert.equal(a.state.playing, false, 'changing view stops playback');
+  assert.equal(a.get('view-help').hidden, false); assert.equal(a.get('view-simulator').hidden, true);
 });
