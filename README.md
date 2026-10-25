@@ -76,6 +76,7 @@ L’application s’ouvre alors en plein écran avec son icône. Après une prem
 - Conversion des phonèmes en configurations de main et positions LPC.
 - Lecture de la séquence avec voix française optionnelle, pause, navigation pas à pas, vitesse réglable et boucle. Lecture didactique à cadence régulière : chaque clé dispose de la même durée, avec transition animée, son associé, puis temps d’observation. Un clic sur une clé rejoue son son seul.
 - Avatar avec main droite vue de dos, transitions articulées et repères de position. Le mode miroir s’applique aussi aux illustrations du référentiel. Le repère dorsal est commun aux huit configurations : main redressée, pouce et index à gauche du dessin, auriculaire à droite. En position « ki » près de la bouche, l’index est au-dessus du majeur, avec les doigts repliés en dessous et le pouce replié masqué derrière la main.
+- Clés répétées : quand deux clés successives ont la même configuration et la même position, la main « tape » la clé (elle recule vers le poignet en se rapprochant légèrement du spectateur, puis revient au contact au début du son). Ces clés sont marquées ↻ dans la séquence.
 - Référentiel des huit configurations de main et des cinq positions.
 - Conservation du dernier texte et des réglages dans le navigateur, avec une commande de réinitialisation dans l’aide.
 

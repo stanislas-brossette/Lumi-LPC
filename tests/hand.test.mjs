@@ -97,3 +97,26 @@ test('ki has the index above the middle finger and the folded fingers below, as 
   assert.match(visual.handSVG(2),/data-view="direct"/);
   assert.match(visual.handSVG(2,true),/data-view="mirror"/);
 });
+
+test('a tap leaves the face and returns to the same contact, pausable and interruptible',()=>{
+  const a=animator();a.rig.goTo(5,pos(),1);const contact=a.rig.snapshot();
+  assert.equal(contact.lift,0);
+  assert.equal(a.rig.tap(5,pos(),1),280);same(a.rig.snapshot(),contact);
+  a.advance(140);const away=a.rig.snapshot();
+  assert.ok(away.lift>.99,'fully withdrawn halfway');
+  same(away.pose,contact.pose);same(away.position,contact.position);
+  assert.match(a.art.attrs.transform,/rotate\(55\) translate\(0 22\) scale\(0\.968\)/);
+  a.advance(210);a.rig.pause();const paused=a.rig.snapshot();a.advance(1000);same(a.rig.snapshot(),paused);
+  assert.ok(paused.lift>0&&paused.lift<away.lift);
+  a.rig.resume();a.advance(1070);same(a.rig.snapshot(),contact);assert.equal(a.callbacks.size,0);
+  assert.doesNotMatch(a.art.attrs.transform,/translate\(0 /,'back in contact');
+  // A different key during a tap starts from the withdrawn hand, without a snap.
+  a.rig.tap(5,pos(),1);a.advance(1210);const mid=a.rig.snapshot();a.rig.goTo(1,pos('s'),1);same(a.rig.snapshot(),mid);
+  a.advance(1700);same(a.rig.snapshot().pose,visual.pose(1));assert.equal(a.rig.snapshot().lift,0);
+  assert.equal(a.rig.tap(1,pos('s'),.25),900,'slow motion is capped');
+});
+
+test('reduced motion taps without moving',()=>{
+  const a=animator(true);a.rig.goTo(5,pos(),1);
+  assert.equal(a.rig.tap(5,pos(),1),0);assert.equal(a.rig.snapshot().lift,0);assert.equal(a.callbacks.size,0);
+});
