@@ -79,16 +79,17 @@ function app(stored = null) {
     frame() { const [id, fn] = frames.entries().next().value; frames.delete(id); fn(); } };
 }
 
-test('learning speed defaults to 0.5, migrating the old normal-speed setting', () => {
-  assert.equal(app().state.speed, 0.5);
-  assert.equal(app({ speed: 1 }).state.speed, 0.5);
+test('speed defaults to 1 and preserves saved playback preferences', () => {
+  assert.equal(app().state.speed, 1);
+  assert.equal(app({ speed: 1 }).state.speed, 1);
+  assert.equal(app({ speed: 0.5, speedProfile: 2 }).state.speed, 0.5);
   assert.equal(app({ speed: 0.25, speedProfile: 2 }).state.speed, 0.25);
 });
 
 test('visual follows the audio clock at every speed; pause/resume cannot drift', async () => {
   const a = app(); a.togglePlay(); await Promise.resolve();
   const audio = a.audios[0];
-  assert.equal(audio.playbackRate, 0.5);
+  assert.equal(audio.playbackRate, 1);
   assert.equal(a.timers.size, 0, 'no estimated timers alongside audio');
   audio.currentTime = a.state.voiceData.times[3]; a.frame(); assert.equal(a.state.index, 3);
   a.togglePlay(); assert.equal(audio.paused, true); assert.equal(a.frames.size, 0);
