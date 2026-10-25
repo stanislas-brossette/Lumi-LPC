@@ -12,7 +12,8 @@ clé reste sélectionné par défaut.
   pour limiter les clics. Aucun chevauchement ne masque l’attaque des consonnes.
   Les gestes suivent les durées des extraits et la bouche leurs repères Siwis.
 - Seule la ponctuation ou un `|` explicite ajoute une pause de 180 ms. Les
-  frontières de mots ne créent pas de pause. À ×1, les sons gardent leur durée
+  frontières de mots ne créent pas de pause et n’empêchent plus l’enchaînement
+  d’une consonne prononcée avec la voyelle initiale suivante. À ×1, les sons gardent leur durée
   d’origine ; aucune cadence de 175 mots par minute n’est imposée.
 - Pause, ralenti, boucle et reprise suivent l’horloge audio. Cliquer sur une clé
   rejoue son extrait, avec les mêmes repères de bouche.

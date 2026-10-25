@@ -127,10 +127,29 @@ test('the consonant pass preserves all other units and reproduces the archived c
       assert.equal(entry.vowel,null);
       if(entry.source==='carrier-eu')assert.ok(entry.sourceEnd<entry.supportVowelOnset,'stop before the supporting vowel');
       if(entry.source==='espeak-eu')assert.equal(entry.sourceEnd,entry.supportVowelOnset);
+    }else if(ipa==='pa'){
+      // The later /pa/ repair is checked separately; reconstruct this pass's baseline.
+      hash.update(readFileSync('tests/fixtures/voice-pa-before.wav').subarray(44));
     }else hash.update(new Uint8Array(sample.buffer,sample.byteOffset,sample.byteLength));
   }
   assert.equal(hash.digest('hex'),report.unmodifiedPcmSha256,'319 units must remain bit-identical');
   const ng=inventory.filter(k=>k.ipa==='ŋ');
   const packet=synthesizeKeysWithBank(ng,bank,encodeWav);
   assert.equal(packet.voice,'eSpeak NG');assert.match(packet.warning,/ŋ.*eSpeak/);
+});
+
+test('/pa/ keeps the closure before the vowel and changes no other audio unit',()=>{
+ const before=JSON.parse(readFileSync('tests/fixtures/voice-pa-before.json'));
+ const entry=manifest.keys.pa;
+ assert.equal(entry.source,'carrier');assert.equal(entry.phonemes,'ʒə dˈi pˈa .');
+ const clip=bank.samples.subarray(entry.start,entry.start+entry.length);
+ const rms=x=>Math.sqrt(x.reduce((sum,s)=>sum+s*s,0)/x.length);
+ assert.ok(entry.vowel>.06&&entry.vowel<entry.end);
+ assert.ok(rms(clip.subarray(0,Math.round(.06*bank.sampleRate)))<.12*rms(clip),'keep the quiet closure before the release');
+ const hash=createHash('sha256');
+ for(const [ipa,e] of Object.entries(manifest.keys))if(ipa!=='pa'){
+  const samples=bank.samples.subarray(e.start,e.start+e.length);
+  hash.update(new Uint8Array(samples.buffer,samples.byteOffset,samples.byteLength));
+ }
+ assert.equal(hash.digest('hex'),before.unmodifiedPcmSha256,'328 other units unchanged');
 });

@@ -79,7 +79,7 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         raise ValueError('Unknown repair keys')
     for key in keys:
         c, v = key['c'], key['v']
-        contextual = (c in {'p', 'b', 't', 'd', 'k', 'g'} and not v) or key['ipa'] == 'to'
+        contextual = (c in {'p', 'b', 't', 'd', 'k', 'g'} and not v) or key['ipa'] in {'to', 'pa'}
         if previous is not None and key['ipa'] not in selected:
             entry = previous['keys'][key['ipa']].copy()
             pcm = previous_audio[entry['start']:entry['start'] + entry['length']].copy()
@@ -112,7 +112,9 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         target_end = int(sum(durations[:id_index(carrier + unit)])) if contextual else len(samples)
         # Stops need a small release transition to remain distinguishable.
         release = round(0.015 * rate) if contextual and not v else 0
-        start = max(0, target_start - round(0.008 * rate))
+        # /pa/: the model's nominal start falls after the closure/release.
+        # Keep 100 ms of pre-roll so the /p/ is not cut into a bare vowel.
+        start = max(0, target_start - round((0.100 if key['ipa'] == 'pa' else 0.008) * rate))
         end = min(len(samples), target_end + release)
         # Trim only outside the extracted unit, leaving 12 ms around audible data.
         # The low threshold preserves weak fricatives and plosive releases.
@@ -120,12 +122,21 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         if len(active) == 0:
             raise ValueError(f'Silent key: {key["ipa"]}')
         end = min(end, start + int(active[-1]) + round(0.012 * rate) + 1)
-        start = max(start, start + int(active[0]) - round(0.012 * rate))
+        if key['ipa'] != 'pa':
+            start = max(start, start + int(active[0]) - round(0.012 * rate))
         vowel = None
         if c and v:
             # ids: BOS, PAD, then each codepoint's ids followed by PAD, EOS.
             index = id_index(prefix)
             vowel = (int(sum(durations[:index])) - start) / rate
+            if key['ipa'] == 'pa':
+                # After the preserved closure, use the measured energy rise for
+                # mouth opening instead of the late stress-token boundary.
+                window = round(0.005 * rate)
+                energy = np.array([np.sqrt(np.mean(samples[t:t+window] ** 2)) for t in range(start, end-window, window)])
+                threshold = float(energy.max()) * 0.12
+                voiced = np.flatnonzero(energy > threshold)
+                if len(voiced): vowel = int(voiced[0]) * window / rate
             if not 0 < vowel < (end - start) / rate:
                 raise ValueError(f'Vowel outside clip: {key["ipa"]}')
         clip = samples[start:end].copy()
@@ -140,6 +151,8 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         entries[key['ipa']] = {'start': cursor, 'length': len(pcm), 'vowel': vowel, 'end': len(pcm) / rate,
                                'source': 'carrier' if contextual else 'isolated', 'phonemes': ''.join(phonemes),
                                'sourceStart': start, 'sourceEnd': end}
+        if key['ipa'] == 'pa':
+            entries[key['ipa']]['vowelMethod'] = 'energy rise after preserved closure'
         if audit_dir:
             audit_dir.mkdir(parents=True, exist_ok=True)
             with wave.open(str(audit_dir / f'{len(entries):03}.wav'), 'wb') as wav:
@@ -164,6 +177,7 @@ def generate(model, output, audit_dir=None, repair_existing=False, repair_keys=N
         'repairBaseSha256': base_hash,
         'keys': entries,
     }
+    if previous is not None: manifest = {**previous, **manifest}
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     print(f'{len(entries)} keys, {cursor / rate:.1f} s, {audio_path.stat().st_size / 1e6:.2f} MB')
 

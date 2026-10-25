@@ -74,7 +74,7 @@ L’application s’ouvre alors en plein écran avec son icône. Après une prem
 - Conversion en phonèmes à partir d’exemples et d’un lexique embarqués ; les mots inconnus sont signalés.
 - Édition manuelle des phonèmes et choix de l’interprétation du schwa `/ə/`.
 - Conversion des phonèmes en configurations de main et positions LPC.
-- Lecteur réunissant, dans une même carte, la phrase écrite et sa prononciation clé par clé (mot et son en cours surlignés, sons déjà lus, barre de progression), l’avatar, la bande des clés et les commandes. Un clic sur un mot ou un son y mène. Avec la voix, chaque clé est rattachée au mot du texte d’où elle vient grâce aux événements de mots d’eSpeak ; sans voix, mots et prononciation ne sont associés que si leurs nombres concordent. Le lecteur tient sur un écran d’ordinateur portable (1280 × 800) comme sur un téléphone ; sur téléphone, « Préparer les clés » fait défiler jusqu’au lecteur.
+- Lecteur réunissant, dans une même carte, la phrase écrite et sa prononciation clé par clé (mot et son en cours surlignés, sons déjà lus, barre de progression), l’avatar, la bande des clés et les commandes. Un clic sur un mot ou un son y mène. Avec la voix, chaque clé est rattachée au mot, ou aux deux mots qu’elle enchaîne, grâce aux événements de mots d’eSpeak ; sans voix, mots et prononciation ne sont associés que si leurs nombres concordent. Le lecteur tient sur un écran d’ordinateur portable (1280 × 800) comme sur un téléphone ; sur téléphone, « Préparer les clés » fait défiler jusqu’au lecteur.
 - Lecture de la séquence avec voix française optionnelle, pause, navigation pas à pas, vitesse réglable et boucle. Lecture didactique à cadence régulière : chaque clé dispose de la même durée, avec transition animée, son associé, puis temps d’observation. Un clic sur une clé rejoue son son seul.
 - Bouche animée : forme des lèvres pour chaque son, synchronisée avec la voix (ou avec la lecture visuelle seule).
 - Avatar avec main droite vue de dos, transitions articulées et repères de position. Le mode miroir s’applique aussi aux illustrations du référentiel. Le repère dorsal est commun aux huit configurations : main redressée, pouce et index à gauche du dessin, auriculaire à droite. En position « ki » près de la bouche, l’index est au-dessus du majeur, avec les doigts repliés en dessous et le pouce replié masqué derrière la main.
@@ -195,3 +195,9 @@ isolés. Voir le [rapport et les limites](docs/voice-audit-2026-10-25.md). Le /�
 isolé utilise exceptionnellement eSpeak, signalé à l’écran ; /ɥ/ reste à
 confirmer. `/voice-review.html` permet de comparer les anciens extraits, les
 nouveaux et leurs contextes de génération. Les autres 319 unités sont inchangées.
+
+L’enchaînement phonétique fonctionne aussi entre deux mots : « il a réussi son
+examen » devient `ila ʁeysi sɔ̃nɛgzamɛ̃|`, avec les clés /la/ et /nɛ/. Les mots
+écrits restent distincts et peuvent être surlignés ensemble. Aucune consonne de
+liaison absente du moteur n’est ajoutée ; les pauses explicites bloquent le
+regroupement. Voir [les règles et les limites](docs/connected-speech.md).

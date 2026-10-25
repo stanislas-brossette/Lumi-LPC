@@ -65,3 +65,9 @@ Le contrôle du 25 octobre est documenté dans [le rapport acoustique](../docs/v
 Le serveur local expose `/voice-review.html` pour comparer les sept corrections
 aux anciens sons et écouter l'ensemble des 329 unités. Cette page de travail
 et les anciens sons sont exclus du build Netlify.
+
+La correction 0.4.4 extrait /pa/ d’une phrase porteuse avec 100 ms de fermeture
+conservée avant la borne initiale du modèle. Son repère de voyelle est estimé
+sur la montée d’énergie ; cette exception est tracée dans le manifeste. Les
+328 autres unités sont inchangées. L’ancien /pa/ est disponible dans la page
+locale de comparaison. Voir [le détail et ses limites](../docs/connected-speech.md).

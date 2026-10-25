@@ -3,7 +3,7 @@
   "sampleRate": 22050,
   "name": "Première banque Siwis",
   "audio": "voice-stops-before.wav",
-  "audioSha256": "af7cc36ebd78d1e578d1eb93aa651cee2cec75ad7a778d5faa84abd75957a461",
+  "audioSha256": "d7908912cbbbf61c32b082d881e6a2ca9e5a87b77bc954a1a5bd05043b4c80eb",
   "sourceBankSha256": "bca646818e6d4fea8f739dc567aee28b07ad7dddf7fccb3ce72961e968173d67",
   "keys": {
     "b": {
@@ -365,6 +365,18 @@
       "length": 4160,
       "end": 0.18866213151927438,
       "vowel": null
+    },
+    "pa": {
+      "start": 402853,
+      "length": 6220,
+      "vowel": 0.13596371882086167,
+      "end": 0.28208616780045354
+    },
+    "pass-context-pa": {
+      "start": 409073,
+      "length": 18688,
+      "vowel": null,
+      "end": 0.8475283446712019
     }
   }
 }

@@ -2,11 +2,11 @@
 // Playback either spaces individual keys or keeps the complete eSpeak phrase.
 // Each key also records the text word it comes from (key.word, an index into words).
 export function timelineFromEvents(result, LPC, schwa) {
-  const keys = [], times = [], phrases = [], words = [], phones = [];
+  const keys = [], times = [], words = [], phones = [];
   let phonemes = [];
   function flush(pause = false) {
     if (!phonemes.length) {
-      if (pause && keys.length && !keys.at(-1).pauseAfter) { keys.at(-1).pauseAfter = true; phrases[phrases.length - 1] += '|'; }
+      if (pause && keys.length && !keys.at(-1).pauseAfter) { keys.at(-1).pauseAfter = true; }
       return;
     }
     // eSpeak writes /ɥ/ as /y/; same phoneme count, so onsets stay aligned.
@@ -19,12 +19,11 @@ export function timelineFromEvents(result, LPC, schwa) {
       key.phoneStart = phones.length + consumed;
       key.phoneCount = Number(!!key.c) + Number(!!key.v);
       consumed += Number(!!key.c) + Number(!!key.v);
-      key.word = words.length - 1;
+      key.word = words.length - 1; key.wordEnd = key.word;
       keys.push(key);
     }
     if (consumed !== phonemes.length) throw new Error('Alignement phonétique incohérent.');
     if (group.length) { keys.at(-1).wordAfter = true; keys.at(-1).pauseAfter = pause; }
-    phrases.push(ipa + (pause ? '|' : ''));
     phones.push(...phonemes.map(p => ({ raw: p.raw, sound: p.sound, time: p.time, word: words.length - 1 })));
     phonemes = [];
   }
@@ -44,7 +43,20 @@ export function timelineFromEvents(result, LPC, schwa) {
   if (!keys.length || times.some((time, i) => !Number.isFinite(time) || time < 0 || time > result.duration || (i && time < times[i - 1]))) {
     throw new Error('Le moteur vocal n’a pas fourni un minutage exploitable.');
   }
-  return { keys, times, words, phones, ipa: phrases.join(' ') };
+  // Resyllabify only phonemes the engine actually emitted, across a word
+  // boundary without a measured pause. Never manufacture a liaison consonant.
+  const joined=[], onsets=[];
+  for(let i=0;i<keys.length;i++){
+    const left=keys[i],right=keys[i+1];
+    if(left.c&&!left.v&&left.wordAfter&&!left.pauseAfter&&right?.v&&!right.c){
+      joined.push({...LPC.encode(left.c+right.v,schwa)[0],word:left.word,wordEnd:right.wordEnd,
+        phoneStart:left.phoneStart,phoneCount:2,wordAfter:right.wordAfter,pauseAfter:right.pauseAfter});
+      onsets.push(times[i]);i++;
+    }else{joined.push(left);onsets.push(times[i]);}
+  }
+  const ipa=joined.map(k=>k.ipa+(k.pauseAfter?'| ':k.wordAfter?' ':'')).join('').trim();
+  return { keys:joined, times:onsets, words, phones, ipa };
+
 }
 
 export function keyAtTime(times, seconds) {
@@ -214,7 +226,7 @@ export async function synthesizePronunciation(ipa, LPC, schwa, options = {}) {
 // A small, pre-generated neural voice bank. eSpeak still determines the text's
 // phonemes; automatic and manually corrected keys use these same audio units.
 // No neural model, remote TTS API or AudioContext is needed during playback.
-const VOICE_BANK_VERSION = '0.4.3';
+const VOICE_BANK_VERSION = '0.4.4';
 let bankReady;
 export function readVoiceBank(manifest, buffer) {
   const view = new DataView(buffer);

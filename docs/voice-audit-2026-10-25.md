@@ -158,3 +158,12 @@ une régénération du corpus pour conserver ces corrections. Les tests vérifie
 les empreintes, l'identité des 319 autres unités et les bornes de coupe ; ils
 ne remplacent pas l'écoute. Cache PWA 0.4.3 ; le chargement versionné évite la
 réutilisation de l'ancienne banque pendant une mise à jour du service worker.
+
+## Correction ciblée suivante : /pa/
+
+Le /pa/ de « papa », signalé comme un /a/, est régénéré en contexte puis coupé
+en conservant la fermeture avant le relâchement. La nouvelle borne ne suit
+pas aveuglément l’alignement tardif du modèle. Les 328 autres unités restent
+identiques. Détails, limites et reconnaissance indépendante :
+[enchaînements et /pa/](connected-speech.md). L’ancien /pa/ est ajouté à l’archive
+de comparaison ; les coupes de consonnes de la passe précédente sont inchangées.
